@@ -129,7 +129,12 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
-    return await Prisma.create("project", project);
+    const opts = {
+      ...project,
+      userSecret,
+    };
+
+    return await Prisma.create("project", opts);
   };
 
   /**

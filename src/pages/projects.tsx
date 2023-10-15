@@ -75,7 +75,10 @@ export default function Projects(): JSX.Element {
           )}
 
           {showProjectDialog && (
-            <NewProjectDialog setShowProjectDialog={setShowProjectDialog} />
+            <NewProjectDialog
+              secret={session.user.secret}
+              setShowProjectDialog={setShowProjectDialog}
+            />
           )}
 
           <div className="flex flex-col items-start justify-start">
@@ -113,7 +116,30 @@ const hasProjects = (projects: any): boolean => {
 // Popup dialog when the user wants to create a new project
 const NewProjectDialog = (props: {
   setShowProjectDialog: (show: boolean) => void;
+  secret: string | null;
 }): JSX.Element => {
+  const [project, setProject] = useState({
+    name: `cool-project-${Math.floor(Math.random() * 100)}`,
+    description: "",
+    type: "table",
+    tags: [],
+  });
+
+  if (!props.secret) {
+    return <></>;
+  }
+
+  const { refetch } = api.projects.createProject.useQuery(
+    {
+      secret: props.secret,
+      project,
+    },
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
   return (
     <div
       className="absolute m-10 flex h-screen w-screen flex-col items-center justify-center bg-slate-950/80 p-10 backdrop-blur-md"
@@ -127,13 +153,23 @@ const NewProjectDialog = (props: {
         <input
           className="m-3 h-12 w-96 rounded-md border-b-2 border-b-white bg-slate-200/20 px-4 py-2 text-white"
           placeholder="Project Name"
+          onChange={(e) => setProject({ ...project, name: e.target.value })}
         />
         <input
           className="m-3 h-12 w-96 rounded-md border-b-2 border-b-white bg-slate-200/20 px-4 py-2 text-white"
           placeholder="Project Description"
+          onChange={(e) =>
+            setProject({ ...project, description: e.target.value })
+          }
         />
         <div className="flex flex-row gap-4">
-          <button className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white">
+          <button
+            onClick={() => {
+              refetch();
+              props.setShowProjectDialog(false);
+            }}
+            className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white"
+          >
             Create
           </button>
           <button

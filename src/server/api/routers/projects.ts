@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Prisma } from "~/lib/prisma";
+import { type Project } from "~/lib/types";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -27,8 +28,42 @@ const getProjectsProcedure = publicProcedure
   });
 
 /**
+ * Create project procedure for the projects router
+ */
+const createProjectProcedure = publicProcedure
+  .input(
+    z.object({
+      secret: z.string(),
+      project: z.object({
+        name: z.string(),
+        description: z.string(),
+        type: z.string(),
+        tags: z.array(z.string()),
+      }),
+    }),
+  )
+  .query(async ({ input }) => {
+    if (!input.secret) {
+      return {
+        result: null,
+      };
+    }
+
+    return await Prisma.createProject(input.secret, input.project as Project)
+      .catch((e) => {
+        console.error(e.message);
+      })
+      .then((res) => {
+        return {
+          result: res,
+        };
+      });
+  });
+
+/**
  * The projects router
  */
 export const projectsRouter = createTRPCRouter({
   getProjects: getProjectsProcedure,
+  createProject: createProjectProcedure,
 });
