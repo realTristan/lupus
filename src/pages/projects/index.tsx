@@ -6,7 +6,7 @@ import { type Project } from "~/lib/types";
 import { api } from "~/utils/api";
 import PlusSmallSVG from "~/components/svgs/Plus";
 import Link from "next/link";
-import TrashcanSVG from "~/components/svgs/Trashcan";
+import Image from "next/image";
 
 /**
  * Projects page
@@ -49,20 +49,41 @@ export default function Projects(): JSX.Element {
         <Head>
           <title>Projects | arcai</title>
         </Head>
-        <main className="flex min-h-screen flex-col items-center justify-center">
-          <div className="fixed top-16 flex flex-row items-center justify-between">
-            <h1 className="fixed left-10 m-4 text-4xl font-black">Projects</h1>
-            <Link
-              href="/projects/new"
-              className="fixed right-10 m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
-            >
-              <PlusSmallSVG />
-              <p>New Project</p>
-            </Link>
-          </div>
 
-          {!projects?.data?.result?.length && (
-            <div className="flex flex-col items-center justify-center text-center">
+        <Link
+          href="/"
+          className="fixed left-10 top-10 flex flex-row items-center justify-center gap-4"
+        >
+          <Image
+            src="/images/arcai_logo.png"
+            width={50}
+            height={100}
+            alt=""
+            className="w-auto rounded-full"
+          />
+          <h1 className="mb-2 text-3xl font-bold">arcai</h1>
+        </Link>
+
+        <div className="fixed right-10 top-10 flex flex-row items-center justify-center">
+          <Link
+            href="/projects/new"
+            className="m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
+          >
+            <PlusSmallSVG />
+            <p>New Project</p>
+          </Link>
+          <Image
+            src={session?.user.image ?? ""}
+            width={65}
+            height={65}
+            alt=""
+            className="rounded-full"
+          />
+        </div>
+
+        <main className="mt-24 flex min-h-screen flex-col items-center p-14">
+          {!projects?.data?.result?.length ? (
+            <div className="mt-20 flex flex-col items-center justify-center text-center">
               <p className="text-7xl font-black ">Nothing&#39;s here.</p>
               <p className="mt-3 text-lg font-normal">
                 You don&#39;t have any projects yet. Create one to get started.
@@ -74,17 +95,30 @@ export default function Projects(): JSX.Element {
                 Get Started
               </Link>
             </div>
+          ) : (
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="text-left">
+                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Description</th>
+                  <th className="px-4 py-2">Created at</th>
+                  <th className="px-4 py-2">Last updated at</th>
+                  <th className="px-4 py-2"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects?.data?.result?.map((project: Project) => {
+                  return (
+                    <ProjectCard
+                      p={project}
+                      key={project.id}
+                      sec={session?.user.secret ?? ""}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
           )}
-
-          <div className="flex w-full flex-col items-start justify-start p-10">
-            {projects.data?.result?.map((project: Project) => (
-              <ProjectCard
-                key={project.id}
-                p={project}
-                sec={session.user.secret ?? ""}
-              />
-            ))}
-          </div>
         </main>
       </>
     );
@@ -111,27 +145,37 @@ const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
     },
   );
 
-  return (
-    <div className="m-4 flex flex-row items-center justify-start">
-      <Link
-        href={`/projects/id/${props.p.id}`}
-        className="flex flex-row items-center justify-between gap-10 rounded-full bg-slate-100/80 px-14 py-5 hover:bg-slate-200/70"
-      >
-        <div className="flex flex-col gap-1">
-          <p className="text-2xl font-black">{props.p.name}</p>
-          <p className="text-lg font-normal">{props.p.description}</p>
-        </div>
+  const router = useRouter();
 
-        <button
-          onClick={() => {
-            refetch();
-            window.location.reload();
-          }}
-          className="m-4 rounded-full bg-slate-950 p-5 text-white shadow-xl hover:bg-red-500"
-        >
-          <TrashcanSVG />
-        </button>
-      </Link>
-    </div>
+  return (
+    <tr key={props.p.id} className="cursor-pointer hover:bg-slate-100/60">
+      <td className="border px-4 py-2">{props.p.name}</td>
+      <td className="border px-4 py-2">{props.p.description}</td>
+      <td className="border px-4 py-2">
+        {new Date(props.p.createdAt).toLocaleString()}
+      </td>
+      <td className="border px-4 py-2">
+        {new Date(props.p.updatedAt).toLocaleString()}
+      </td>
+      <td className="border px-4 py-2">
+        <div>
+          <Link
+            href={`/projects/id/${props.p.id}`}
+            className="m-2 rounded-md bg-slate-950 px-5 py-3 font-medium tracking-wide text-white shadow-xl hover:bg-white hover:text-slate-950"
+          >
+            Open
+          </Link>
+          <button
+            className="m-2 rounded-md bg-red-500 px-5 py-3 font-medium tracking-wide text-white shadow-xl hover:bg-red-600"
+            onClick={() => {
+              refetch();
+              router.reload();
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 };

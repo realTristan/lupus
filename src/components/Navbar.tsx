@@ -7,7 +7,7 @@ export default function Navbar() {
     <nav className="fixed left-10 top-10 flex items-center justify-between">
       <div className="flex flex-row items-center justify-center gap-4">
         <Image
-          src="/images/arclogo.png"
+          src="/images/arcai_logo.png"
           width={50}
           height={100}
           alt=""
