@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { type Project, type User } from "./types";
+import { sha256 } from "./crypto";
 
 export class Prisma extends PrismaClient {
   constructor() {
@@ -129,8 +130,14 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
+    // Generate a new project id
+    const id: string = await sha256(
+      Math.random().toString() + Date.now().toString(),
+    );
+
     const opts = {
       ...project,
+      id,
       userSecret,
     };
 
@@ -140,12 +147,14 @@ export class Prisma extends PrismaClient {
   /**
    * Updates a project
    * @param userSecret The user secret
+   * @param id The project id
    * @param project The project to update
    * @returns The updated project
    * @throws Error if the user is not found
    */
   public static readonly updateProject = async (
     userSecret: string,
+    id: string,
     project: Project,
   ): Promise<Project> => {
     const user: User | null = await Prisma.findOne("user", {
@@ -156,7 +165,15 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
-    return await Prisma.update("project", { id: project.id }, project);
+    const existingProject: Project | null = await Prisma.findOne("project", {
+      id,
+    });
+
+    if (!existingProject) {
+      throw new Error("Project not found");
+    }
+
+    return await Prisma.update("project", { id, userSecret }, project);
   };
 
   /**
@@ -168,7 +185,7 @@ export class Prisma extends PrismaClient {
    */
   public static readonly deleteProject = async (
     userSecret: string,
-    id: number,
+    id: string,
   ): Promise<Project> => {
     const user: User | null = await Prisma.findOne("user", {
       secret: userSecret,
@@ -178,7 +195,7 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
-    return await Prisma.delete("project", { id });
+    return await Prisma.delete("project", { id, userSecret });
   };
 
   /**
@@ -189,7 +206,7 @@ export class Prisma extends PrismaClient {
    */
   public static readonly getProject = async (
     userSecret: string,
-    id: number,
+    id: string,
   ): Promise<Project | null> => {
     const user: User | null = await Prisma.findOne("user", {
       secret: userSecret,
@@ -199,7 +216,7 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
-    return await Prisma.findOne("project", { id });
+    return await Prisma.findOne("project", { id, userSecret });
   };
 
   /**

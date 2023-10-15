@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Project" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "type" TEXT NOT NULL,
@@ -21,6 +21,9 @@ CREATE TABLE "User" (
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project_id_key" ON "Project"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");

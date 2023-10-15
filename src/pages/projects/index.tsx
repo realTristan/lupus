@@ -5,7 +5,8 @@ import LoadingCenter from "~/components/Loading";
 import { type Project } from "~/lib/types";
 import { api } from "~/utils/api";
 import PlusSmallSVG from "~/components/svgs/Plus";
-import { useState } from "react";
+import Link from "next/link";
+import TrashcanSVG from "~/components/svgs/Trashcan";
 
 /**
  * Projects page
@@ -14,9 +15,6 @@ import { useState } from "react";
 export default function Projects(): JSX.Element {
   // Check if the user is logged in
   const { data: session, status } = useSession();
-
-  // Track the popup dialog for creating a new project
-  const [showProjectDialog, setShowProjectDialog] = useState<boolean>(false);
 
   // Next router for redirecting to the login endpoint if the
   // user isn't logged in.
@@ -50,13 +48,13 @@ export default function Projects(): JSX.Element {
         <main className="flex min-h-screen flex-col items-center justify-center">
           <div className="fixed top-16 flex flex-row items-center justify-between">
             <h1 className="fixed left-10 m-4 text-4xl font-black">Projects</h1>
-            <button
-              onClick={() => setShowProjectDialog(true)}
-              className="fixed right-10 m-4 flex flex-row gap-2 rounded-md bg-slate-950 px-10 py-4 text-white"
+            <Link
+              href="/projects/new"
+              className="fixed right-10 m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
             >
               <PlusSmallSVG />
               <p>New Project</p>
-            </button>
+            </Link>
           </div>
 
           {!hasProjects(projects) && (
@@ -65,40 +63,22 @@ export default function Projects(): JSX.Element {
               <p className="mt-3 text-lg font-normal">
                 You don&#39;t have any projects yet. Create one to get started.
               </p>
-              <button
-                onClick={() => setShowProjectDialog(true)}
-                className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white"
+              <Link
+                href="/projects/new"
+                className="m-4 rounded-full bg-slate-950 px-10 py-4 font-bold tracking-wide text-white hover:bg-slate-800"
               >
                 Get Started
-              </button>
+              </Link>
             </div>
           )}
 
-          {showProjectDialog && (
-            <NewProjectDialog
-              secret={session.user.secret}
-              setShowProjectDialog={setShowProjectDialog}
-            />
-          )}
-
-          <div className="flex flex-col items-start justify-start">
+          <div className="flex w-full flex-col items-start justify-start p-10">
             {projects.data?.result?.map((project: Project) => (
-              <div
-                key={Math.random()}
-                className="flex flex-row items-center justify-between"
-              >
-                <div className="flex flex-row items-center justify-start">
-                  <div className="flex flex-col items-start justify-center">
-                    <h1 className="text-2xl font-bold">{project.name}</h1>
-                    <p className="text-base font-normal">
-                      {project.description}
-                    </p>
-                  </div>
-                </div>
-                <button className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white">
-                  Edit
-                </button>
-              </div>
+              <ProjectCard
+                key={project.id}
+                project={project}
+                secret={session.user.secret}
+              />
             ))}
           </div>
         </main>
@@ -113,26 +93,18 @@ const hasProjects = (projects: any): boolean => {
   return projects?.data?.result?.length;
 };
 
-// Popup dialog when the user wants to create a new project
-const NewProjectDialog = (props: {
-  setShowProjectDialog: (show: boolean) => void;
+const ProjectCard = (props: {
+  project: Project;
   secret: string | null;
 }): JSX.Element => {
-  const [project, setProject] = useState({
-    name: `cool-project-${Math.floor(Math.random() * 100)}`,
-    description: "",
-    type: "table",
-    tags: [],
-  });
-
   if (!props.secret) {
     return <></>;
   }
 
-  const { refetch } = api.projects.createProject.useQuery(
+  const { refetch } = api.projects.deleteProject.useQuery(
     {
       secret: props.secret,
-      project,
+      id: props.project.id,
     },
     {
       enabled: false,
@@ -141,45 +113,26 @@ const NewProjectDialog = (props: {
   );
 
   return (
-    <div
-      className="absolute m-10 flex h-screen w-screen flex-col items-center justify-center bg-slate-950/80 p-10 backdrop-blur-md"
-      style={{ zIndex: 1000 }}
-    >
-      <p className="text-4xl font-bold text-white">Create a new project</p>
-      <p className="mt-2 text-base font-normal italic text-white">
-        Projects are used to organize your data
-      </p>
-      <div className="flex flex-col items-center justify-center">
-        <input
-          className="m-3 h-12 w-96 rounded-md border-b-2 border-b-white bg-slate-200/20 px-4 py-2 text-white"
-          placeholder="Project Name"
-          onChange={(e) => setProject({ ...project, name: e.target.value })}
-        />
-        <input
-          className="m-3 h-12 w-96 rounded-md border-b-2 border-b-white bg-slate-200/20 px-4 py-2 text-white"
-          placeholder="Project Description"
-          onChange={(e) =>
-            setProject({ ...project, description: e.target.value })
-          }
-        />
-        <div className="flex flex-row gap-4">
-          <button
-            onClick={() => {
-              refetch();
-              props.setShowProjectDialog(false);
-            }}
-            className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white"
-          >
-            Create
-          </button>
-          <button
-            onClick={() => props.setShowProjectDialog(false)}
-            className="m-4 rounded-md bg-slate-950 px-10 py-4 text-white"
-          >
-            Cancel
-          </button>
+    <div className="m-4 flex flex-row items-center justify-start">
+      <Link
+        href={`/projects/id/${props.project.id}`}
+        className="flex flex-row items-center justify-between gap-10 rounded-full bg-slate-100/80 px-14 py-5 hover:bg-slate-200/70"
+      >
+        <div className="flex flex-col gap-1">
+          <p className="text-2xl font-black">{props.project.name}</p>
+          <p className="text-lg font-normal">{props.project.description}</p>
         </div>
-      </div>
+
+        <button
+          onClick={() => {
+            refetch();
+            window.location.reload();
+          }}
+          className="m-4 rounded-full bg-slate-950 p-5 text-white shadow-xl hover:bg-red-500"
+        >
+          <TrashcanSVG />
+        </button>
+      </Link>
     </div>
   );
 };

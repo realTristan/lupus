@@ -3,7 +3,7 @@ import { type Dispatch, type SetStateAction } from "react";
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   type: string;
@@ -11,7 +11,7 @@ export interface Project {
   createdAt: Date;
   updatedAt: Date;
   user: User;
-  userSecret: number;
+  userSecret: string;
 }
 
 export interface User {
