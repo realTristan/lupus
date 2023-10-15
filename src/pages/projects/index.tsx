@@ -64,7 +64,7 @@ export default function Projects(): JSX.Element {
           <h1 className="mb-2 text-3xl font-bold">arcai</h1>
         </Link>
 
-        <div className="fixed right-10 top-10 flex flex-row items-center justify-center">
+        <div className="fixed right-10 top-10 flex flex-row items-center justify-center gap-6">
           <Link
             href="/projects/new"
             className="m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
