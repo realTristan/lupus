@@ -7,6 +7,8 @@ import {
 
 // import google provider
 import GoogleProvider from "next-auth/providers/google";
+import { sha256 } from "~/lib/crypto";
+import { Prisma } from "~/lib/prisma";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,10 +18,11 @@ import GoogleProvider from "next-auth/providers/google";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: string;
-      // ...other properties
-      // role: UserRole;
+    user: {
+      secret: string | null;
+      email: string | null;
+      image: string | null;
+      name: string | null;
     };
   }
 
@@ -35,17 +38,55 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session }) => ({
-      ...session,
-    }),
-  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
   ],
+  callbacks: {
+    async session({ session }) {
+      const bearerSecret: string | undefined = process.env.BEARER_SECRET;
+
+      if (!bearerSecret) {
+        throw new Error("BEARER_SECRET is not defined");
+      }
+
+      if (!session) {
+        throw new Error("Session is not defined");
+      }
+
+      if (!session.user) {
+        throw new Error("User is not defined");
+      }
+
+      const email: string | null = session.user.email ?? null;
+      const image: string | null = session.user.image ?? null;
+      const name: string | null = session.user.name ?? null;
+      const secret: string | null = email
+        ? await sha256(email + bearerSecret)
+        : null;
+
+      session.user = {
+        secret,
+        email,
+        image,
+        name,
+      };
+
+      // Add the user to the database if they don't already exist
+      if (email && secret) {
+        Prisma.addUser({
+          email,
+          secret,
+        }).catch(() => {
+          return;
+        });
+      }
+
+      return session;
+    },
+  },
 };
 
 /**

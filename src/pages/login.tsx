@@ -52,7 +52,7 @@ const LoginPage = (props: { redirect: string | null }): JSX.Element => {
  * Successful login response
  */
 const SuccessLogin = (): JSX.Element => (
-  <div className="bg-primary flex h-screen w-full flex-col items-center justify-center">
+  <div className="flex h-screen w-full flex-col items-center justify-center bg-slate-950">
     <p className="text-4xl font-bold tracking-wide text-white">
       Login Successful
     </p>

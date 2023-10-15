@@ -1,0 +1,31 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUPABASE_URL")
+  directUrl = env("SUPABASE_DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  type        String
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userSecret], references: [secret])
+  userSecret  String
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  secret     String    @unique
+  created_at DateTime  @default(now())
+  projects   Project[]
+}
+
+// npx prisma migrate dev --name init

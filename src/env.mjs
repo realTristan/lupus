@@ -29,6 +29,15 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
       ? z.string()
       : z.string().optional(),
+    BEARER_SECRET: process.env.BEARER_SECRET
+      ? z.string()
+      : z.string().optional(),
+
+    // Supabase env variables
+    SUPABASE_URL: process.env.SUPABASE_URL ? z.string() : z.string().optional(),
+    SUPABASE_DIRECT_URL: process.env.SUPABASE_DIRECT_URL
+      ? z.string()
+      : z.string().optional(),
   },
 
   /**
@@ -46,10 +55,17 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    BEARER_SECRET: process.env.BEARER_SECRET,
+
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_DIRECT_URL: process.env.SUPABASE_DIRECT_URL,
+
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
