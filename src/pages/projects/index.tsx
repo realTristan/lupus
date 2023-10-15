@@ -39,6 +39,10 @@ export default function Projects(): JSX.Element {
       return <LoadingCenter />;
     }
 
+    if (!session?.user.secret) {
+      return <></>;
+    }
+
     // Return the projects
     return (
       <>
@@ -57,7 +61,7 @@ export default function Projects(): JSX.Element {
             </Link>
           </div>
 
-          {!hasProjects(projects) && (
+          {!projects?.data?.result?.length && (
             <div className="flex flex-col items-center justify-center text-center">
               <p className="text-7xl font-black ">Nothing&#39;s here.</p>
               <p className="mt-3 text-lg font-normal">
@@ -76,8 +80,8 @@ export default function Projects(): JSX.Element {
             {projects.data?.result?.map((project: Project) => (
               <ProjectCard
                 key={project.id}
-                project={project}
-                secret={session.user.secret}
+                p={project}
+                sec={session.user.secret ?? ""}
               />
             ))}
           </div>
@@ -89,22 +93,17 @@ export default function Projects(): JSX.Element {
   return <LoadingCenter />;
 }
 
-const hasProjects = (projects: any): boolean => {
-  return projects?.data?.result?.length;
-};
-
-const ProjectCard = (props: {
-  project: Project;
-  secret: string | null;
-}): JSX.Element => {
-  if (!props.secret) {
-    return <></>;
-  }
-
+/**
+ * Project card
+ * @param {Project} props.project Project
+ * @param {string | null} props.secret User secret
+ * @returns {JSX.Element} JSX.Element
+ */
+const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
   const { refetch } = api.projects.deleteProject.useQuery(
     {
-      secret: props.secret,
-      id: props.project.id,
+      secret: props.sec,
+      id: props.p.id,
     },
     {
       enabled: false,
@@ -115,12 +114,12 @@ const ProjectCard = (props: {
   return (
     <div className="m-4 flex flex-row items-center justify-start">
       <Link
-        href={`/projects/id/${props.project.id}`}
+        href={`/projects/id/${props.p.id}`}
         className="flex flex-row items-center justify-between gap-10 rounded-full bg-slate-100/80 px-14 py-5 hover:bg-slate-200/70"
       >
         <div className="flex flex-col gap-1">
-          <p className="text-2xl font-black">{props.project.name}</p>
-          <p className="text-lg font-normal">{props.project.description}</p>
+          <p className="text-2xl font-black">{props.p.name}</p>
+          <p className="text-lg font-normal">{props.p.description}</p>
         </div>
 
         <button
