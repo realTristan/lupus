@@ -2,6 +2,7 @@ import { base64encode } from "~/lib/crypto";
 import { type ObjectState } from "~/lib/state";
 import { type Layer } from "~/lib/types";
 import PlusSVG from "./svgs/Plus";
+import CopySVG from "./svgs/Copy";
 
 /**
  * Network Model Component
@@ -47,16 +48,22 @@ export default function NetworkModel(props: {
         );
       })}
 
-      {props.layers.value.length < 3 ? (
-        <button
-          onClick={() => onClick()}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-        >
-          <PlusSVG className="fill-slate-950" /> <p>Add Layer</p>
+      <div className="flex flex-row gap-4">
+        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+          <CopySVG className="fill-slate-950" /> <p>Copy Code</p>
         </button>
-      ) : (
-        <></>
-      )}
+
+        {props.layers.value.length < 3 ? (
+          <button
+            onClick={() => onClick()}
+            className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          >
+            <PlusSVG className="fill-slate-950" /> <p>Add Layer</p>
+          </button>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }
