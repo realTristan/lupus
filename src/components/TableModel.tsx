@@ -49,9 +49,11 @@ export default class TrainDataTable extends Component {
 
             <tbody>
               {this.state.data.map((row: any) => (
-                <tr key={row.id}>
+                <tr key={row.id} id={`row-${row.id}`}>
                   {row.input.map((input: number[], index: number) => {
-                    const id: string = base64encode(Math.random().toString());
+                    const id: string = base64encode(
+                      Math.random() + Date.now() + "",
+                    );
 
                     return (
                       <this.TableBody
@@ -95,7 +97,7 @@ export default class TrainDataTable extends Component {
   }
 
   /**
-   * Table data component
+   * Table body component
    * @param props Table data props
    * @returns JSX.Element
    * @memberof Table
@@ -159,12 +161,12 @@ export default class TrainDataTable extends Component {
    * @memberof Table
    */
   private readonly AddRowButton = (): JSX.Element => {
+    const id = base64encode(Math.random() + Date.now() + "");
+
     const onClick = () => {
       if (this.state.data.length >= 25) {
         return;
       }
-
-      const id = base64encode(Math.random().toString());
 
       this.setState({
         data: [
@@ -179,13 +181,14 @@ export default class TrainDataTable extends Component {
 
     return (
       <>
-        <button
+        <a
           onClick={() => onClick()}
+          href={`#row-${id}`}
           className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
         >
           <PlusSVG className="h-5 w-5 fill-slate-950" />
           <span>Add Row</span>
-        </button>
+        </a>
       </>
     );
   };
