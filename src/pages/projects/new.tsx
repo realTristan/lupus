@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import LoadingCenter from "~/components/Loading";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
-import CirclesBackground from "~/components/svgs/CirclesBackground";
 
 // Popup dialog when the user wants to create a new project
 export default function NewProjectPage(): JSX.Element {
@@ -48,7 +47,6 @@ export default function NewProjectPage(): JSX.Element {
         </Head>
 
         <Navbar />
-        <CirclesBackground className="-z-10 opacity-10" />
 
         <main className="flex min-h-screen flex-col items-center justify-center">
           <p className="text-4xl font-bold text-slate-950">
