@@ -2,7 +2,7 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import LoadingCenter from "~/components/Loading";
+import LoadingCenter from "~/components/svgs/Loading";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
 

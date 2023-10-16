@@ -1,7 +1,7 @@
 import { useRouter, type NextRouter } from "next/router";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
-import LoadingCenter from "~/components/Loading";
+import LoadingCenter from "~/components/svgs/Loading";
 import TableModel from "~/components/TableModel";
 import Head from "next/head";
 import {

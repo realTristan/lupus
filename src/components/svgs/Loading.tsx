@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "~/utils/cn";
+
 /**
  * Loading Component
  * @returns JSX.Element
@@ -12,10 +14,10 @@ export default function LoadingCenter(): JSX.Element {
   );
 }
 
-export function LoadingRelative() {
+export function LoadingRelative(props: { className?: string }): JSX.Element {
   return (
     <svg
-      className="h-20 w-20 animate-spin text-white"
+      className={cn("h-20 w-20 animate-spin text-white", props.className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

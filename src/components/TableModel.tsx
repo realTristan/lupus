@@ -1,12 +1,20 @@
-import { Component } from "react";
+import { Component, useState } from "react";
 import CrossSVG from "./svgs/Cross";
 import * as tf from "@tensorflow/tfjs";
 import PlusSVG from "./svgs/Plus";
 import { base64encode } from "~/lib/crypto";
 import { cn } from "~/utils/cn";
+import { LoadingRelative } from "./svgs/Loading";
 
 export default class TrainDataTable extends Component {
-  state: any;
+  state: {
+    headers: string[];
+    data: any[];
+    testEpochs: number;
+    testInput: number;
+    model: tf.Sequential | null;
+    prediction: string;
+  };
   props: any = {
     headers: [],
     data: [],
@@ -21,6 +29,7 @@ export default class TrainDataTable extends Component {
       data: props.data,
       testEpochs: 10,
       testInput: 1,
+      model: null,
       prediction: "",
     };
   }
@@ -77,8 +86,8 @@ export default class TrainDataTable extends Component {
           </p>
         </div>
 
-        <div className="flex w-full flex-col gap-4">
-          <div className="flex flex-row gap-4">
+        <div className="flex w-full flex-col gap-2">
+          <div className="mb-1 flex flex-row gap-4">
             <this.DataInput />
             <this.EpochsInput />
           </div>
@@ -87,7 +96,12 @@ export default class TrainDataTable extends Component {
           <p className="text-red-500">
             {this.state.testEpochs > 100 ? "Too many epochs. Maximum: 100" : ""}
           </p>
-          <p>
+          <div className="flex flex-row gap-4">
+            <this.DownloadModelButton />
+            <this.BuildModelButton />
+          </div>
+
+          <p className="mt-2">
             Output:{" "}
             {this.state.prediction ? this.state.prediction : "Nothing yet."}
           </p>
@@ -95,6 +109,66 @@ export default class TrainDataTable extends Component {
       </div>
     );
   }
+
+  /**
+   * Build model button component
+   * @returns JSX.Element
+   * @memberof Table
+   */
+  private readonly BuildModelButton = (): JSX.Element => {
+    const [building, setBuilding] = useState(false);
+
+    const onClick = async () => {
+      if (building) {
+        return;
+      }
+
+      setBuilding(true);
+
+      const newModel = await this.buildModel();
+      this.setState({
+        model: newModel,
+      });
+
+      setBuilding(false);
+    };
+
+    return building ? (
+      <button
+        onClick={async () => await onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <LoadingRelative className="h-8 w-8" />
+      </button>
+    ) : (
+      <button
+        onClick={async () => await onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <span>Build Model</span>
+      </button>
+    );
+  };
+
+  /**
+   * Download model button component
+   * @returns JSX.Element
+   * @memberof Table
+   */
+  private readonly DownloadModelButton = (): JSX.Element => {
+    const onClick = async () => {
+      return;
+    };
+
+    return (
+      <button
+        onClick={async () => await onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <span>Download Model</span>
+      </button>
+    );
+  };
 
   /**
    * Table body component
@@ -279,38 +353,53 @@ export default class TrainDataTable extends Component {
    * @memberof Table
    */
   private readonly GeneratePredictionButton = (): JSX.Element => {
+    const [generating, setGenerating] = useState(false);
+
     const onClick = async () => {
       if (this.state.testEpochs > 100) {
         return;
       }
 
-      const pred = await this.predictGenderFromHeight();
+      if (generating) {
+        return;
+      }
+
+      setGenerating(true);
+
+      const pred = await this.testModel();
       this.setState({
         prediction: pred.toString(),
       });
+
+      setGenerating(false);
     };
 
-    return (
-      <>
-        <button
-          onClick={async () => await onClick()}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-        >
-          <span>
-            Generate Prediction for <strong>{this.state.testInput}</strong> with{" "}
-            <strong>{this.state.testEpochs}</strong> epochs
-          </span>
-        </button>
-      </>
+    return generating ? (
+      <button
+        onClick={async () => await onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <LoadingRelative className="h-8 w-8" />
+      </button>
+    ) : (
+      <button
+        onClick={async () => await onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <span>
+          Generate Prediction for <strong>{this.state.testInput}</strong> with{" "}
+          <strong>{this.state.testEpochs}</strong> epochs
+        </span>
+      </button>
     );
   };
 
   /**
-   * Predict the gender from the height
-   * @param data The data to train the network on
-   * @returns the tensor prediction
+   * Build the model
+   * @returns Promise<void>
+   * @memberof Table
    */
-  predictGenderFromHeight = async () => {
+  private readonly buildModel = async (): Promise<tf.Sequential> => {
     const { data } = this.state;
 
     const model = tf.sequential();
@@ -330,9 +419,31 @@ export default class TrainDataTable extends Component {
 
     await model.fit(xs, ys, { epochs: this.state.testEpochs });
 
-    const testTensor = tf.tensor2d([this.state.testInput], [1, 1]);
-    const pred = model.predict(testTensor);
+    return model;
+  };
 
-    return pred;
+  /**
+   * Test the model
+   * @returns Promise<tf.Tensor>
+   * @memberof Table
+   */
+  private readonly testModel = async () => {
+    const predict = async (model: tf.Sequential) => {
+      const testTensor = tf.tensor2d([this.state.testInput], [1, 1]);
+      const pred = model.predict(testTensor);
+
+      return pred;
+    };
+
+    if (this.state.model == null) {
+      const newModel = await this.buildModel();
+      this.setState({
+        model: newModel,
+      });
+
+      return await predict(newModel);
+    }
+
+    return await predict(this.state.model);
   };
 }

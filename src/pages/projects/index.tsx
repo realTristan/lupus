@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { type NextRouter, useRouter } from "next/router";
-import LoadingCenter from "~/components/Loading";
+import LoadingCenter from "~/components/svgs/Loading";
 import { type Project } from "~/lib/types";
 import { api } from "~/utils/api";
 import Link from "next/link";
