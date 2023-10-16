@@ -1,6 +1,8 @@
 # arcai ![Stars](https://img.shields.io/github/stars/realTristan/arc?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/arc?label=Watchers)
 
-<img width="1128" alt="Screenshot 2023-10-15 at 6 20 36 PM" src="https://github.com/realTristan/arc/assets/75189508/4b2a7ea7-2bb8-489c-9fb6-afb3af7c4d4c">
+<img width="1091" alt="Screenshot 2023-10-16 at 9 08 54 AM" src="https://github.com/realTristan/arc/assets/75189508/21ed6e2f-cf3c-410b-9778-494b0fb6c059">
+<img width="1090" alt="Screenshot 2023-10-16 at 9 09 10 AM" src="https://github.com/realTristan/arc/assets/75189508/02485559-2cbc-44be-b669-b9b71f496ba1">
+
 
 # License
 MIT License
