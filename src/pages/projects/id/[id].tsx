@@ -9,9 +9,9 @@ import {
   TEST_PROJECT_TABLE_HEADERS,
 } from "~/lib/constants";
 import Navbar from "~/components/Navbar";
-import PlusSVG from "~/components/svgs/Plus";
 import { type Layer } from "~/lib/types";
 import { ObjectState } from "~/lib/state";
+import NetworkModel from "~/components/NetworkModel";
 
 /**
  * Project page
@@ -109,63 +109,4 @@ export default function ProjectPage(): JSX.Element {
 
   // If the user isn't logged in, return a loading component
   return <LoadingCenter />;
-}
-
-/**
- * Network Model Component
- * @returns {JSX.Element} JSX.Element
- */
-function NetworkModel(props: { layers: ObjectState<Layer[]> }): JSX.Element {
-  const clean = (s: string): string => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  const onClick = () => {
-    if (props.layers.value.length >= 3) {
-      return;
-    }
-
-    props.layers.set([
-      ...props.layers.value,
-      {
-        type: "dense",
-        neurons: 1,
-        inputShape: 1,
-      },
-    ]);
-  };
-
-  return (
-    <div className="mx-3 my-5 flex w-full flex-col gap-4">
-      <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-        Network: tf.Sequential
-      </span>
-      <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-        Loss Function: MSE <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Optimizer: Adam
-      </span>
-      {props.layers.value.map((layer, i) => {
-        return (
-          <span
-            key={i}
-            className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-          >
-            Layer {i + 1}: {clean(layer.type)} <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Neurons: {layer.neurons} <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Input Shape: {layer.inputShape}
-          </span>
-        );
-      })}
-      {props.layers.value.length < 3 ? (
-        <button
-          onClick={() => onClick()}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-        >
-          <PlusSVG className="fill-slate-950" /> <p>Add Layer</p>
-        </button>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
 }

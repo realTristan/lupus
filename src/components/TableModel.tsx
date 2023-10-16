@@ -63,7 +63,7 @@ export default class TableModel extends Component {
                 <tr key={row.id} id={`row-${row.id}`}>
                   {row.input.map((input: number[], index: number) => {
                     const id: string = base64encode(
-                      Math.random() + Date.now() + "",
+                      Math.random() + ":" + Date.now() + "",
                     );
 
                     return (
@@ -265,7 +265,7 @@ export default class TableModel extends Component {
    * @memberof Table
    */
   private readonly AddRowButton = (): JSX.Element => {
-    const id = base64encode(Math.random() + Date.now() + "");
+    const id = base64encode(Math.random() + ":" + Date.now() + "");
 
     const onClick = () => {
       if (this.state.data.length >= 25) {
