@@ -63,6 +63,9 @@ export default class TrainDataTable extends Component {
           </table>
 
           <this.AddRowButton />
+          <p className="text-red-500">
+            {this.state.data.length >= 25 ? "Maximum rows reached (25)" : ""}
+          </p>
         </div>
 
         <div className="flex w-full flex-col gap-4">
@@ -72,7 +75,13 @@ export default class TrainDataTable extends Component {
           </div>
 
           <this.GeneratePredictionButton />
-          <p>{this.state.prediction}</p>
+          <p className="text-red-500">
+            {this.state.testEpochs > 100 ? "Too many epochs. Maximum: 100" : ""}
+          </p>
+          <p>
+            Output:{" "}
+            {this.state.prediction ? this.state.prediction : "Nothing yet."}
+          </p>
         </div>
       </div>
     );
@@ -129,9 +138,9 @@ export default class TrainDataTable extends Component {
     return (
       <td
         onClick={() => onClick()}
-        className="group cursor-pointer border-2 border-slate-100 px-7 py-3 hover:border-slate-950 hover:bg-slate-950 hover:text-white"
+        className="cursor-pointer border-2 border-slate-100 px-7 py-3 hover:bg-slate-50"
       >
-        <CrossSVG className="h-3 w-3 fill-slate-950 group-hover:fill-white" />
+        <CrossSVG className="h-3 w-3 fill-slate-950" />
       </td>
     );
   };
@@ -143,6 +152,10 @@ export default class TrainDataTable extends Component {
    */
   private readonly AddRowButton = (): JSX.Element => {
     const onClick = () => {
+      if (this.state.data.length >= 25) {
+        return;
+      }
+
       const id = base64encode(Math.random().toString());
 
       this.setState({
@@ -157,13 +170,15 @@ export default class TrainDataTable extends Component {
     };
 
     return (
-      <button
-        onClick={() => onClick()}
-        className="group flex w-full flex-row items-center justify-center gap-4 rounded-md border-2 border-slate-100 px-10 py-3 hover:border-slate-950 hover:bg-slate-950 hover:text-white"
-      >
-        <PlusSVG className="h-5 w-5 fill-slate-950 group-hover:fill-white" />
-        <span>Add Row</span>
-      </button>
+      <>
+        <button
+          onClick={() => onClick()}
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        >
+          <PlusSVG className="h-5 w-5 fill-slate-950" />
+          <span>Add Row</span>
+        </button>
+      </>
     );
   };
 
@@ -254,6 +269,10 @@ export default class TrainDataTable extends Component {
    */
   private readonly GeneratePredictionButton = (): JSX.Element => {
     const onClick = async () => {
+      if (this.state.testEpochs > 100) {
+        return;
+      }
+
       const pred = await this.predictGenderFromHeight();
       this.setState({
         prediction: pred.toString(),
@@ -261,15 +280,17 @@ export default class TrainDataTable extends Component {
     };
 
     return (
-      <button
-        onClick={async () => await onClick()}
-        className="group flex w-full flex-row items-center justify-center gap-4 rounded-md border-2 border-slate-100 px-10 py-3 hover:border-slate-950 hover:bg-slate-950 hover:text-white"
-      >
-        <span>
-          Generate Prediction for <strong>{this.state.testInput}</strong> with{" "}
-          <strong>{this.state.testEpochs}</strong> epochs
-        </span>
-      </button>
+      <>
+        <button
+          onClick={async () => await onClick()}
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        >
+          <span>
+            Generate Prediction for <strong>{this.state.testInput}</strong> with{" "}
+            <strong>{this.state.testEpochs}</strong> epochs
+          </span>
+        </button>
+      </>
     );
   };
 

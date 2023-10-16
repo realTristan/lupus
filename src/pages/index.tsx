@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import CirclesBackground from "~/components/svgs/CirclesBackground";
 import Navbar from "~/components/Navbar";
 import ExternalSVG from "~/components/svgs/External";
 
@@ -13,6 +14,7 @@ export default function Home() {
       </Head>
 
       <Navbar />
+      <CirclesBackground className="-z-10 opacity-10" />
 
       <main className="flex min-h-screen flex-col items-center justify-center">
         <h1 className="mx-10 text-center text-8xl font-bold md:text-9xl xl:w-3/4">
@@ -28,7 +30,7 @@ export default function Home() {
             <ExternalSVG className="fill-slate-950" /> <p>Get started</p>
           </Link>
           <Link
-            href="/"
+            href="/learn-more"
             className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <ExternalSVG className="fill-slate-950" /> <p>Learn more</p>

@@ -52,11 +52,11 @@ export default function ProjectPage() {
 
           <main className="mt-24 flex min-h-screen flex-col items-start gap-10 p-14">
             <div>
-              <h1 className="text-4xl font-black">{data.result.name}</h1>
-              <p className="text-2xl">{data.result.description}</p>
+              <h1 className="text-6xl font-black">{data.result.name}</h1>
+              <p className="mt-2 text-2xl">{data.result.description}</p>
             </div>
             <div>
-              <h1 className="w-fit text-6xl font-black" contentEditable={true}>
+              <h1 className="w-fit text-5xl font-thin" contentEditable={true}>
                 Table 1
               </h1>
               <TableModel

@@ -11,7 +11,7 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="fixed top-0 z-50 flex w-screen flex-row justify-between p-10">
+    <nav className="fixed top-0 z-50 flex w-screen flex-row justify-between bg-white/80 p-10 backdrop-blur-md">
       <Link href="/" className="group flex flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold">
           <mark className="mr-1 bg-transparent text-6xl font-black">A</mark>rc
@@ -51,7 +51,7 @@ export default function Navbar() {
           </button>
 
           <Image
-            src={session?.user.image ?? ""}
+            src={session?.user.image ?? "/images/default_pfp.png"}
             width={65}
             height={65}
             alt=""
