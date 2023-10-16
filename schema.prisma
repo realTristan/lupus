@@ -20,6 +20,7 @@ model Project {
   userSecret   String
   tables       TableModel[]
   NetworkModel NetworkModel[]
+  Build        Build[]
 }
 
 // Model for storing user data
@@ -29,6 +30,16 @@ model User {
   secret     String    @unique
   created_at DateTime  @default(now())
   projects   Project[]
+}
+
+// Model for storing previous builds
+model Build {
+  id        String   @id @unique @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
 }
 
 // Model for storing table data

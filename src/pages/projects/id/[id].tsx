@@ -102,6 +102,11 @@ export default function ProjectPage(): JSX.Element {
               layers={layers.value}
             />
           </div>
+          <div className="w-full">
+            <h1 className="w-fit text-5xl font-thin" contentEditable={true}>
+              Model Builds
+            </h1>
+          </div>
         </main>
       </>
     );
