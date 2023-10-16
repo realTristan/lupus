@@ -5,16 +5,19 @@ import GoogleLogoSmallSVG from "~/components/svgs/Google";
 export default function Navbar() {
   return (
     <nav className="fixed left-10 top-10 flex items-center justify-between">
-      <div className="flex flex-row items-center justify-center gap-4">
+      <Link
+        href="/"
+        className="fixed left-10 top-10 flex flex-row items-center justify-center gap-4"
+      >
         <Image
-          src="/images/arcai_logo.png"
+          src="/images/arcbuildinglogo2.png"
           width={50}
           height={100}
           alt=""
           className="w-auto rounded-full"
         />
-        <h1 className="mb-2 text-3xl font-bold">arcai</h1>
-      </div>
+        <h1 className="text-3xl font-bold">arcai</h1>
+      </Link>
 
       <Link
         href="/login?redirect=/projects"

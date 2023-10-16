@@ -22,6 +22,11 @@ export interface User {
 }
 
 export interface TableData {
+  id: string;
+  input: number[];
+}
+
+export interface TableInput {
   headers: string[];
-  data: any[][];
+  data: TableData[];
 }

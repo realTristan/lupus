@@ -2,12 +2,15 @@ import { useRouter, type NextRouter } from "next/router";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import LoadingCenter from "~/components/Loading";
-import { base64encode } from "~/lib/crypto";
-import TrainDataTable from "~/components/TrainDataTable";
+import TableModel from "~/components/TableModel";
 import Link from "next/link";
 import PlusSVG from "~/components/svgs/Plus";
 import Image from "next/image";
 import Head from "next/head";
+import {
+  TEST_PROJECT_TABLE_DATA,
+  TEST_PROJECT_TABLE_HEADERS,
+} from "~/lib/constants";
 
 export default function ProjectPage() {
   const { data: session, status } = useSession();
@@ -40,13 +43,6 @@ export default function ProjectPage() {
       refetch();
     }
 
-    const tableHeaders = ["ID", "Gender (M/F)", "Height (cm)"];
-    const tableData = [
-      { id: base64encode(Math.random().toString()), gender: 0, height: 220 },
-      { id: base64encode(Math.random().toString()), gender: 0, height: 210 },
-      { id: base64encode(Math.random().toString()), gender: 1, height: 120 },
-    ];
-
     if (data?.result) {
       return (
         <>
@@ -59,13 +55,13 @@ export default function ProjectPage() {
             className="fixed left-10 top-10 flex flex-row items-center justify-center gap-4"
           >
             <Image
-              src="/images/arcai_logo.png"
+              src="/images/arcbuildinglogo2.png"
               width={50}
               height={100}
               alt=""
               className="w-auto rounded-full"
             />
-            <h1 className="mb-2 text-3xl font-bold">arcai</h1>
+            <h1 className="text-3xl font-bold">arcai</h1>
           </Link>
 
           <div className="fixed right-10 top-10 flex flex-row items-center justify-center gap-6">
@@ -89,7 +85,10 @@ export default function ProjectPage() {
             <h1 className="text-4xl font-black">{data.result.name}</h1>
             <p className="text-2xl">{data.result.description}</p>
 
-            <TrainDataTable headers={tableHeaders} data={tableData} />
+            <TableModel
+              headers={TEST_PROJECT_TABLE_HEADERS}
+              data={TEST_PROJECT_TABLE_DATA}
+            />
           </main>
         </>
       );

@@ -55,13 +55,13 @@ export default function Projects(): JSX.Element {
           className="fixed left-10 top-10 flex flex-row items-center justify-center gap-4"
         >
           <Image
-            src="/images/arcai_logo.png"
+            src="/images/arcbuildinglogo2.png"
             width={50}
             height={100}
             alt=""
             className="w-auto rounded-full"
           />
-          <h1 className="mb-2 text-3xl font-bold">arcai</h1>
+          <h1 className="text-3xl font-bold">arcai</h1>
         </Link>
 
         <div className="fixed right-10 top-10 flex flex-row items-center justify-center gap-6">
