@@ -3,6 +3,7 @@ import { type ObjectState } from "~/lib/state";
 import { type Layer } from "~/lib/types";
 import PlusSVG from "./svgs/Plus";
 import CopySVG from "./svgs/Copy";
+import TrashcanSVG from "./svgs/Trashcan";
 
 /**
  * Network Model Component
@@ -133,6 +134,20 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
             onBlur={(e) => onBlur(e, "inputShape")}
           />
         </span>
+
+        {/* Button to delete the current layer */}
+        {props.index >= 1 && (
+          <button
+            onClick={() => {
+              const newLayers = props.layers.value;
+              newLayers.splice(props.index, 1);
+              props.layers.set(newLayers);
+            }}
+            className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          >
+            <TrashcanSVG className="h-5 w-5 fill-slate-950" /> <p>Delete</p>
+          </button>
+        )}
       </div>
     </span>
   );
