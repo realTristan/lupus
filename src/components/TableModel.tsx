@@ -50,10 +50,17 @@ export default class TrainDataTable extends Component {
             <tbody>
               {this.state.data.map((row: any) => (
                 <tr key={row.id}>
-                  {row.input.map((input: any) => {
+                  {row.input.map((input: number[], index: number) => {
                     const id: string = base64encode(Math.random().toString());
 
-                    return <this.TableBody key={id} input={input} row={row} />;
+                    return (
+                      <this.TableBody
+                        key={id}
+                        input={input}
+                        row={row}
+                        index={index}
+                      />
+                    );
                   })}
 
                   <this.RemoveRowButton id={row.id} />
@@ -95,16 +102,17 @@ export default class TrainDataTable extends Component {
    */
   private readonly TableBody = (props: {
     row: any;
-    input: string;
+    input: number[];
+    index: number;
   }): JSX.Element => {
     const onBlur = (e: any) => {
-      const newInput = props.row.input.map((i: any) =>
-        i === props.input ? e.currentTarget.textContent : i,
-      );
+      const newData = this.state.data.map((d: any) => {
+        if (d.id === props.row.id) {
+          d.input[props.index] = parseInt(e.currentTarget.textContent);
+        }
 
-      const newData = this.state.data.map((d: any) =>
-        d.id === props.row.id ? { ...d, input: newInput } : d,
-      );
+        return d;
+      });
 
       this.setState({
         data: newData,
