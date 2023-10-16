@@ -398,7 +398,7 @@ export default class TableModel extends Component {
 
       const pred = await this.testModel();
       this.setState({
-        prediction: pred.toString(),
+        prediction: pred?.toString() ?? "Error",
       });
 
       setTesting(false);
@@ -474,7 +474,14 @@ export default class TableModel extends Component {
     };
 
     if (this.state.model == null) {
-      const newModel = await this.buildModel();
+      const newModel = await this.buildModel().catch((e) =>
+        console.log(e.message),
+      );
+
+      if (!newModel) {
+        return;
+      }
+
       this.setState({
         model: newModel,
       });
