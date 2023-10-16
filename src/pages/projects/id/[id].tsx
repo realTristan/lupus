@@ -81,14 +81,21 @@ export default function ProjectPage() {
             />
           </div>
 
-          <main className="mt-24 flex min-h-screen flex-col items-center p-14">
-            <h1 className="text-4xl font-black">{data.result.name}</h1>
-            <p className="text-2xl">{data.result.description}</p>
-
-            <TableModel
-              headers={TEST_PROJECT_TABLE_HEADERS}
-              data={TEST_PROJECT_TABLE_DATA}
-            />
+          <main className="mt-24 flex min-h-screen flex-col items-start gap-10 p-14">
+            <div>
+              <h1 className="text-4xl font-black">{data.result.name}</h1>
+              <p className="text-2xl">{data.result.description}</p>
+            </div>
+            <div>
+              <h1 className="w-fit text-6xl font-black" contentEditable={true}>
+                Table 1
+              </h1>
+              <TableModel
+                className="m-7"
+                headers={TEST_PROJECT_TABLE_HEADERS}
+                data={TEST_PROJECT_TABLE_DATA}
+              />
+            </div>
           </main>
         </>
       );

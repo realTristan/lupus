@@ -1,15 +1,16 @@
 import { Component } from "react";
 import CrossSVG from "./svgs/Cross";
 import * as tf from "@tensorflow/tfjs";
-import { type TableInput } from "~/lib/types";
 import PlusSVG from "./svgs/Plus";
 import { base64encode } from "~/lib/crypto";
+import { cn } from "~/utils/cn";
 
 export default class TrainDataTable extends Component {
   state: any;
-  props: TableInput = {
+  props: any = {
     headers: [],
     data: [],
+    className: "",
   };
 
   constructor(props: any) {
@@ -30,7 +31,12 @@ export default class TrainDataTable extends Component {
    */
   render() {
     return (
-      <div className="m-10 flex w-full flex-col gap-4 p-10 lg:flex-row lg:gap-10">
+      <div
+        className={cn(
+          "flex w-full flex-col gap-4 lg:flex-row lg:gap-10",
+          this.props.className,
+        )}
+      >
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <table className="w-full">
             <thead>
