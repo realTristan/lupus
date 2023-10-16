@@ -92,7 +92,7 @@ export default class TrainDataTable extends Component {
             <this.EpochsInput />
           </div>
 
-          <this.GeneratePredictionButton />
+          <this.TestModelButton />
           <p className="text-red-500">
             {this.state.testEpochs > 100 ? "Too many epochs. Maximum: 100" : ""}
           </p>
@@ -352,29 +352,29 @@ export default class TrainDataTable extends Component {
    * @returns JSX.Element
    * @memberof Table
    */
-  private readonly GeneratePredictionButton = (): JSX.Element => {
-    const [generating, setGenerating] = useState(false);
+  private readonly TestModelButton = (): JSX.Element => {
+    const [testing, setTesting] = useState(false);
 
     const onClick = async () => {
       if (this.state.testEpochs > 100) {
         return;
       }
 
-      if (generating) {
+      if (testing) {
         return;
       }
 
-      setGenerating(true);
+      setTesting(true);
 
       const pred = await this.testModel();
       this.setState({
         prediction: pred.toString(),
       });
 
-      setGenerating(false);
+      setTesting(false);
     };
 
-    return generating ? (
+    return testing ? (
       <button
         onClick={async () => await onClick()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
@@ -387,7 +387,7 @@ export default class TrainDataTable extends Component {
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <span>
-          Generate Prediction for <strong>{this.state.testInput}</strong> with{" "}
+          Test Model: <strong>{this.state.testInput}</strong> with{" "}
           <strong>{this.state.testEpochs}</strong> epochs
         </span>
       </button>
