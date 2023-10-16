@@ -6,6 +6,7 @@ import { base64encode } from "~/lib/crypto";
 import { cn } from "~/utils/cn";
 import { LoadingRelative } from "./svgs/Loading";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default class TableModel extends Component {
   state: {
@@ -151,7 +152,7 @@ export default class TableModel extends Component {
     return building ? (
       <button
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <LoadingRelative className="h-8 w-8" />
       </button>
@@ -254,7 +255,7 @@ export default class TableModel extends Component {
     return (
       <td
         onClick={() => onClick()}
-        className="cursor-pointer border-2 border-slate-100 px-7 py-3 hover:bg-slate-50"
+        className="cursor-pointer border-2 border-slate-100 px-7 py-3 text-base hover:bg-slate-50"
       >
         <CrossSVG className="h-3 w-3 fill-slate-950" />
       </td>
@@ -286,16 +287,23 @@ export default class TableModel extends Component {
     };
 
     return (
-      <>
-        <a
-          onClick={() => onClick()}
-          href={`#row-${id}`}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-        >
-          <PlusSVG className="h-5 w-5 fill-slate-950" />
-          <span>Add Row</span>
-        </a>
-      </>
+      <div className="flex w-full flex-row gap-4">
+        {this.state.data.length < 25 ? (
+          <Link
+            onClick={() => onClick()}
+            href={`#row-${id}`}
+            className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          >
+            <PlusSVG className="h-5 w-5 fill-slate-950" />
+            <span>Add Row</span>
+          </Link>
+        ) : (
+          <></>
+        )}
+        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+          <span>Import Test Dataset</span>
+        </button>
+      </div>
     );
   };
 
@@ -409,7 +417,7 @@ export default class TableModel extends Component {
     return testing ? (
       <button
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <LoadingRelative className="h-8 w-8" />
       </button>

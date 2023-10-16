@@ -115,7 +115,7 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
         Layer {props.index + 1}: {clean(props.layer.type)}
       </p>
 
-      <div className="flex w-full flex-row items-start justify-start gap-2">
+      <div className="flex w-full flex-col items-start justify-start gap-2 lg:flex-row">
         <span className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-2 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
           <p>Neurons: </p>
           <input
