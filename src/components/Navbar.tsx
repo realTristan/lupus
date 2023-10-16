@@ -12,13 +12,13 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 flex w-screen flex-row justify-between p-10">
-      <Link href="/" className="flex flex-col items-start gap-2">
+      <Link href="/" className="group flex flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold">
           <mark className="mr-1 bg-transparent text-6xl font-black">A</mark>rc
           AI{" "}
           <mark className="bg-transparent text-base font-thin">beta v0.1</mark>
         </h1>
-        <span className="h-1 w-20 bg-slate-300"></span>
+        <span className="h-0.5 w-0 bg-slate-300 duration-300 ease-in-out group-hover:w-20"></span>
       </Link>
 
       {status !== "authenticated" && (
