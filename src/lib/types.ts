@@ -20,3 +20,8 @@ export interface User {
   secret: string;
   projects?: Project[];
 }
+
+export interface TableData {
+  headers: string[];
+  data: any[][];
+}

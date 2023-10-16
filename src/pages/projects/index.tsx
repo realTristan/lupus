@@ -4,7 +4,7 @@ import { type NextRouter, useRouter } from "next/router";
 import LoadingCenter from "~/components/Loading";
 import { type Project } from "~/lib/types";
 import { api } from "~/utils/api";
-import PlusSmallSVG from "~/components/svgs/Plus";
+import PlusSVG from "~/components/svgs/Plus";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -69,7 +69,7 @@ export default function Projects(): JSX.Element {
             href="/projects/new"
             className="m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
           >
-            <PlusSmallSVG />
+            <PlusSVG />
             <p>New Project</p>
           </Link>
           <Image
