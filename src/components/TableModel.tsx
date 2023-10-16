@@ -160,7 +160,9 @@ export default class TableModel extends Component {
         onClick={async () => await onClick()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>Build</span>
+        <span>
+          Build with <strong>{this.state.testEpochs}</strong> epochs
+        </span>
       </button>
     );
   };
@@ -417,8 +419,7 @@ export default class TableModel extends Component {
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <span>
-          Test Model: <strong>{this.state.testInput}</strong> with{" "}
-          <strong>{this.state.testEpochs}</strong> epochs
+          Test Model using: <strong>{this.state.testInput}</strong>
         </span>
       </button>
     );
