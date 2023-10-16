@@ -132,7 +132,7 @@ const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
       <td className="flex flex-col gap-2 border px-4 py-2">
         <Link
           href={`/projects/id/${props.p.id}`}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:border-slate-300 hover:bg-slate-200"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:border-slate-200 hover:bg-slate-200"
         >
           <ExternalSVG className="fill-slate-950" /> <p>Open Project</p>
         </Link>
@@ -142,7 +142,7 @@ const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
             refetch();
             router.reload();
           }}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-red-500 px-14 py-3 text-lg font-normal tracking-wider text-white hover:border-red-700 hover:bg-red-600"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-red-500 bg-red-500 px-14 py-3 text-lg font-normal tracking-wider text-white hover:border-red-600 hover:bg-red-600"
         >
           <TrashcanSVG className="fill-white" /> <p>Delete Project</p>
         </button>

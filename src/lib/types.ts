@@ -30,3 +30,9 @@ export interface TableInput {
   headers: string[];
   data: TableData[];
 }
+
+export interface Layer {
+  type: "dense" | "conv2d" | "maxpool2d";
+  neurons?: number;
+  inputShape?: number;
+}

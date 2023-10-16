@@ -5,8 +5,9 @@ import PlusSVG from "./svgs/Plus";
 import { base64encode } from "~/lib/crypto";
 import { cn } from "~/utils/cn";
 import { LoadingRelative } from "./svgs/Loading";
+import { useRouter } from "next/router";
 
-export default class TrainDataTable extends Component {
+export default class TableModel extends Component {
   state: {
     headers: string[];
     data: any[];
@@ -19,6 +20,7 @@ export default class TrainDataTable extends Component {
     headers: [],
     data: [],
     className: "",
+    layers: [],
   };
 
   constructor(props: any) {
@@ -101,7 +103,7 @@ export default class TrainDataTable extends Component {
             <this.BuildModelButton />
           </div>
 
-          <p className="mt-2">
+          <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
             Output:{" "}
             {this.state.prediction ? this.state.prediction : "Nothing yet."}
           </p>
@@ -109,6 +111,19 @@ export default class TrainDataTable extends Component {
       </div>
     );
   }
+
+  /**
+   * Network selection dropdown component
+   * @returns JSX.Element
+   * @memberof Table
+   */
+  private readonly NetworkSelectionDropdown = (): JSX.Element => {
+    return (
+      <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+        Using: <strong>Network 1</strong>
+      </p>
+    );
+  };
 
   /**
    * Build model button component
@@ -143,9 +158,9 @@ export default class TrainDataTable extends Component {
     ) : (
       <button
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>Build Model</span>
+        <span>Build</span>
       </button>
     );
   };
@@ -156,16 +171,31 @@ export default class TrainDataTable extends Component {
    * @memberof Table
    */
   private readonly DownloadModelButton = (): JSX.Element => {
+    const router = useRouter();
+
     const onClick = async () => {
+      if (!this.state.model) {
+        return;
+      }
+
+      const model = await this.state.model.save("downloads://model");
+      const modelJSON = JSON.stringify(model);
+      const ENCODING_PREFIX = "data:text/plain;charset=utf-8,";
+
+      router
+        .push(`${ENCODING_PREFIX}${encodeURIComponent(modelJSON)}`)
+        .catch((e) => console.log(e.message));
+
       return;
     };
 
     return (
       <button
+        disabled={!this.state.model}
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
       >
-        <span>Download Model</span>
+        <span>Download</span>
       </button>
     );
   };
@@ -258,7 +288,7 @@ export default class TrainDataTable extends Component {
         <a
           onClick={() => onClick()}
           href={`#row-${id}`}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
         >
           <PlusSVG className="h-5 w-5 fill-slate-950" />
           <span>Add Row</span>
@@ -377,14 +407,14 @@ export default class TrainDataTable extends Component {
     return testing ? (
       <button
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <LoadingRelative className="h-8 w-8" />
       </button>
     ) : (
       <button
         onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <span>
           Test Model: <strong>{this.state.testInput}</strong> with{" "}
@@ -404,8 +434,16 @@ export default class TrainDataTable extends Component {
 
     const model = tf.sequential();
 
-    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
-    model.compile({ loss: "meanSquaredError", optimizer: "sgd" });
+    for (const layer of this.props.layers) {
+      model.add(
+        tf.layers.dense({
+          units: layer.neurons,
+          inputShape: [layer.inputShape],
+        }),
+      );
+    }
+
+    model.compile({ loss: "meanSquaredError", optimizer: "adam" });
 
     const xs = tf.tensor2d(
       data.map((d: any) => d.input[0]),

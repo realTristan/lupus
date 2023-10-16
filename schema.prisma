@@ -8,18 +8,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Model for storing projects
 model Project {
-  id          String       @id @unique @default(uuid())
-  name        String
-  description String?
-  tags        String[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userSecret], references: [secret])
-  userSecret  String
-  tables      TableModel[]
+  id           String         @id @unique @default(uuid())
+  name         String
+  description  String?
+  tags         String[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  user         User           @relation(fields: [userSecret], references: [secret])
+  userSecret   String
+  tables       TableModel[]
+  NetworkModel NetworkModel[]
 }
 
+// Model for storing user data
 model User {
   id         Int       @id @default(autoincrement())
   email      String    @unique
@@ -28,6 +31,7 @@ model User {
   projects   Project[]
 }
 
+// Model for storing table data
 model TableModel {
   id          String   @id @unique @default(uuid())
   name        String
@@ -38,7 +42,28 @@ model TableModel {
   projectId   String
 }
 
+// Model for storing network models
+model NetworkModel {
+  id          String              @id @unique @default(uuid())
+  name        String
+  description String?
+  layers      NetworkModelLayer[]
+  project     Project             @relation(fields: [projectId], references: [id])
+  projectId   String
+}
+
+// Model for storing network model layers
+model NetworkModelLayer {
+  id             String        @id @unique @default(uuid())
+  type           String
+  neurons        Int
+  activation     String
+  shape          Int
+  NetworkModel   NetworkModel? @relation(fields: [networkModelId], references: [id])
+  networkModelId String?
+}
+
+// Model for storing image data
 // model GraphicsModel {}
-// model NetworkModel {}
 
 // npx prisma migrate dev --name init
