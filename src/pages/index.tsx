@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "~/components/Navbar";
+import ExternalSVG from "~/components/svgs/External";
 
 export default function Home() {
   return (
@@ -15,20 +16,23 @@ export default function Home() {
 
       <main className="flex min-h-screen flex-col items-center justify-center">
         <h1 className="mx-10 text-center text-8xl font-bold md:text-9xl xl:w-3/4">
-          Welcome<mark className="bg-transparent text-slate-300">,</mark> to the
-          future
-          <mark className="bg-transparent text-slate-300">.</mark>
+          Build<mark className="bg-transparent text-slate-300">.</mark>{" "}
+          Collaborate<mark className="bg-transparent text-slate-300">.</mark>{" "}
+          Market<mark className="bg-transparent text-slate-300">.</mark>
         </h1>
         <div className="m-10 flex flex-row gap-10">
           <Link
             href="/projects"
-            className="rounded-full bg-slate-950 px-14 py-5 text-xl font-extrabold tracking-wider text-white shadow-xl duration-500 ease-in-out hover:bg-white hover:text-slate-950"
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >
-            Get started
+            <ExternalSVG className="fill-slate-950" /> <p>Get started</p>
           </Link>
-          <button className="rounded-full bg-slate-950 px-14 py-5 text-xl font-extrabold tracking-wider text-white shadow-xl duration-500 ease-in-out hover:bg-white hover:text-slate-950">
-            Learn more
-          </button>
+          <Link
+            href="/"
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          >
+            <ExternalSVG className="fill-slate-950" /> <p>Learn more</p>
+          </Link>
         </div>
       </main>
     </>

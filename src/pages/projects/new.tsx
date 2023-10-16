@@ -43,40 +43,40 @@ export default function NewProjectPage(): JSX.Element {
         <p className="text-4xl font-bold text-slate-950">
           Create a new project
         </p>
-        <p className="mt-2 text-base font-normal italic text-slate-950">
+        <p className="mt-1 text-base font-normal italic text-slate-950">
           Projects are used to organize your data
         </p>
-        <div className="flex flex-col items-center justify-center">
+        <div className="mt-2 flex w-1/3 flex-col items-center justify-center">
           <input
-            className="m-3 h-12 w-96 rounded-none border-b-2 border-b-slate-950 bg-slate-50 px-4 py-2 text-slate-600"
+            className="m-3 h-12 w-full rounded-none border-b-2 border-b-slate-950 bg-slate-50 px-4 py-2 text-slate-600"
             placeholder="Project Name"
             onChange={(e) => setProject({ ...project, name: e.target.value })}
           />
           <input
-            className="m-3 h-12 w-96 rounded-none border-b-2 border-b-slate-950 bg-slate-50 px-4 py-2 text-slate-600"
+            className="m-3 h-12 w-full rounded-none border-b-2 border-b-slate-950 bg-slate-50 px-4 py-2 text-slate-600"
             placeholder="Project Description"
             onChange={(e) =>
               setProject({ ...project, description: e.target.value })
             }
           />
-          <div className="flex flex-row gap-4">
+          <div className="flex w-full flex-row gap-4">
             <button
               onClick={() => {
                 refetch().then(() => {
                   router.push("/projects").catch((e) => console.log(e.message));
                 });
               }}
-              className="m-4 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-white hover:text-slate-950"
+              className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
             >
-              Create
+              <p>Create</p>
             </button>
             <button
               onClick={() =>
                 router.push("/projects").catch((e) => console.log(e.message))
               }
-              className="m-4 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-white hover:text-slate-950"
+              className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
             >
-              Cancel
+              <p>Cancel</p>
             </button>
           </div>
         </div>

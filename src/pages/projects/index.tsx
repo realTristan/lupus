@@ -4,9 +4,10 @@ import { type NextRouter, useRouter } from "next/router";
 import LoadingCenter from "~/components/Loading";
 import { type Project } from "~/lib/types";
 import { api } from "~/utils/api";
-import PlusSVG from "~/components/svgs/Plus";
 import Link from "next/link";
-import Image from "next/image";
+import Navbar from "~/components/Navbar";
+import ExternalSVG from "~/components/svgs/External";
+import TrashcanSVG from "~/components/svgs/Trashcan";
 
 /**
  * Projects page
@@ -50,36 +51,7 @@ export default function Projects(): JSX.Element {
           <title>Projects | arcai</title>
         </Head>
 
-        <Link
-          href="/"
-          className="fixed left-10 top-10 flex flex-row items-center justify-center gap-4"
-        >
-          <Image
-            src="/images/arcbuildinglogo2.png"
-            width={50}
-            height={100}
-            alt=""
-            className="w-auto rounded-full"
-          />
-          <h1 className="text-3xl font-bold">arcai</h1>
-        </Link>
-
-        <div className="fixed right-10 top-10 flex flex-row items-center justify-center gap-6">
-          <Link
-            href="/projects/new"
-            className="m-4 flex flex-row gap-2 rounded-full bg-slate-950 px-10 py-4 text-white shadow-xl hover:bg-slate-800"
-          >
-            <PlusSVG />
-            <p>New Project</p>
-          </Link>
-          <Image
-            src={session?.user.image ?? ""}
-            width={65}
-            height={65}
-            alt=""
-            className="rounded-full"
-          />
-        </div>
+        <Navbar />
 
         <main className="mt-24 flex min-h-screen flex-col items-center p-14">
           {!projects?.data?.result?.length ? (
@@ -90,9 +62,9 @@ export default function Projects(): JSX.Element {
               </p>
               <Link
                 href="/projects/new"
-                className="m-4 rounded-full bg-slate-950 px-10 py-4 font-bold tracking-wide text-white hover:bg-slate-800"
+                className="mt-5 flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-4 text-lg font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               >
-                Get Started
+                <ExternalSVG className="fill-slate-950" /> <p>Get started</p>
               </Link>
             </div>
           ) : (
@@ -157,24 +129,23 @@ const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
       <td className="border px-4 py-2">
         {new Date(props.p.updatedAt).toLocaleString()}
       </td>
-      <td className="border px-4 py-2">
-        <div>
-          <Link
-            href={`/projects/id/${props.p.id}`}
-            className="m-2 rounded-md bg-slate-950 px-5 py-3 font-medium tracking-wide text-white shadow-xl hover:bg-white hover:text-slate-950"
-          >
-            Open
-          </Link>
-          <button
-            className="m-2 rounded-md bg-red-500 px-5 py-3 font-medium tracking-wide text-white shadow-xl hover:bg-red-600"
-            onClick={() => {
-              refetch();
-              router.reload();
-            }}
-          >
-            Delete
-          </button>
-        </div>
+      <td className="flex flex-col gap-2 border px-4 py-2">
+        <Link
+          href={`/projects/id/${props.p.id}`}
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-lg font-normal tracking-wider text-slate-950 hover:border-slate-300 hover:bg-slate-200"
+        >
+          <ExternalSVG className="fill-slate-950" /> <p>Open Project</p>
+        </Link>
+
+        <button
+          onClick={() => {
+            refetch();
+            router.reload();
+          }}
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-red-500 px-14 py-3 text-lg font-normal tracking-wider text-white hover:border-red-700 hover:bg-red-600"
+        >
+          <TrashcanSVG className="fill-white" /> <p>Delete Project</p>
+        </button>
       </td>
     </tr>
   );
