@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import LoadingCenter from "~/components/Loading";
 import { type Session } from "next-auth";
+import { useRouter } from "next/router";
 
 /**
  * Return the component jsx
@@ -33,6 +34,7 @@ export default function Login(props: {
  */
 const LoginPage = (props: { redirect: string | null }): JSX.Element => {
   const { status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -41,8 +43,11 @@ const LoginPage = (props: { redirect: string | null }): JSX.Element => {
   }, [status]);
 
   if (status === "authenticated") {
-    if (props.redirect) window.location.href = props.redirect;
-    else return <SuccessLogin />;
+    if (props.redirect) {
+      router.push(props.redirect).catch((e) => console.log(e.message));
+    } else {
+      return <SuccessLogin />;
+    }
   }
 
   return <LoadingCenter />;
