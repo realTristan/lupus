@@ -5,7 +5,7 @@ import LoadingCenter from "~/components/svgs/Loading";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
 import { type Table, type Network, type Project } from "~/lib/types";
-import TableModel from "~/components/TableModel";
+import TableModel from "~/components/TableModel/TableModel";
 import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel";
 import { genId } from "~/lib/crypto";
