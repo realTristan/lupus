@@ -1,11 +1,3 @@
-import { type Sequential } from "@tensorflow/tfjs";
-import { useState } from "react";
-import {
-  type Table,
-  type Build,
-  type Network,
-  type TableValue,
-} from "~/lib/types";
 import TableHeader from "./components/TableHeader";
 import TableCell from "./components/TableCell";
 import RemoveRowButton from "./components/RemoveRowButton";
@@ -18,8 +10,16 @@ import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
 import ModelBuildsList from "./components/ModelBuildsList";
-import { ObjectState } from "~/lib/state";
 import linearTableToObjs from "./lib/linearTableToObjs";
+import { ObjectState } from "~/lib/state";
+import { useState } from "react";
+import { type Sequential } from "@tensorflow/tfjs";
+import {
+  type Table,
+  type Build,
+  type Network,
+  type TableValue,
+} from "~/lib/types";
 
 /**
  * Test Model Button props
