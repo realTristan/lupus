@@ -5,13 +5,14 @@ import PlusSVG from "./svgs/Plus";
 import { genId } from "~/lib/crypto";
 import { LoadingRelative } from "./svgs/Loading";
 import { useRouter } from "next/router";
-import { type TableValue } from "~/lib/types";
+import { type Table, type TableValue } from "~/lib/types";
 import { MAX_ROWS } from "~/lib/constants";
 
 interface TableModelProps {
   headers: string[];
   values: number[];
   layers: any[];
+  table: Table;
 }
 
 interface TableModelState {
@@ -80,65 +81,75 @@ export default class TableModel extends Component {
    */
   render() {
     return (
-      <div className="flex w-full flex-col gap-4 lg:flex-row lg:gap-10">
-        <div className="flex w-full flex-col items-center justify-center gap-4">
-          <table className="w-full">
-            <thead>
-              <tr>
-                {this.state.headers.map((header: string) => (
-                  <this.TableHeader header={header} key={header} />
-                ))}
-                <this.TableHeader header={"Actions"} />
-              </tr>
-            </thead>
-
-            <tbody>
-              {this.state.values.map((row: any) => (
-                <tr key={row.id}>
-                  {row.values.map((value: number[], index: number) => {
-                    return (
-                      <this.TableBody
-                        key={row.id + ":" + index}
-                        value={value}
-                        row={row}
-                        index={index}
-                      />
-                    );
-                  })}
-
-                  <this.RemoveRowButton id={row.id} />
+      <div className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+        <h1 className="w-full text-5xl font-extrabold">
+          {this.props.table.name}
+        </h1>
+        <p className="mt-2 w-full text-xl font-thin">
+          {this.props.table.description}
+        </p>
+        <div className="mt-4 flex w-full flex-col lg:flex-row lg:gap-10">
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <table className="w-full">
+              <thead>
+                <tr>
+                  {this.state.headers.map((header: string) => (
+                    <this.TableHeader header={header} key={header} />
+                  ))}
+                  <this.TableHeader header={"Actions"} />
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
 
-          <div className="flex w-full flex-row gap-4">
-            <this.AddRowButton />
-            <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-              <span>Import Test Dataset</span>
-            </button>
+              <tbody>
+                {this.state.values.map((row: any) => (
+                  <tr key={row.id}>
+                    {row.values.map((value: number[], index: number) => {
+                      return (
+                        <this.TableBody
+                          key={row.id + ":" + index}
+                          value={value}
+                          row={row}
+                          index={index}
+                        />
+                      );
+                    })}
+
+                    <this.RemoveRowButton id={row.id} />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="flex w-full flex-row gap-4">
+              <this.AddRowButton />
+              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+                <span>Import Test Dataset</span>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className="flex w-full flex-col gap-2">
-          <div className="mb-1 flex flex-row gap-4">
-            <this.DataInput />
-            <this.EpochsInput />
+          <div className="flex w-full flex-col gap-2">
+            <div className="mb-1 flex flex-row gap-4">
+              <this.DataInput />
+              <this.EpochsInput />
+            </div>
+
+            <this.TestModelButton />
+            <p className="text-red-500">
+              {this.state.testEpochs > 100
+                ? "Too many epochs. Maximum: 100"
+                : ""}
+            </p>
+            <div className="flex flex-row gap-4">
+              <this.DownloadModelButton />
+              <this.BuildModelButton />
+            </div>
+
+            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+              Output:{" "}
+              {this.state.prediction ? this.state.prediction : "Nothing yet."}
+            </p>
           </div>
-
-          <this.TestModelButton />
-          <p className="text-red-500">
-            {this.state.testEpochs > 100 ? "Too many epochs. Maximum: 100" : ""}
-          </p>
-          <div className="flex flex-row gap-4">
-            <this.DownloadModelButton />
-            <this.BuildModelButton />
-          </div>
-
-          <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-            Output:{" "}
-            {this.state.prediction ? this.state.prediction : "Nothing yet."}
-          </p>
         </div>
       </div>
     );

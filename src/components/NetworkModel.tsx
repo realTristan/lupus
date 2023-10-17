@@ -20,6 +20,7 @@ const clean = (s: string): string => {
  */
 interface NetworkModelProps {
   project: ObjectState<Project>;
+  activeNetwork: ObjectState<Network>;
   network: Network;
 }
 
@@ -61,7 +62,29 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
   };
 
   return (
-    <div className="mx-3 my-5 flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+      <div className="flex flex-row justify-between">
+        <div className="w-full">
+          <h1 className="w-full text-5xl font-extrabold">
+            {props.network.name}
+          </h1>
+          <p className="w-full text-xl font-thin">
+            {props.network.description}
+          </p>
+        </div>
+        <button
+          disabled={props.network === props.activeNetwork.value}
+          onClick={() => props.activeNetwork.set(props.network)}
+          className="flex flex-row items-center justify-center gap-4 rounded-md border-2 border-slate-100 bg-white px-10 py-7 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+        >
+          <p>
+            {props.network == props.activeNetwork.value
+              ? "Already active"
+              : "Set as active"}
+          </p>
+        </button>
+      </div>
+
       {/* Network type */}
       <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
         Network: tf.Sequential

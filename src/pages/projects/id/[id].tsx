@@ -8,7 +8,6 @@ import { type Table, type Network, type Project } from "~/lib/types";
 import TableModel from "~/components/TableModel";
 import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel";
-import { useState } from "react";
 
 /**
  * Project page
@@ -63,7 +62,7 @@ export default function ProjectPage(): JSX.Element {
   /**
    * Store the networks
    */
-  const [activeNetwork, setActiveNetwork] = useState<Network>();
+  const activeNetwork = new ObjectState<Network>({} as Network);
 
   // If the user isn't logged in, redirect to the login page
   if (status === "unauthenticated") {
@@ -75,12 +74,12 @@ export default function ProjectPage(): JSX.Element {
   if (status === "authenticated") {
     // Verify states and data
     if (!session?.user.secret) return <></>;
-    if (!data?.result) {
+    if (!project.updated || !data?.result) {
       getProject().then((res) => {
         if (!res.data?.result) return;
 
         project.set(res.data.result);
-        setActiveNetwork(res.data.result.networks[0]);
+        activeNetwork.set(res.data.result.networks[0] ?? ({} as Network));
       });
 
       return <LoadingCenter />;
@@ -95,7 +94,7 @@ export default function ProjectPage(): JSX.Element {
 
         <Navbar />
 
-        <main className="mt-40 flex min-h-screen flex-col gap-10 p-14">
+        <main className="flex min-h-screen flex-col gap-10 p-14 pt-52">
           {/* Project title and description */}
           <div className="text-center">
             <h1 className="text-6xl font-black">{data.result.name}</h1>
@@ -105,55 +104,27 @@ export default function ProjectPage(): JSX.Element {
           {/* Map the networks */}
           {project.value.networks?.map((network: Network) => {
             return (
-              <div key={network.id} className="w-full">
-                <div className="flex flex-row justify-between">
-                  <div className="w-full">
-                    <h1 className="w-full text-5xl font-extrabold">
-                      {network.name}
-                    </h1>
-                    <p className="mt-2 w-full text-xl font-thin">
-                      {network.description}
-                    </p>
-                  </div>
-                  <button
-                    disabled={network === activeNetwork}
-                    onClick={() => setActiveNetwork(network)}
-                    className="flex flex-row items-center justify-center gap-4 rounded-md border-2 border-slate-100 bg-white px-10 py-7 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-                  >
-                    <p>
-                      {network == activeNetwork
-                        ? "Already active"
-                        : "Set as active"}
-                    </p>
-                  </button>
-                </div>
-
-                <NetworkModel project={project} network={network} />
-              </div>
+              <NetworkModel
+                key={network.id}
+                project={project}
+                network={network}
+                activeNetwork={activeNetwork}
+              />
             );
           })}
 
           {/* Map the tables */}
           {data.result.tables?.map((table: Table) => {
             return (
-              <div key={table.id} className="w-full">
-                <h1 className="w-full text-5xl font-extrabold">{table.name}</h1>
-                <p className="mt-2 w-full text-xl font-thin">
-                  {table.description}
-                </p>
-                <div className="m-3 w-full">
-                  <TableModel
-                    headers={table.headers}
-                    values={table.values}
-                    layers={activeNetwork?.layers ?? []}
-                  />
-                </div>
-              </div>
+              <TableModel
+                key={table.id}
+                headers={table.headers}
+                values={table.values}
+                layers={activeNetwork.value.layers}
+                table={table}
+              />
             );
           })}
-
-          {/* Model builds */}
-          <h1 className="w-fit text-5xl font-thin">Model Builds</h1>
         </main>
       </>
     );
