@@ -11,7 +11,7 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="fixed top-0 z-50 flex w-screen flex-row justify-between bg-white/80 p-10 backdrop-blur-md">
+    <nav className="fixed top-0 z-50 flex w-screen flex-row justify-between border-b-4 border-slate-950 bg-white p-10">
       <Link href="/" className="group flex flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold">
           <mark className="bg-transparent text-6xl font-black">A</mark>rc AI{" "}

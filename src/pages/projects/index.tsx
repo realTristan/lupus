@@ -53,7 +53,7 @@ export default function Projects(): JSX.Element {
 
         <Navbar />
 
-        <main className="mt-24 flex min-h-screen flex-col items-center p-14">
+        <main className="mt-40 flex min-h-screen flex-col items-center p-14">
           {!projects?.data?.result?.length ? (
             <div className="mt-20 flex flex-col items-center justify-center text-center">
               <p className="text-7xl font-black ">Nothing&#39;s here.</p>

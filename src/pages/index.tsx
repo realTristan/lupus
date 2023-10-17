@@ -16,7 +16,7 @@ export default function Home() {
       <Navbar />
       <CirclesBackground className="-z-10 opacity-10" />
 
-      <main className="flex min-h-screen flex-col items-center justify-center">
+      <main className="flex min-h-screen flex-col items-center justify-center pt-40">
         <h1 className="mx-10 text-center text-8xl font-bold md:text-9xl xl:w-3/4">
           Build<mark className="bg-transparent text-slate-300">.</mark>{" "}
           Collaborate<mark className="bg-transparent text-slate-300">.</mark>{" "}
