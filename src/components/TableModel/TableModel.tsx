@@ -46,7 +46,7 @@ interface Props {
  */
 export default function TableModel(props: Props): JSX.Element {
   // All states
-  const [hidden, setHidden] = useState<boolean>(false);
+  const [hidden, setHidden] = useState<boolean>(true);
   const [headers, setHeaders] = useState<string[]>(props.headers);
   const [epochs, setEpochs] = useState<number>(10);
   const [prediction, setPrediction] = useState<string>("None");
