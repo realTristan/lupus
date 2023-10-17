@@ -1,6 +1,13 @@
 import { PrismaClient } from "@prisma/client";
-import { type Project, type User } from "./types";
-import { sha256 } from "./crypto";
+import {
+  type Table,
+  type Project,
+  type User,
+  type Network,
+  type NetworkLayer,
+} from "./types";
+import { genId } from "./crypto";
+import { DEFAULT_PROJECT_TABLE_HEADERS } from "./constants";
 
 export class Prisma extends PrismaClient {
   constructor() {
@@ -121,27 +128,124 @@ export class Prisma extends PrismaClient {
   public static readonly createProject = async (
     userSecret: string,
     project: Project,
-  ): Promise<Project> => {
-    const user: User | null = await Prisma.findOne("user", {
-      secret: userSecret,
+  ): Promise<string> => {
+    // Generate a new project id
+    const projectId: string = project.id ? project.id : genId();
+
+    // Create the project
+    await Prisma.create("project", {
+      ...project,
+      id: projectId,
+      user: {
+        connect: {
+          secret: userSecret,
+        },
+      },
     });
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // Create a new table
+    await Prisma.createTable(userSecret, projectId, {
+      name: "Table 1",
+      description: "Default table",
+      headers: DEFAULT_PROJECT_TABLE_HEADERS,
+      values: [0, 1, 0, 2, 1, 3],
+    });
 
-    // Generate a new project id
-    const id: string = await sha256(
-      Math.random().toString() + Date.now().toString(),
-    );
+    // Create a network model
+    const networkId: string = await Prisma.createNetwork(projectId, {
+      name: "Network 1",
+      description: "Default network",
+    });
 
-    const opts = {
-      ...project,
-      id,
-      userSecret,
-    };
+    // Create a network layer
+    await Prisma.createNetworkLayer(networkId, {
+      type: "dense",
+      neurons: 1,
+      shape: 1,
+    });
 
-    return await Prisma.create("project", opts);
+    // Return the project id
+    return projectId;
+  };
+
+  /**
+   * Creates a table
+   * @param userSecret The user secret
+   * @param projectId The project id
+   * @param table The table to create
+   * @returns The created table
+   * @throws Error if the user is not found
+   * @throws Error if the project is not found
+   */
+  public static readonly createTable = async (
+    userSecret: string,
+    projectId: string,
+    table: any,
+  ): Promise<string> => {
+    const tableId: string = table.id ? table.id : genId();
+
+    await Prisma.create("tableModel", {
+      ...table,
+      id: tableId,
+      project: {
+        connect: {
+          id: projectId,
+        },
+      },
+    });
+
+    return tableId;
+  };
+
+  /**
+   * Creates a network
+   * @param projectId The project id
+   * @param network The network to create
+   * @returns The created network
+   * @throws Error if the user is not found
+   * @throws Error if the project is not found
+   */
+  public static readonly createNetwork = async (
+    projectId: string,
+    network: any,
+  ): Promise<string> => {
+    const networkId: string = network.id ? network.id : genId();
+
+    await Prisma.create("networkModel", {
+      ...network,
+      id: networkId,
+      project: {
+        connect: {
+          id: projectId,
+        },
+      },
+    });
+    return networkId;
+  };
+
+  /**
+   * Creates a network layer
+   * @param networkId The network id
+   * @param layer The layer to create
+   * @returns The created layer
+   */
+  public static readonly createNetworkLayer = async (
+    networkId: string,
+    layer: NetworkLayer,
+  ): Promise<string> => {
+    const layerId: string = layer.id ? layer.id : genId();
+
+    await Prisma.create("networkModelLayer", {
+      ...layer,
+      id: layerId,
+      network: {
+        connect: {
+          id: networkId,
+        },
+      },
+    });
+
+    return layerId;
   };
 
   /**
@@ -216,7 +320,54 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
-    return await Prisma.findOne("project", { id, userSecret });
+    // Get the base project
+    const project: Project | null = await Prisma.findOne("project", {
+      id,
+      userSecret,
+    });
+
+    if (!project) return null;
+
+    // Get the project tables
+    const tables: Table[] | null = await Prisma.findMany("tableModel", {
+      projectId: id,
+    });
+
+    if (!tables)
+      return {
+        ...project,
+        tables: [],
+      };
+
+    // Get the projects networks
+    const networks: Network[] | null = await Prisma.findMany("networkModel", {
+      projectId: id,
+    });
+
+    // Get the network layers
+    if (!networks) {
+      return {
+        ...project,
+        networks: [],
+        tables,
+      };
+    }
+
+    // Get the network layers
+    for (const network of networks) {
+      const layers = (await Prisma.findMany("networkModelLayer", {
+        networkModelId: network.id,
+      })) as NetworkLayer[] | null;
+
+      // Set the layers
+      layers ? (network.layers = layers) : (network.layers = []);
+    }
+
+    return {
+      ...project,
+      networks,
+      tables,
+    };
   };
 
   /**

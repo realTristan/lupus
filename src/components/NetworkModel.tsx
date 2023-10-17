@@ -1,30 +1,36 @@
-import { base64encode } from "~/lib/crypto";
+import { genId } from "~/lib/crypto";
 import { type ObjectState } from "~/lib/state";
-import { type Layer } from "~/lib/types";
+import { type Network, type NetworkLayer } from "~/lib/types";
 import PlusSVG from "./svgs/Plus";
 import CopySVG from "./svgs/Copy";
 import TrashcanSVG from "./svgs/Trashcan";
+import { MAX_NETWORK_LAYERS } from "~/lib/constants";
 
 /**
  * Network Model Component
  * @returns {JSX.Element} JSX.Element
  */
 export default function NetworkModel(props: {
-  layers: ObjectState<Layer[]>;
+  networks: ObjectState<Network[]>;
+  network: Network;
 }): JSX.Element {
   const onClick = () => {
-    if (props.layers.value.length >= 3) {
+    if (props.network.layers.length >= MAX_NETWORK_LAYERS) {
       return;
     }
 
-    props.layers.set([
-      ...props.layers.value,
-      {
-        type: "dense",
-        neurons: 1,
-        inputShape: 1,
-      },
-    ]);
+    const newNetwork = props.network;
+    newNetwork.layers.push({
+      id: genId(),
+      type: "dense",
+      neurons: 1,
+      shape: 1,
+    });
+
+    const newNetworks = props.networks.value;
+    newNetworks.push(newNetwork);
+
+    props.networks.set(newNetworks);
   };
 
   return (
@@ -36,15 +42,16 @@ export default function NetworkModel(props: {
         Loss Function: MSE <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Optimizer: Adam
       </span>
-      {props.layers.value.map((layer, i) => {
-        const id = base64encode(Math.random() + ":" + Date.now() + "");
+      {props.network.layers.map((layer: NetworkLayer, i: number) => {
+        const key: string = genId();
 
         return (
           <NetworkLayer
-            layers={props.layers}
+            networks={props.networks}
+            network={props.network}
             layer={layer}
             index={i}
-            key={id}
+            key={key}
           />
         );
       })}
@@ -54,7 +61,7 @@ export default function NetworkModel(props: {
           <CopySVG className="fill-slate-950" /> <p>Copy Code</p>
         </button>
 
-        {props.layers.value.length < 3 ? (
+        {props.network.layers.length < MAX_NETWORK_LAYERS ? (
           <button
             onClick={() => onClick()}
             className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
@@ -82,8 +89,9 @@ const clean = (s: string): string => {
  * Network layer props
  */
 interface NetworkLayerProps {
-  layers: ObjectState<Layer[]>;
-  layer: Layer;
+  networks: ObjectState<Network[]>;
+  network: Network;
+  layer: NetworkLayer;
   index: number;
 }
 
@@ -95,18 +103,25 @@ interface NetworkLayerProps {
 function NetworkLayer(props: NetworkLayerProps): JSX.Element {
   const onBlur = (e: any, key: string): void => {
     const value: string = e.currentTarget.value || "1";
-    const newLayers = props.layers.value;
-    const newLayer = newLayers[props.index];
-
-    if (!newLayer) {
-      return;
-    }
+    const newNetwork = props.network;
 
     // @ts-ignore
-    newLayer[key] = parseInt(value);
-    newLayers[props.index] = newLayer;
+    newNetwork.layers[props.index][key] = parseInt(value);
 
-    props.layers.set(newLayers);
+    const newNetworks = props.networks.value;
+    newNetworks.push(newNetwork);
+
+    props.networks.set(newNetworks);
+  };
+
+  const deleteLayer = async () => {
+    const newNetwork = props.network;
+    newNetwork.layers.splice(props.index, 1);
+
+    const newNetworks = props.networks.value;
+    newNetworks.push(newNetwork);
+
+    props.networks.set(newNetworks);
   };
 
   return (
@@ -130,19 +145,15 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
           <input
             type="number"
             className="bg-transparent px-2 py-1"
-            defaultValue={props.layer.inputShape}
-            onBlur={(e) => onBlur(e, "inputShape")}
+            defaultValue={props.layer.shape}
+            onBlur={(e) => onBlur(e, "shape")}
           />
         </span>
 
         {/* Button to delete the current layer */}
         {props.index >= 1 && (
           <button
-            onClick={() => {
-              const newLayers = props.layers.value;
-              newLayers.splice(props.index, 1);
-              props.layers.set(newLayers);
-            }}
+            onClick={async () => await deleteLayer()}
             className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <TrashcanSVG className="h-5 w-5 fill-slate-950" /> <p>Delete</p>

@@ -37,7 +37,6 @@ const createProjectProcedure = publicProcedure
       project: z.object({
         name: z.string(),
         description: z.string(),
-        type: z.string(),
         tags: z.array(z.string()),
       }),
     }),

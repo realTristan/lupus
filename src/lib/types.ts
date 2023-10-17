@@ -12,6 +12,43 @@ export interface Project {
   updatedAt: Date;
   user: User;
   userSecret: string;
+  tables: Table[];
+  networks: Network[];
+  builds: Build[];
+}
+
+export interface Build {
+  id?: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Network {
+  id?: string;
+  name: string;
+  description?: string;
+  layers: NetworkLayer[];
+}
+
+export interface NetworkLayer {
+  id?: string;
+  type: string;
+  neurons?: number;
+  shape?: number;
+}
+
+export interface Table {
+  id?: string;
+  name: string;
+  description?: string;
+  headers: string[];
+  values: number[];
+}
+
+export interface TableValue {
+  id?: string;
+  values: number[];
 }
 
 export interface User {
@@ -19,20 +56,4 @@ export interface User {
   email: string;
   secret: string;
   projects?: Project[];
-}
-
-export interface TableData {
-  id: string;
-  input: number[];
-}
-
-export interface TableInput {
-  headers: string[];
-  data: TableData[];
-}
-
-export interface Layer {
-  type: "dense" | "conv2d" | "maxpool2d";
-  neurons?: number;
-  inputShape?: number;
 }

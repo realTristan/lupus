@@ -2,25 +2,28 @@ import { Component, useState } from "react";
 import CrossSVG from "./svgs/Cross";
 import * as tf from "@tensorflow/tfjs";
 import PlusSVG from "./svgs/Plus";
-import { base64encode } from "~/lib/crypto";
+import { genId } from "~/lib/crypto";
 import { cn } from "~/utils/cn";
 import { LoadingRelative } from "./svgs/Loading";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import { type TableValue } from "~/lib/types";
+import { MAX_ROWS } from "~/lib/constants";
 
 export default class TableModel extends Component {
   state: {
     headers: string[];
-    data: any[];
+    values: TableValue[];
+
     testEpochs: number;
     testInput: number;
     model: tf.Sequential | null;
     prediction: string;
   };
+
   props: any = {
-    headers: [],
-    data: [],
     className: "",
+    headers: [] as string[],
+    values: [] as TableValue[],
     layers: [],
   };
 
@@ -29,7 +32,7 @@ export default class TableModel extends Component {
 
     this.state = {
       headers: props.headers,
-      data: props.data,
+      values: props.values,
       testEpochs: 10,
       testInput: 1,
       model: null,
@@ -60,17 +63,15 @@ export default class TableModel extends Component {
             </thead>
 
             <tbody>
-              {this.state.data.map((row: any) => (
-                <tr key={row.id} id={`row-${row.id}`}>
-                  {row.input.map((input: number[], index: number) => {
-                    const id: string = base64encode(
-                      Math.random() + ":" + Date.now() + "",
-                    );
+              {this.state.values.map((row: any) => (
+                <tr key={row.id}>
+                  {row.values.map((value: number[], index: number) => {
+                    const id: string = genId();
 
                     return (
                       <this.TableBody
                         key={id}
-                        input={input}
+                        value={value}
                         row={row}
                         index={index}
                       />
@@ -83,10 +84,12 @@ export default class TableModel extends Component {
             </tbody>
           </table>
 
-          <this.AddRowButton />
-          <p className="text-red-500">
-            {this.state.data.length >= 25 ? "Maximum rows reached (25)" : ""}
-          </p>
+          <div className="flex w-full flex-row gap-4">
+            <this.AddRowButton />
+            <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+              <span>Import Test Dataset</span>
+            </button>
+          </div>
         </div>
 
         <div className="flex w-full flex-col gap-2">
@@ -112,19 +115,6 @@ export default class TableModel extends Component {
       </div>
     );
   }
-
-  /**
-   * Network selection dropdown component
-   * @returns JSX.Element
-   * @memberof Table
-   */
-  private readonly NetworkSelectionDropdown = (): JSX.Element => {
-    return (
-      <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-        Using: <strong>Network 1</strong>
-      </p>
-    );
-  };
 
   /**
    * Build model button component
@@ -211,20 +201,20 @@ export default class TableModel extends Component {
    */
   private readonly TableBody = (props: {
     row: any;
-    input: number[];
+    value: number[];
     index: number;
   }): JSX.Element => {
     const onBlur = (e: any) => {
-      const newData = this.state.data.map((d: any) => {
+      const newValues = this.state.values.map((d: any) => {
         if (d.id === props.row.id) {
-          d.input[props.index] = parseInt(e.currentTarget.textContent);
+          d.values[props.index] = parseInt(e.currentTarget.textContent);
         }
 
         return d;
       });
 
       this.setState({
-        data: newData,
+        values: newValues,
       });
     };
 
@@ -235,7 +225,7 @@ export default class TableModel extends Component {
         suppressContentEditableWarning={true}
         onBlur={(e) => onBlur(e)}
       >
-        {props.input}
+        {props.value}
       </td>
     );
   };
@@ -248,7 +238,7 @@ export default class TableModel extends Component {
   private readonly RemoveRowButton = (props: { id: string }): JSX.Element => {
     const onClick = () => {
       this.setState({
-        data: this.state.data.filter((row: any) => row.id !== props.id),
+        values: this.state.values.filter((row: any) => row.id !== props.id),
       });
     };
 
@@ -268,42 +258,34 @@ export default class TableModel extends Component {
    * @memberof Table
    */
   private readonly AddRowButton = (): JSX.Element => {
-    const id = base64encode(Math.random() + ":" + Date.now() + "");
+    const id: string = genId();
 
     const onClick = () => {
-      if (this.state.data.length >= 25) {
+      if (this.state.values.length >= MAX_ROWS) {
         return;
       }
 
       this.setState({
-        data: [
-          ...this.state.data,
+        values: [
+          ...this.state.values,
           {
             id,
-            input: [0, 0],
+            values: [0, 0],
           },
         ],
       });
     };
 
-    return (
-      <div className="flex w-full flex-row gap-4">
-        {this.state.data.length < 25 ? (
-          <Link
-            onClick={() => onClick()}
-            href={`#row-${id}`}
-            className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-          >
-            <PlusSVG className="h-5 w-5 fill-slate-950" />
-            <span>Add Row</span>
-          </Link>
-        ) : (
-          <></>
-        )}
-        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-          <span>Import Test Dataset</span>
-        </button>
-      </div>
+    return this.state.values.length < MAX_ROWS ? (
+      <button
+        onClick={() => onClick()}
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      >
+        <PlusSVG className="h-5 w-5 fill-slate-950" />
+        <span>Add Row</span>
+      </button>
+    ) : (
+      <></>
     );
   };
 
@@ -439,15 +421,13 @@ export default class TableModel extends Component {
    * @memberof Table
    */
   private readonly buildModel = async (): Promise<tf.Sequential> => {
-    const { data } = this.state;
-
     const model = tf.sequential();
 
     for (const layer of this.props.layers) {
       model.add(
         tf.layers.dense({
           units: layer.neurons,
-          inputShape: [layer.inputShape],
+          inputShape: [layer.shape],
         }),
       );
     }
@@ -455,13 +435,13 @@ export default class TableModel extends Component {
     model.compile({ loss: "meanSquaredError", optimizer: "adam" });
 
     const xs = tf.tensor2d(
-      data.map((d: any) => d.input[0]),
-      [data.length, 1],
+      this.state.values.map((d: any) => d.values[0]),
+      [this.state.values.length, 1],
     );
 
     const ys = tf.tensor2d(
-      data.map((d: any) => d.input[1]),
-      [data.length, 1],
+      this.state.values.map((d: any) => d.values[1]),
+      [this.state.values.length, 1],
     );
 
     await model.fit(xs, ys, { epochs: this.state.testEpochs });
