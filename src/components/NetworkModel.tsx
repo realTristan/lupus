@@ -5,6 +5,7 @@ import PlusSVG from "./svgs/Plus";
 import TrashcanSVG from "./svgs/Trashcan";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
 import CopySVG from "./svgs/Copy";
+import { useState } from "react";
 
 /**
  * Clean a string
@@ -61,8 +62,10 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
     });
   };
 
+  const [hidden, setHidden] = useState<boolean>(true);
+
   return (
-    <div className="flex w-full flex-col gap-4 rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+    <div className="flex w-full flex-col gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-7">
       <div className="flex flex-row justify-between">
         <div className="w-full">
           <h1 className="w-full text-5xl font-extrabold">
@@ -72,62 +75,72 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
             {props.network.description}
           </p>
         </div>
-        <button
-          disabled={props.network === props.activeNetwork.value}
-          onClick={() => props.activeNetwork.set(props.network)}
-          className="flex flex-row items-center justify-center gap-4 rounded-md border-2 border-slate-100 bg-white px-10 py-7 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-        >
-          <p>
-            {props.network == props.activeNetwork.value
-              ? "Already active"
-              : "Set as active"}
-          </p>
-        </button>
+        <div className="flex w-full flex-row justify-end gap-2">
+          <button
+            disabled={props.network.id === props.activeNetwork.value.id}
+            onClick={() => props.activeNetwork.set(props.network)}
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+          >
+            <p>
+              {props.network.id == props.activeNetwork.value.id
+                ? "Already active"
+                : "Set as active"}
+            </p>
+          </button>
+          <button
+            onClick={() => setHidden(!hidden)}
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+          >
+            <p>{hidden ? "Show network" : "Hide network"}</p>
+          </button>
+        </div>
       </div>
 
-      {/* Network type */}
-      <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-        Network: tf.Sequential
-      </span>
+      <div className={hidden ? "hidden" : "flex flex-col gap-2"}>
+        {/* Network type */}
+        <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
+          Network: tf.Sequential
+        </span>
 
-      {/* Loss function and optimizer */}
-      <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-        Loss Function: MSE <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Optimizer: Adam
-      </span>
+        {/* Loss function and optimizer */}
+        <span className="flex w-full flex-row items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
+          Loss Function: MSE <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&#x2192; Optimizer: Adam
+        </span>
 
-      {/* Map the layers */}
-      {props.network.layers?.map((layer: NetworkLayer, i: number) => {
-        return (
-          <NetworkLayer
-            project={props.project}
-            network={props.network}
-            layer={layer}
-            index={i}
-            key={layer.id}
-          />
-        );
-      })}
+        {/* Map the layers */}
+        {props.network.layers?.map((layer: NetworkLayer, i: number) => {
+          return (
+            <NetworkLayer
+              project={props.project}
+              network={props.network}
+              layer={layer}
+              index={i}
+              key={layer.id}
+            />
+          );
+        })}
 
-      <div className="flex flex-row gap-4">
-        {/* Button to copy the code */}
-        <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-          <CopySVG className="fill-slate-950" /> <p>Copy Code</p>
-        </button>
+        <div className="flex flex-row gap-2">
+          {/* Button to copy the code */}
+          <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+            <CopySVG className="fill-slate-950" /> <p>Copy Code</p>
+          </button>
 
-        {/* Button to add a new layer */}
-        <button
-          disabled={props.network.layers.length >= MAX_NETWORK_LAYERS}
-          onClick={() => addNetworkLayer()}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-        >
-          <PlusSVG className="fill-slate-950" />{" "}
-          <p>
-            {props.network.layers.length >= MAX_NETWORK_LAYERS
-              ? "Max layers reached"
-              : "Add Layer"}
-          </p>
-        </button>
+          {/* Button to add a new layer */}
+          <button
+            disabled={props.network.layers.length >= MAX_NETWORK_LAYERS}
+            onClick={() => addNetworkLayer()}
+            className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+          >
+            <PlusSVG className="fill-slate-950" />{" "}
+            <p>
+              {props.network.layers.length >= MAX_NETWORK_LAYERS
+                ? "Max layers reached"
+                : "Add Layer"}
+            </p>
+          </button>
+        </div>
       </div>
     </div>
   );

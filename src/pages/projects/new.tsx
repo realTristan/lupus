@@ -80,7 +80,7 @@ export default function NewProjectPage(): JSX.Element {
                 : ""}
             </p>
 
-            <div className="flex w-full flex-row gap-4">
+            <div className="flex w-full flex-row gap-2">
               <button
                 onClick={() => {
                   if (project.name.length > 20) {

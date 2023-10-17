@@ -31,7 +31,7 @@ export default function Navbar() {
       )}
 
       {status === "authenticated" && (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-2">
           <Link
             href="/projects/new"
             className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"

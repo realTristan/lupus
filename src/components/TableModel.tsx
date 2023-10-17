@@ -22,6 +22,7 @@ interface TableModelState {
   testInput: number;
   model: tf.Sequential | null;
   prediction: string;
+  hidden: boolean;
 }
 
 export default class TableModel extends Component {
@@ -38,6 +39,7 @@ export default class TableModel extends Component {
       testInput: 1,
       model: null,
       prediction: "None",
+      hidden: true,
     };
 
     const columns: number = props.headers.length;
@@ -82,14 +84,30 @@ export default class TableModel extends Component {
   render() {
     return (
       <div className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7">
-        <h1 className="w-full text-5xl font-extrabold">
-          {this.props.table.name}
-        </h1>
-        <p className="mt-2 w-full text-xl font-thin">
-          {this.props.table.description}
-        </p>
-        <div className="mt-4 flex w-full flex-col lg:flex-row lg:gap-10">
-          <div className="flex w-full flex-col items-center justify-center gap-4">
+        <div className="flex flex-row items-center justify-between">
+          <div>
+            <h1 className="w-full text-5xl font-extrabold">
+              {this.props.table.name}
+            </h1>
+            <p className="mt-2 w-full text-xl font-thin">
+              {this.props.table.description}
+            </p>
+          </div>
+          <button
+            onClick={() => this.setState({ hidden: !this.state.hidden })}
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+          >
+            <p>{this.state.hidden ? "Show table" : "Hide table"}</p>
+          </button>
+        </div>
+        <div
+          className={
+            this.state.hidden
+              ? "hidden"
+              : "mt-4 flex w-full flex-col gap-2 lg:flex-row"
+          }
+        >
+          <div className="flex w-full flex-col items-center justify-center gap-2">
             <table className="w-full">
               <thead>
                 <tr>
@@ -120,7 +138,7 @@ export default class TableModel extends Component {
               </tbody>
             </table>
 
-            <div className="flex w-full flex-row gap-4">
+            <div className="flex w-full flex-row gap-2">
               <this.AddRowButton />
               <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
                 <span>Import Test Dataset</span>
@@ -129,7 +147,7 @@ export default class TableModel extends Component {
           </div>
 
           <div className="flex w-full flex-col gap-2">
-            <div className="mb-1 flex flex-row gap-4">
+            <div className="mb-1 flex flex-row gap-2">
               <this.DataInput />
               <this.EpochsInput />
             </div>
@@ -140,7 +158,7 @@ export default class TableModel extends Component {
                 ? "Too many epochs. Maximum: 100"
                 : ""}
             </p>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2">
               <this.DownloadModelButton />
               <this.BuildModelButton />
             </div>

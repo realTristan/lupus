@@ -94,7 +94,7 @@ export default function ProjectPage(): JSX.Element {
 
         <Navbar />
 
-        <main className="flex min-h-screen flex-col gap-10 p-14 pt-52">
+        <main className="flex min-h-screen flex-col gap-7 p-14 pt-52">
           {/* Project title and description */}
           <div className="text-center">
             <h1 className="text-6xl font-black">{data.result.name}</h1>
