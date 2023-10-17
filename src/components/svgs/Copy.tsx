@@ -9,8 +9,8 @@ export default function CopySVG(props: { className?: string }): JSX.Element {
       viewBox="0 0 806 988.75"
       x="0px"
       y="0px"
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       width={25}
       height={25}
     >

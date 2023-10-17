@@ -83,6 +83,43 @@ const getProjectProcedure = publicProcedure
   });
 
 /**
+ * Update project procedure for the projects router
+ */
+const updateProjectProcedure = publicProcedure
+  .input(
+    z.object({
+      secret: z.string(),
+      id: z.string(),
+      project: z.object({
+        name: z.string().optional(),
+        description: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+      }),
+    }),
+  )
+  .query(async ({ input }) => {
+    if (!input.secret || !input.id) {
+      return {
+        result: null,
+      };
+    }
+
+    return await Prisma.updateProject(
+      input.secret,
+      input.id,
+      input.project as Project,
+    )
+      .catch((e) => {
+        console.error(e.message);
+      })
+      .then((res) => {
+        return {
+          result: res,
+        };
+      });
+  });
+
+/**
  * Delete project procedure for the projects router
  */
 const deleteProjectProcedure = publicProcedure
@@ -109,8 +146,9 @@ const deleteProjectProcedure = publicProcedure
  * The projects router
  */
 export const projectsRouter = createTRPCRouter({
-  getProjects: getProjectsProcedure,
-  createProject: createProjectProcedure,
-  getProject: getProjectProcedure,
-  deleteProject: deleteProjectProcedure,
+  getAll: getProjectsProcedure,
+  createOne: createProjectProcedure,
+  getOne: getProjectProcedure,
+  deleteOne: deleteProjectProcedure,
+  updateOne: updateProjectProcedure,
 });

@@ -29,7 +29,7 @@ export default function NewProjectPage(): JSX.Element {
       return <></>;
     }
 
-    const { refetch } = api.projects.createProject.useQuery(
+    const { refetch } = api.projects.createOne.useQuery(
       {
         secret: session.user.secret,
         project,

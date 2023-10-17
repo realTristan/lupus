@@ -29,7 +29,7 @@ export default function Projects(): JSX.Element {
   }
 
   // Get the users projects
-  const projects = api.projects.getProjects.useQuery({
+  const projects = api.projects.getAll.useQuery({
     secret: session?.user.secret ?? "",
   });
 
@@ -106,7 +106,7 @@ export default function Projects(): JSX.Element {
  * @returns {JSX.Element} JSX.Element
  */
 const ProjectCard = (props: { p: Project; sec: string }): JSX.Element => {
-  const { refetch } = api.projects.deleteProject.useQuery(
+  const { refetch } = api.projects.deleteOne.useQuery(
     {
       secret: props.sec,
       id: props.p.id,

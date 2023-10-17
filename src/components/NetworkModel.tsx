@@ -1,6 +1,6 @@
 import { genId } from "~/lib/crypto";
 import { type ObjectState } from "~/lib/state";
-import { type Network, type NetworkLayer } from "~/lib/types";
+import { type Project, type Network, type NetworkLayer } from "~/lib/types";
 import PlusSVG from "./svgs/Plus";
 import TrashcanSVG from "./svgs/Trashcan";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
@@ -16,13 +16,18 @@ const clean = (s: string): string => {
 };
 
 /**
+ * Network model props
+ */
+interface NetworkModelProps {
+  project: ObjectState<Project>;
+  network: Network;
+}
+
+/**
  * Network Model Component
  * @returns {JSX.Element} JSX.Element
  */
-export default function NetworkModel(props: {
-  networks: ObjectState<Network[]>;
-  network: Network;
-}): JSX.Element {
+export default function NetworkModel(props: NetworkModelProps): JSX.Element {
   /**
    * Add a new network layer
    * @returns {Promise<void>}
@@ -47,11 +52,12 @@ export default function NetworkModel(props: {
       ],
     };
 
-    props.networks.set(
-      props.networks.value.map((n: Network) =>
-        n.id === newNetwork.id ? newNetwork : n,
+    props.project.set({
+      ...props.project.value,
+      networks: props.project.value.networks?.map((network: Network) =>
+        network.id === newNetwork.id ? newNetwork : network,
       ),
-    );
+    });
   };
 
   return (
@@ -68,10 +74,10 @@ export default function NetworkModel(props: {
       </span>
 
       {/* Map the layers */}
-      {props.network.layers.map((layer: NetworkLayer, i: number) => {
+      {props.network.layers?.map((layer: NetworkLayer, i: number) => {
         return (
           <NetworkLayer
-            networks={props.networks}
+            project={props.project}
             network={props.network}
             layer={layer}
             index={i}
@@ -108,7 +114,7 @@ export default function NetworkModel(props: {
  * Network layer props
  */
 interface NetworkLayerProps {
-  networks: ObjectState<Network[]>;
+  project: ObjectState<Project>;
   network: Network;
   layer: NetworkLayer;
   index: number;
@@ -129,7 +135,7 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
     const value = e.target.value;
     const newNetwork = {
       ...props.network,
-      layers: props.network.layers.map((layer: NetworkLayer, i: number) => {
+      layers: props.network.layers?.map((layer: NetworkLayer, i: number) => {
         if (i === props.index) {
           return {
             ...layer,
@@ -141,11 +147,12 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
       }),
     };
 
-    props.networks.set(
-      props.networks.value.map((n: Network) =>
-        n.id === newNetwork.id ? newNetwork : n,
+    props.project.set({
+      ...props.project.value,
+      networks: props.project.value.networks?.map((network: Network) =>
+        network.id === newNetwork.id ? newNetwork : network,
       ),
-    );
+    });
   };
 
   /**
@@ -160,11 +167,12 @@ function NetworkLayer(props: NetworkLayerProps): JSX.Element {
       ),
     };
 
-    props.networks.set(
-      props.networks.value.map((n: Network) =>
-        n.id === newNetwork.id ? newNetwork : n,
+    props.project.set({
+      ...props.project.value,
+      networks: props.project.value.networks?.map((network: Network) =>
+        network.id === newNetwork.id ? newNetwork : network,
       ),
-    );
+    });
   };
 
   return (
