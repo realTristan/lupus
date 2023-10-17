@@ -46,7 +46,7 @@ export default function ProjectPage(): JSX.Element {
   /**
    * Update the project settings
    */
-  const { refetch: updateProject } = api.projects.updateOne.useQuery(
+  const { refetch: _updateProject } = api.projects.updateOne.useQuery(
     {
       secret: session?.user.secret ?? "",
       id: router.query.id as string,
