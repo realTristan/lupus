@@ -1,12 +1,12 @@
 import { genId } from "~/lib/crypto";
 import { type ObjectState } from "~/lib/state";
 import { type Project, type Network, type NetworkLayer } from "~/lib/types";
-import PlusSVG from "./svgs/Plus";
-import TrashcanSVG from "./svgs/Trashcan";
+import PlusSVG from "../svgs/Plus";
+import TrashcanSVG from "../svgs/Trashcan";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
-import CopySVG from "./svgs/Copy";
+import CopySVG from "../svgs/Copy";
 import { useState } from "react";
-import CrossSVG from "./svgs/Cross";
+import CrossSVG from "../svgs/Cross";
 
 /**
  * Clean a string
