@@ -5,7 +5,7 @@ import { type Sequential } from "@tensorflow/tfjs";
  * @param model The model to download
  * @returns Promise<void>
  */
-export default async function downloadModel(model: Sequential): Promise<void> {
+export async function downloadModel(model: Sequential): Promise<void> {
   if (!model) {
     return;
   }

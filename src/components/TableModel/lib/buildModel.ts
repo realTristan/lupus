@@ -27,9 +27,7 @@ interface Parameters {
  * @param params.epochs The epochs
  * @param params.values The values
  */
-export default async function buildModel(
-  params: Parameters,
-): Promise<Sequential> {
+export async function buildModel(params: Parameters): Promise<Sequential> {
   const model = sequential();
 
   for (const layer of params.activeNetwork.layers) {

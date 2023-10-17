@@ -7,7 +7,7 @@ import { type TableValue } from "~/lib/types";
  * @returns {Promise<{id: string, values: number[]}[]>} The array of objects
  * @async
  */
-export default async function linearTableToObjs(
+export async function linearTableToObjs(
   cols: number,
   nums: number[],
 ): Promise<TableValue[]> {

@@ -1,21 +1,11 @@
-import { genId } from "~/lib/crypto";
 import { type ObjectState } from "~/lib/state";
-import { type Project, type Network, type NetworkLayer } from "~/lib/types";
-import PlusSVG from "../svgs/Plus";
-import TrashcanSVG from "../svgs/Trashcan";
-import { MAX_NETWORK_LAYERS } from "~/lib/constants";
+import { type Project, type Network, type NetLayer } from "~/lib/types";
 import CopySVG from "../svgs/Copy";
 import { useState } from "react";
-import CrossSVG from "../svgs/Cross";
-
-/**
- * Clean a string
- * @param s String to clean
- * @returns {string} Cleaned string
- */
-const clean = (s: string): string => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+import NetworkLayer from "./components/NetworkLayer/NetworkLayer";
+import AddLayerButton from "./components/AddLayerButton";
+import DeleteNetworkButton from "./components/DeleteNetworkButton";
+import SetAsActiveNetworkButton from "./components/SetAsActiveNetworkButton";
 
 /**
  * Network model props
@@ -31,89 +21,40 @@ interface NetworkModelProps {
  * @returns {JSX.Element} JSX.Element
  */
 export default function NetworkModel(props: NetworkModelProps): JSX.Element {
-  /**
-   * Add a new network layer
-   * @returns {Promise<void>}
-   * @async
-   */
-  const addNetworkLayer = async (): Promise<void> => {
-    if (props.network.layers.length >= MAX_NETWORK_LAYERS) {
-      return;
-    }
-
-    const networkLayerId: string = await genId();
-    const newNetwork = {
-      ...props.network,
-      layers: [
-        ...props.network.layers,
-        {
-          id: networkLayerId,
-          type: "dense",
-          neurons: 1,
-          shape: 1,
-        },
-      ],
-    };
-
-    props.project.set({
-      ...props.project.value,
-      networks: props.project.value.networks?.map((network: Network) =>
-        network.id === newNetwork.id ? newNetwork : network,
-      ),
-    });
-  };
-
   const [hidden, setHidden] = useState<boolean>(true);
 
   return (
-    <div className="flex w-full flex-col gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+    <div
+      id={props.network.id}
+      className="flex w-full flex-col gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-7"
+    >
       <div className="flex flex-row justify-between">
         <div className="w-full">
+          {/* Network name */}
           <h1 className="w-full text-5xl font-extrabold">
             {props.network.name}
           </h1>
+
+          {/* Network description */}
           <p className="w-full text-xl font-thin">
             {props.network.description}
           </p>
         </div>
         <div className="flex w-full flex-row justify-end gap-2">
-          <button
-            disabled={props.network.id === props.activeNetwork.value.id}
-            onClick={() => props.activeNetwork.set(props.network)}
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-          >
-            <p>
-              {props.network.id == props.activeNetwork.value.id
-                ? "Already active"
-                : "Set as active"}
-            </p>
-          </button>
+          <SetAsActiveNetworkButton {...props} />
+          {/* Button to hide the network */}
           <button
             onClick={() => setHidden(!hidden)}
             className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
           >
             <p>{hidden ? "Show network" : "Hide network"}</p>
           </button>
-          <button
-            onClick={() => {
-              if (props.activeNetwork.value.id === props.network.id) {
-                return;
-              }
-
-              const newNetworks = props.project.value.networks.filter(
-                (network: Network) => network.id !== props.network.id,
-              );
-
-              props.project.set({
-                ...props.project.value,
-                networks: newNetworks,
-              });
-            }}
-            disabled={props.activeNetwork.value.id === props.network.id}
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50 disabled:opacity-50"
-          >
-            <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Delete</p>
-          </button>
+          {/* Button to delete the network */}
+          <DeleteNetworkButton
+            activeNetwork={props.activeNetwork.value}
+            network={props.network}
+            project={props.project}
+          />{" "}
         </div>
       </div>
 
@@ -130,7 +71,7 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
         </span>
 
         {/* Map the layers */}
-        {props.network.layers?.map((layer: NetworkLayer, i: number) => (
+        {props.network.layers?.map((layer: NetLayer, i: number) => (
           <NetworkLayer
             project={props.project}
             network={props.network}
@@ -146,126 +87,9 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
             <CopySVG className="fill-slate-950" /> <p>Copy Code</p>
           </button>
 
-          {/* Button to add a new layer */}
-          <button
-            disabled={props.network.layers.length >= MAX_NETWORK_LAYERS}
-            onClick={() => addNetworkLayer()}
-            className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-          >
-            <PlusSVG className="fill-slate-950" />{" "}
-            <p>
-              {props.network.layers.length >= MAX_NETWORK_LAYERS
-                ? "Max layers reached"
-                : "Add Layer"}
-            </p>
-          </button>
+          <AddLayerButton {...props} />
         </div>
       </div>
     </div>
-  );
-}
-
-/**
- * Network layer props
- */
-interface NetworkLayerProps {
-  project: ObjectState<Project>;
-  network: Network;
-  layer: NetworkLayer;
-  index: number;
-}
-
-/**
- * Network layer component
- * @param props Network layer props
- * @returns JSX.Element
- */
-function NetworkLayer(props: NetworkLayerProps): JSX.Element {
-  /**
-   * On row change event
-   * @param e Event
-   * @param key Key
-   */
-  const onRowChangeBlur = (e: any, key: string): void => {
-    const value = e.target.value;
-    const newNetwork = {
-      ...props.network,
-      layers: props.network.layers?.map((layer: NetworkLayer, i: number) => {
-        if (i === props.index) {
-          return {
-            ...layer,
-            [key]: value,
-          };
-        }
-
-        return layer;
-      }),
-    };
-
-    props.project.set({
-      ...props.project.value,
-      networks: props.project.value.networks?.map((network: Network) =>
-        network.id === newNetwork.id ? newNetwork : network,
-      ),
-    });
-  };
-
-  /**
-   * Delete the current layer
-   * @returns {void}
-   */
-  const deleteLayer = (): void => {
-    const newNetwork = {
-      ...props.network,
-      layers: props.network.layers.filter(
-        (_: NetworkLayer, i: number) => i !== props.index,
-      ),
-    };
-
-    props.project.set({
-      ...props.project.value,
-      networks: props.project.value.networks?.map((network: Network) =>
-        network.id === newNetwork.id ? newNetwork : network,
-      ),
-    });
-  };
-
-  return (
-    <span className="flex w-full flex-col items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-      <p>
-        Layer {props.index + 1}: {clean(props.layer.type)}
-      </p>
-
-      <div className="flex w-full flex-col items-start justify-start gap-2 lg:flex-row">
-        <span className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-2 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-          <p>Neurons: </p>
-          <input
-            type="number"
-            className="bg-transparent px-2 py-1"
-            defaultValue={props.layer.neurons}
-            onBlur={(e) => onRowChangeBlur(e, "neurons")}
-          />
-        </span>
-        <span className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-2 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-          <p>Input Shape: </p>
-          <input
-            type="number"
-            className="bg-transparent px-2 py-1"
-            defaultValue={props.layer.shape}
-            onBlur={(e) => onRowChangeBlur(e, "shape")}
-          />
-        </span>
-
-        {/* Button to delete the current layer */}
-        {props.index >= 1 && (
-          <button
-            onClick={() => deleteLayer()}
-            className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-          >
-            <TrashcanSVG className="h-5 w-5 fill-slate-950" /> <p>Delete</p>
-          </button>
-        )}
-      </div>
-    </span>
   );
 }

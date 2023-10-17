@@ -10,7 +10,7 @@ import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
 import ModelsList from "./components/ModelsList";
-import linearTableToObjs from "./lib/linearTableToObjs";
+import { linearTableToObjs } from "./lib/linearTableToObjs";
 import { ObjectState } from "~/lib/state";
 import { useState } from "react";
 import {
@@ -64,7 +64,10 @@ export default function TableModel(props: Props): JSX.Element {
 
   // Return the component
   return (
-    <div className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+    <div
+      id={props.table.id}
+      className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7"
+    >
       <div className="flex flex-row items-center justify-between">
         <div>
           <h1 className="w-full text-5xl font-extrabold">{props.table.name}</h1>
@@ -80,7 +83,7 @@ export default function TableModel(props: Props): JSX.Element {
         </button>
       </div>
       <div className={hidden ? "hidden" : "flex flex-col"}>
-        <div className="mt-4 flex w-full flex-col gap-2 lg:flex-row">
+        <div className="mt-4 flex w-full flex-col gap-2 sm:flex-row">
           <div className="flex w-full flex-col items-center justify-center gap-2">
             <table className="w-full">
               <thead>

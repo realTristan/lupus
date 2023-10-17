@@ -29,10 +29,10 @@ export interface Network {
   id: string;
   name: string;
   description?: string;
-  layers: NetworkLayer[];
+  layers: NetLayer[];
 }
 
-export interface NetworkLayer {
+export interface NetLayer {
   id: string;
   type: string;
   neurons?: number;

@@ -5,7 +5,7 @@ import {
   tensor2d,
 } from "@tensorflow/tfjs";
 
-import buildModel from "./buildModel";
+import { buildModel } from "./buildModel";
 import { type TableValue, type Model, type Network } from "~/lib/types";
 import { genId } from "~/lib/crypto";
 import { type Dispatch, type SetStateAction } from "react";
@@ -46,7 +46,7 @@ interface Parameters {
  * @param {SetState<Model[]>} params.setModels The set models function
  * @returns Promise<Tensor<Rank> | Tensor<Rank>[] | null>
  */
-export default async function testModel(params: Parameters) {
+export async function testModel(params: Parameters) {
   const predict = async (model: Sequential) => {
     const testTensor = tensor2d([params.input], [1, 1]);
     const pred = model.predict(testTensor);

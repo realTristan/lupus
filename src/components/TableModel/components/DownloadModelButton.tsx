@@ -1,5 +1,5 @@
 import { type Sequential } from "@tensorflow/tfjs";
-import downloadModel from "../lib/downloadModel";
+import { downloadModel } from "../lib/downloadModel";
 
 /**
  * Download model button props

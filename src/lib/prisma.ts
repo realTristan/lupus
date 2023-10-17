@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { type Project, type User, type NetworkLayer } from "./types";
+import { type Project, type User, type NetLayer } from "./types";
 import { genId } from "./crypto";
 import { DEFAULT_PROJECT_TABLE_HEADERS } from "./constants";
 
@@ -261,9 +261,9 @@ export class Prisma extends PrismaClient {
    * @param layer The layer to create
    * @returns The created layer
    */
-  public static readonly createNetworkLayer = async (
+  public static readonly createNetLayer = async (
     networkId: string,
-    layer: NetworkLayer,
+    layer: NetLayer,
   ): Promise<string> => {
     const layerId: string = layer.id ? layer.id : await genId();
 

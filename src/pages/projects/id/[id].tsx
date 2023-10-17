@@ -123,7 +123,50 @@ export default function ProjectPage(): JSX.Element {
 
         <Navbar />
 
-        <main className="flex min-h-screen flex-col gap-7 p-14 pt-52">
+        {/* A side menu that lists all of the project networks and tables */}
+        <div className="fixed left-0 top-0 z-40 flex h-screen w-80 flex-col gap-7 bg-white p-10 pt-48">
+          {/* Project name and description */}
+          <div>
+            <h1 className="text-2xl font-black">{data.result.name}</h1>
+            <p className="text-md mt-1 font-thin">{data.result.description}</p>
+          </div>
+          {/* Networks */}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-black">Networks</h1>
+            {project.value.networks?.map((network: Network) => {
+              return (
+                <a
+                  href={`#${network.id}`}
+                  key={network.id}
+                  className={`flex flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 ${
+                    activeNetwork.value.id === network.id ? "bg-slate-50" : ""
+                  }`}
+                  onClick={() => activeNetwork.set(network)}
+                >
+                  <span>{network.name}</span>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Tables */}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-black">Tables</h1>
+            {data.result.tables?.map((table: Table) => {
+              return (
+                <a
+                  href={`#${table.id}`}
+                  key={table.id}
+                  className="flex flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+                >
+                  <span>{table.name}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+
+        <main className="flex min-h-screen flex-col gap-7 p-14 pl-80 pt-52">
           {/* Project title and description */}
           <div className="text-center">
             <h1 className="text-6xl font-black">{data.result.name}</h1>
