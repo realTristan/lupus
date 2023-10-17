@@ -1,8 +1,4 @@
-export const DEFAULT_PROJECT_TABLE_HEADERS = [
-  "Gender (M/F)",
-  "Height (cm)",
-  "Actions",
-];
+export const DEFAULT_PROJECT_TABLE_HEADERS = ["Gender (M/F)", "Height (cm)"];
 
 export const DEFAULT_PROJECT_TABLE_DATA = [
   { values: [0, 220] },

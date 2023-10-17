@@ -39,11 +39,14 @@ export default class TableModel extends Component {
       prediction: "None",
     };
 
-    this.convertLinearTableValuesToObjects(props.values).then((values) => {
-      this.setState({
-        values,
-      });
-    });
+    const columns: number = props.headers.length;
+    this.convertLinearTableValuesToObjects(columns, props.values).then(
+      (values) => {
+        this.setState({
+          values,
+        });
+      },
+    );
   }
 
   /**
@@ -53,11 +56,12 @@ export default class TableModel extends Component {
    * @async
    */
   private readonly convertLinearTableValuesToObjects = async (
+    columns: number,
     nums: number[],
   ): Promise<TableValue[]> => {
     const result: TableValue[] = [];
 
-    for (let i = 0; i < nums.length; i += 2) {
+    for (let i = 0; i < nums.length; i += columns) {
       const values: number[] = [nums[i] ?? 0, nums[i + 1] ?? 0];
       const id: string = await genId();
 
@@ -84,6 +88,7 @@ export default class TableModel extends Component {
                 {this.state.headers.map((header: string) => (
                   <this.TableHeader header={header} key={header} />
                 ))}
+                <this.TableHeader header={"Actions"} />
               </tr>
             </thead>
 
@@ -375,7 +380,7 @@ export default class TableModel extends Component {
    */
   private readonly TableHeader = (props: { header: string }): JSX.Element => {
     const onBlur = (e: any) => {
-      const newHeaders = this.state.headers.map(async (h: string) =>
+      const newHeaders = this.state.headers.map((h: string) =>
         h === props.header ? e.currentTarget.textContent : h,
       );
 
