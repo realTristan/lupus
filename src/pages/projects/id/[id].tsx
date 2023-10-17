@@ -8,6 +8,8 @@ import { type Table, type Network, type Project } from "~/lib/types";
 import TableModel from "~/components/TableModel";
 import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel";
+import { genId } from "~/lib/crypto";
+import PlusSVG from "~/components/svgs/Plus";
 
 /**
  * Project page
@@ -125,6 +127,12 @@ export default function ProjectPage(): JSX.Element {
               />
             );
           })}
+
+          {/* Create a new table  or network dropdown */}
+          <div className="flex w-full flex-row gap-2">
+            <CreateNewTableButton />
+            <CreateNewNetworkButton project={project} />
+          </div>
         </main>
       </>
     );
@@ -132,4 +140,60 @@ export default function ProjectPage(): JSX.Element {
 
   // If the user isn't logged in, return a loading component
   return <LoadingCenter />;
+}
+
+/**
+ * Create a new table button
+ * @param {Object} props Props
+ * @returns {JSX.Element} JSX.Element
+ */
+function CreateNewTableButton(props: {}): JSX.Element {
+  return (
+    <button
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      onClick={async () => {
+        return;
+      }}
+    >
+      <PlusSVG className="fill-slate-950" /> <p>Create a new table</p>
+    </button>
+  );
+}
+
+/**
+ * Create a new network button
+ * @param {Object} props Props
+ * @returns {JSX.Element} JSX.Element
+ */
+function CreateNewNetworkButton(props: {
+  project: ObjectState<Project>;
+}): JSX.Element {
+  return (
+    <button
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      onClick={async () => {
+        const networkId: string = await genId();
+        const newNetwork: Network = {
+          id: networkId,
+          name: "New Network",
+          description: "New Network",
+          layers: [
+            {
+              id: await genId(),
+              type: "dense",
+              neurons: 1,
+              shape: 1,
+            },
+          ],
+        };
+
+        props.project.set({
+          ...props.project.value,
+          networks: [...props.project.value.networks, newNetwork],
+        });
+      }}
+    >
+      <PlusSVG className="fill-slate-950" /> <p>Create a new network</p>
+    </button>
+  );
 }

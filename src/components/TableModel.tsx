@@ -123,7 +123,7 @@ export default class TableModel extends Component {
                   <tr key={row.id}>
                     {row.values.map((value: number[], index: number) => {
                       return (
-                        <this.TableBody
+                        <this.TableCell
                           key={row.id + ":" + index}
                           value={value}
                           row={row}
@@ -141,7 +141,10 @@ export default class TableModel extends Component {
             <div className="flex w-full flex-row gap-2">
               <this.AddRowButton />
               <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-                <span>Import Test Dataset</span>
+                <span>Import CSV</span>
+              </button>
+              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+                <span>Export as CSV</span>
               </button>
             </div>
           </div>
@@ -149,23 +152,24 @@ export default class TableModel extends Component {
           <div className="flex w-full flex-col gap-2">
             <div className="mb-1 flex flex-row gap-2">
               <this.DataInput />
-              <this.EpochsInput />
+              <this.TestModelButton />
             </div>
 
-            <this.TestModelButton />
+            <div className="flex flex-row gap-2">
+              <this.EpochsInput />
+              <this.BuildModelButton />
+            </div>
+
             <p className="text-red-500">
               {this.state.testEpochs > 100
                 ? "Too many epochs. Maximum: 100"
                 : ""}
             </p>
-            <div className="flex flex-row gap-2">
-              <this.DownloadModelButton />
-              <this.BuildModelButton />
-            </div>
 
-            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-              Output:{" "}
-              {this.state.prediction ? this.state.prediction : "Nothing yet."}
+            <this.DownloadModelButton />
+
+            <p className="mt-2 flex h-full w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+              Output: {this.state.prediction}
             </p>
           </div>
         </div>
@@ -208,9 +212,7 @@ export default class TableModel extends Component {
         onClick={async () => await onClick()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>
-          Build with <strong>{this.state.testEpochs}</strong> epochs
-        </span>
+        <span>Build Model</span>
       </button>
     );
   };
@@ -245,18 +247,18 @@ export default class TableModel extends Component {
         onClick={async () => await onClick()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
       >
-        <span>Download</span>
+        <span>Download Model</span>
       </button>
     );
   };
 
   /**
-   * Table body component
+   * Table data component
    * @param props Table data props
    * @returns JSX.Element
    * @memberof Table
    */
-  private readonly TableBody = (props: {
+  private readonly TableCell = (props: {
     row: any;
     value: number[];
     index: number;
@@ -469,9 +471,7 @@ export default class TableModel extends Component {
         onClick={async () => await onClick()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>
-          Test Model using: <strong>{this.state.testInput}</strong>
-        </span>
+        <span>Test Model</span>
       </button>
     );
   };
