@@ -6,33 +6,45 @@ import {
 } from "@tensorflow/tfjs";
 
 import buildModel from "./buildModel";
-import { type TableValue, type Build, type Network } from "~/lib/types";
+import { type TableValue, type Model, type Network } from "~/lib/types";
 import { genId } from "~/lib/crypto";
+import { type Dispatch, type SetStateAction } from "react";
 
+/**
+ * The parameters
+ * @typedef {Object} Parameters
+ * @property {number} input The input
+ * @property {Sequential} model The model
+ * @property {Network} activeNetwork The active network
+ * @property {number} epochs The epochs
+ * @property {Model[]} models The models
+ * @property {TableValue[]} values The values
+ * @property {SetState<Model | null>} setCurrentModel The set current model function
+ * @property {SetState<Model[]>} setModels The set models function
+ */
 interface Parameters {
   input: number;
   model: Sequential | null;
   activeNetwork: Network;
   epochs: number;
-  builds: Build[];
+  models: Model[];
   values: TableValue[];
-  setNewModel: (model: Sequential) => void;
-  setBuilds: (builds: Build[]) => void;
+  setCurrentModel: Dispatch<SetStateAction<Model | null>>;
+  setModels: Dispatch<SetStateAction<Model[]>>;
 }
 
 /**
  * Test the model
- * @returns Tensor<Rank> | Tensor<Rank>[]
- * @memberof Table
- * @param params The parameters
- * @param params.input The input
- * @param params.model The model
- * @param params.activeNetwork The active network
- * @param params.epochs The epochs
- * @param params.builds The builds
- * @param params.values The values
- * @param params.setNewModel The set new model function
- * @param params.setBuilds The set builds function
+ * @param {Parameters} params The parameters
+ * @param {number} params.input The input
+ * @param {Sequential} params.model The model
+ * @param {Network} params.activeNetwork The active network
+ * @param {number} params.epochs The epochs
+ * @param {Model[]} params.models The models
+ * @param {TableValue[]} params.values The values
+ * @param {SetState<Model | null>} params.setCurrentModel The set current model function
+ * @param {SetState<Model[]>} params.setModels The set models function
+ * @returns Promise<Tensor<Rank> | Tensor<Rank>[] | null>
  */
 export default async function testModel(params: Parameters) {
   const predict = async (model: Sequential) => {
@@ -43,29 +55,29 @@ export default async function testModel(params: Parameters) {
   };
 
   if (params.model == null) {
-    const newModel = await buildModel({
+    const newSeqModel = await buildModel({
       activeNetwork: params.activeNetwork,
       epochs: params.epochs,
       values: params.values,
     }).catch((e) => console.log(e.message));
 
-    if (!newModel) {
+    if (!newSeqModel) {
       return null;
     }
 
-    params.setBuilds([
-      ...params.builds,
-      {
-        id: await genId(),
-        networkName: params.activeNetwork.name,
-        createdAt: new Date(),
-        model: newModel,
-      },
-    ]);
+    const newModel = {
+      id: await genId(),
+      networkName: params.activeNetwork.name,
+      networkId: params.activeNetwork.id,
+      createdAt: new Date(),
+      model: newSeqModel,
+    };
 
-    params.setNewModel(newModel);
+    params.setModels([...params.models, newModel]);
 
-    const pred: Tensor<Rank> | Tensor<Rank>[] = await predict(newModel);
+    params.setCurrentModel(newModel);
+
+    const pred: Tensor<Rank> | Tensor<Rank>[] = await predict(newModel.model);
     return pred;
   }
 

@@ -41,7 +41,7 @@ model TableModel {
   values      Int[]
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId   String
-  builds      Build[]
+  models      Model[]
 }
 
 // Model for storing network models
@@ -65,7 +65,7 @@ model NetworkModelLayer {
 }
 
 // Model for storing previous builds
-model Build {
+model Model {
   id          String      @id @unique @default(uuid())
   networkName String
   createdAt   DateTime    @default(now())

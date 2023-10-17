@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import testModel from "../lib/testModel";
 import { type Sequential } from "@tensorflow/tfjs";
-import { type Build, type TableValue, type Network } from "~/lib/types";
+import { type Model, type TableValue, type Network } from "~/lib/types";
 import { LoadingRelative } from "~/components/svgs/Loading";
 
 /**
@@ -11,10 +11,10 @@ import { LoadingRelative } from "~/components/svgs/Loading";
  * @property {Sequential} model The model
  * @property {Network} activeNetwork The active network
  * @property {number} epochs The epochs
- * @property {Build[]} builds The builds
+ * @property {Model[]} models The models
  * @property {TableValue[]} values The values
- * @property {Function} setNewModel Set the new model
- * @property {Function} setBuilds Set the builds
+ * @property {Function} setCurrentModel Set the current model
+ * @property {Function} setModels Set the models
  * @property {Function} setPrediction Set the prediction
  */
 interface Props {
@@ -22,11 +22,11 @@ interface Props {
   model: Sequential | null;
   activeNetwork: Network;
   epochs: number;
-  builds: Build[];
+  models: Model[];
   values: TableValue[];
-  setNewModel: (model: Sequential) => void;
-  setBuilds: (builds: Build[]) => void;
-  setPrediction: (prediction: string) => void;
+  setCurrentModel: Dispatch<SetStateAction<Model | null>>;
+  setModels: Dispatch<SetStateAction<Model[]>>;
+  setPrediction: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -63,10 +63,10 @@ export default function TestModelButton(props: Props): JSX.Element {
       model: props.model,
       activeNetwork: props.activeNetwork,
       epochs: props.epochs,
-      builds: props.builds,
+      models: props.models,
       values: props.values,
-      setNewModel: props.setNewModel,
-      setBuilds: props.setBuilds,
+      setCurrentModel: props.setCurrentModel,
+      setModels: props.setModels,
     });
 
     props.setPrediction(pred?.toString() ?? "Error (None)");

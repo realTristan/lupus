@@ -1,8 +1,8 @@
 import { type Dispatch, type SetStateAction, useState } from "react";
 import buildModel from "../lib/buildModel";
-import { type Build, type Network, type TableValue } from "~/lib/types";
-import { type Sequential } from "@tensorflow/tfjs";
+import { type Model, type Network, type TableValue } from "~/lib/types";
 import { LoadingRelative } from "~/components/svgs/Loading";
+import { genId } from "~/lib/crypto";
 
 /**
  * Build Model Button props
@@ -10,23 +10,28 @@ import { LoadingRelative } from "~/components/svgs/Loading";
  * @property {Network} activeNetwork The active network
  * @property {number} epochs The epochs
  * @property {TableValue[]} values The values
- * @property {Function} setModel Set the model
+ * @property {Model[]} models The models
+ * @property {Function} setModels Set the models
+ * @property {Function} setCurrentModel Set the current model
  */
 interface Props {
   activeNetwork: Network;
   epochs: number;
   values: TableValue[];
-  setModel: (model: Sequential) => void;
-  builds: Build[];
-  setBuilds: Dispatch<SetStateAction<Build[]>>;
+  models: Model[];
+  setModels: Dispatch<SetStateAction<Model[]>>;
+  setCurrentModel: Dispatch<SetStateAction<Model | null>>;
 }
 
 /**
  * Build model button component
- * @param {Props} props Build model button props
+ * @param {Props} props Props
  * @param {Network} props.activeNetwork The active network
  * @param {number} props.epochs The epochs
  * @param {TableValue[]} props.values The values
+ * @param {Model[]} props.models The models
+ * @param {Function} props.setModels Set the models
+ * @param {Function} props.setCurrentModel Set the current model
  * @returns JSX.Element
  * @memberof Table
  */
@@ -40,21 +45,22 @@ export default function BuildModelButton(props: Props): JSX.Element {
 
     setBuilding(true);
 
-    const newModel = await buildModel({
+    const newSeqModel = await buildModel({
       activeNetwork: props.activeNetwork,
       epochs: props.epochs,
       values: props.values,
     });
 
-    props.setModel(newModel);
-    props.setBuilds([
-      {
-        model: newModel,
-        createdAt: new Date(),
-        networkName: props.activeNetwork.name,
-      },
-      ...props.builds,
-    ]);
+    const newModel = {
+      id: await genId(),
+      model: newSeqModel,
+      createdAt: new Date(),
+      networkName: props.activeNetwork.name,
+      networkId: props.activeNetwork.id,
+    };
+
+    props.setCurrentModel(newModel);
+    props.setModels([newModel, ...props.models]);
 
     setBuilding(false);
   };

@@ -9,21 +9,24 @@ import TestModelButton from "./components/TestModelButton";
 import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
-import ModelBuildsList from "./components/ModelBuildsList";
+import PreviousModelsList from "./components/PreviousModelsList";
 import linearTableToObjs from "./lib/linearTableToObjs";
 import { ObjectState } from "~/lib/state";
 import { useState } from "react";
-import { type Sequential } from "@tensorflow/tfjs";
 import {
   type Table,
-  type Build,
   type Network,
   type TableValue,
+  type Model,
 } from "~/lib/types";
 
 /**
  * Test Model Button props
  * @interface Props
+ * @property {Table} table The table
+ * @property {string[]} headers The headers
+ * @property {number[]} values The values
+ * @property {Network} activeNetwork The active network
  */
 interface Props {
   headers: string[];
@@ -35,8 +38,11 @@ interface Props {
 /**
  * Generate the prediction button
  * @param {Props} props Props
+ * @param {Table} props.table The table
+ * @param {string[]} props.headers The headers
+ * @param {number[]} props.values The values
+ * @param {Network} props.activeNetwork The active network
  * @returns JSX.Element
- * @async
  */
 export default function TableModel(props: Props): JSX.Element {
   // All states
@@ -44,8 +50,8 @@ export default function TableModel(props: Props): JSX.Element {
   const [headers, setHeaders] = useState<string[]>(props.headers);
   const [epochs, setEpochs] = useState<number>(10);
   const [prediction, setPrediction] = useState<string>("None");
-  const [builds, setBuilds] = useState<Build[]>([]);
-  const [model, setModel] = useState<Sequential | null>(null);
+  const [models, setModels] = useState<Model[]>([]);
+  const [currentModel, setCurrentModel] = useState<Model | null>(null);
   const [testData, setTestData] = useState<number>(1);
   const values = new ObjectState<TableValue[]>([]);
 
@@ -126,6 +132,7 @@ export default function TableModel(props: Props): JSX.Element {
               <ImportCSVDialog setValues={values.set} />
               <ExportCSVButton />
             </div>
+            {/*<ImportTestDataButton />*/}
           </div>
 
           <div className="flex w-full flex-col gap-2">
@@ -133,13 +140,13 @@ export default function TableModel(props: Props): JSX.Element {
               <TestDataInput setTestData={setTestData} />
               <TestModelButton
                 input={testData}
-                model={model}
+                model={currentModel?.model ?? null}
                 activeNetwork={props.activeNetwork}
                 epochs={epochs}
-                builds={builds}
+                models={models}
                 values={values.value}
-                setNewModel={setModel}
-                setBuilds={setBuilds}
+                setCurrentModel={setCurrentModel}
+                setModels={setModels}
                 setPrediction={setPrediction}
               />
             </div>
@@ -147,29 +154,32 @@ export default function TableModel(props: Props): JSX.Element {
             <div className="flex flex-row gap-2">
               <EpochsInput setEpochs={setEpochs} />
               <BuildModelButton
-                builds={builds}
-                setBuilds={setBuilds}
+                models={models}
+                setModels={setModels}
                 activeNetwork={props.activeNetwork}
                 epochs={epochs}
                 values={values.value}
-                setModel={setModel}
+                setCurrentModel={setCurrentModel}
               />
             </div>
             <p className="text-red-500">
               {epochs > 100 ? "Too many epochs. Maximum: 100" : ""}
             </p>
 
-            <DownloadModelButton model={model} />
+            <DownloadModelButton model={currentModel?.model ?? null} />
 
             <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
               Output: {prediction}
             </p>
           </div>
         </div>
-        <ModelBuildsList
-          builds={builds}
-          setBuilds={setBuilds}
-          setModel={setModel}
+
+        <PreviousModelsList
+          activeNetwork={props.activeNetwork}
+          models={models}
+          setModels={setModels}
+          setCurrentModel={setCurrentModel}
+          currentModel={currentModel}
         />
       </div>
     </div>

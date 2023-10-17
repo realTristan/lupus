@@ -14,32 +14,33 @@ export interface Project {
   userSecret: string;
   tables: Table[];
   networks: Network[];
-  builds: Build[];
+  builds: Model[];
 }
 
-export interface Build {
-  id?: string;
+export interface Model {
+  id: string;
   model: Sequential;
   createdAt: Date;
   networkName: string;
+  networkId: string;
 }
 
 export interface Network {
-  id?: string;
+  id: string;
   name: string;
   description?: string;
   layers: NetworkLayer[];
 }
 
 export interface NetworkLayer {
-  id?: string;
+  id: string;
   type: string;
   neurons?: number;
   shape?: number;
 }
 
 export interface Table {
-  id?: string;
+  id: string;
   name: string;
   description?: string;
   headers: string[];
@@ -47,12 +48,12 @@ export interface Table {
 }
 
 export interface TableValue {
-  id?: string;
+  id: string;
   values: number[];
 }
 
 export interface User {
-  id?: number;
+  id: number;
   email: string;
   secret: string;
   projects?: Project[];
