@@ -64,7 +64,7 @@ model NetworkModelLayer {
   networkId String?
 }
 
-// Model for storing previous builds
+// Model for storing project models
 model Model {
   id          String      @id @unique @default(uuid())
   networkName String

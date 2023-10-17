@@ -20,7 +20,7 @@ interface Props {
 }
 
 /**
- * Model builds list component
+ * Models list component
  * @param {Props} props Props
  * @param {Model[]} props.models The models
  * @param {Network} props.activeNetwork The active network
@@ -30,11 +30,11 @@ interface Props {
  * @returns JSX.Element
  */
 export default function PreviousModelsList(props: Props): JSX.Element {
-  const HAS_BUILDS = props.models.length > 0;
+  const HAS_MODELS = props.models.length > 0;
 
   return (
     <div
-      className={`mt-4 w-full gap-2 ${HAS_BUILDS ? "flex flex-col" : "hidden"}`}
+      className={`mt-4 w-full gap-2 ${HAS_MODELS ? "flex flex-col" : "hidden"}`}
     >
       <h1 className="mt-5 text-2xl font-black">My Models</h1>
       <div className="flex w-full flex-col gap-2">

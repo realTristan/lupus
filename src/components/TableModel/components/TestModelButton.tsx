@@ -36,10 +36,10 @@ interface Props {
  * @param {Sequential} props.model The model
  * @param {Network} props.activeNetwork The active network
  * @param {number} props.epochs The epochs
- * @param {Build[]} props.builds The builds
+ * @param {Model[]} props.models The models
  * @param {TableValue[]} props.values The values
- * @param {Function} props.setNewModel Set the new model function
- * @param {Function} props.setBuilds Set the builds function
+ * @param {Function} props.setCurrentModel Set the new model function
+ * @param {Function} props.setModles Set the models function
  * @param {Function} props.setPrediction Set the prediction function
  * @returns JSX.Element
  * @async

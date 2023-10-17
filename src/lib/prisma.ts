@@ -165,7 +165,7 @@ export class Prisma extends PrismaClient {
               headers: DEFAULT_PROJECT_TABLE_HEADERS,
               values: [0, 1, 0, 2, 1, 3],
               /*
-              builds: {
+              models: {
                 create: [],
               },
               */
@@ -364,7 +364,7 @@ export class Prisma extends PrismaClient {
       include: {
         tables: {
           include: {
-            builds: true,
+            models: true,
           },
         },
         networks: {
