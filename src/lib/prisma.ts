@@ -144,7 +144,7 @@ export class Prisma extends PrismaClient {
     project: Project,
   ): Promise<string> => {
     // Generate a new project id
-    const projectId: string = project.id ? project.id : genId();
+    const projectId: string = project.id ? project.id : await genId();
 
     // Create the project
     await Prisma.create("project", {
@@ -202,7 +202,7 @@ export class Prisma extends PrismaClient {
     projectId: string,
     table: any,
   ): Promise<string> => {
-    const tableId: string = table.id ? table.id : genId();
+    const tableId: string = table.id ? table.id : await genId();
 
     await Prisma.create("tableModel", {
       data: {
@@ -231,7 +231,7 @@ export class Prisma extends PrismaClient {
     projectId: string,
     network: any,
   ): Promise<string> => {
-    const networkId: string = network.id ? network.id : genId();
+    const networkId: string = network.id ? network.id : await genId();
 
     await Prisma.create("networkModel", {
       data: {
@@ -257,7 +257,7 @@ export class Prisma extends PrismaClient {
     networkId: string,
     layer: NetworkLayer,
   ): Promise<string> => {
-    const layerId: string = layer.id ? layer.id : genId();
+    const layerId: string = layer.id ? layer.id : await genId();
 
     await Prisma.create("networkModelLayer", {
       data: {
@@ -322,8 +322,17 @@ export class Prisma extends PrismaClient {
       throw new Error("User not found");
     }
 
+    // Delete the project and all of its tables and networks
     return await Prisma.delete("project", {
       where: { id: projectId, userSecret },
+      include: {
+        tables: true,
+        networks: {
+          include: {
+            layers: true,
+          },
+        },
+      },
     });
   };
 

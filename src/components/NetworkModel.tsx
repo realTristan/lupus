@@ -23,12 +23,17 @@ export default function NetworkModel(props: {
   networks: ObjectState<Network[]>;
   network: Network;
 }): JSX.Element {
-  const onClick = () => {
+  /**
+   * Add a new network layer
+   * @returns {Promise<void>}
+   * @async
+   */
+  const addNetworkLayer = async (): Promise<void> => {
     if (props.network.layers.length >= MAX_NETWORK_LAYERS) {
       return;
     }
 
-    const networkLayerId: string = genId();
+    const networkLayerId: string = await genId();
     const newNetwork = {
       ...props.network,
       layers: [
@@ -84,7 +89,7 @@ export default function NetworkModel(props: {
         {/* Button to add a new layer */}
         <button
           disabled={props.network.layers.length >= MAX_NETWORK_LAYERS}
-          onClick={() => onClick()}
+          onClick={() => addNetworkLayer()}
           className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
         >
           <PlusSVG className="fill-slate-950" />{" "}

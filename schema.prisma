@@ -8,24 +8,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Model for storing projects
-model Project {
-  id          String         @id @unique @default(uuid())
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  name        String
-  description String?
-  tags        String[]
-  user        User           @relation(fields: [userSecret], references: [secret])
-  userSecret  String
-  tables      TableModel[]
-  networks    NetworkModel[]
-  builds      Build[]
-}
-
 // Model for storing user data
 model User {
-  id        Int       @id @unique @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   email     String    @unique
@@ -33,45 +18,60 @@ model User {
   projects  Project[]
 }
 
-// Model for storing previous builds
-model Build {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  project   Project  @relation(fields: [projectId], references: [id])
-  projectId String
+// Model for storing projects
+model Project {
+  id          String         @id
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  name        String
+  description String?
+  tags        String[]
+  user        User           @relation(fields: [userSecret], references: [secret], onDelete: Cascade, onUpdate: Cascade)
+  userSecret  String
+  tables      TableModel[]
+  networks    NetworkModel[]
+  builds      Build[]
 }
 
 // Model for storing table data
 model TableModel {
-  id          String   @id @unique @default(uuid())
+  id          String   @id
   name        String
   description String?
   headers     String[]
   values      Int[]
-  project     Project  @relation(fields: [projectId], references: [id])
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId   String
 }
 
 // Model for storing network models
 model NetworkModel {
-  id          String              @id @unique @default(uuid())
+  id          String              @id
   name        String
   description String?
   layers      NetworkModelLayer[]
-  project     Project             @relation(fields: [projectId], references: [id])
+  project     Project             @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId   String
 }
 
 // Model for storing network model layers
 model NetworkModelLayer {
-  id             String        @id @unique @default(uuid())
-  type           String
-  neurons        Int
-  shape          Int
-  network        NetworkModel? @relation(fields: [networkModelId], references: [id])
-  networkModelId String?
+  id        String        @id
+  type      String
+  neurons   Int
+  shape     Int
+  network   NetworkModel? @relation(fields: [networkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  networkId String?
+}
+
+// Model for storing previous builds
+model Build {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId String
 }
 
 // npx prisma migrate dev --name init

@@ -10,7 +10,7 @@ import { MAX_ROWS } from "~/lib/constants";
 
 interface TableModelProps {
   headers: string[];
-  values: TableValue[];
+  values: number[];
   layers: any[];
 }
 
@@ -32,13 +32,43 @@ export default class TableModel extends Component {
 
     this.state = {
       headers: props.headers,
-      values: props.values,
+      values: [],
       testEpochs: 10,
       testInput: 1,
       model: null,
       prediction: "None",
     };
+
+    this.convertLinearTableValuesToObjects(props.values).then((values) => {
+      this.setState({
+        values,
+      });
+    });
   }
+
+  /**
+   * Convert a linear array of numbers to an array of objects
+   * @param {number[]} nums The linear array of numbers
+   * @returns {Promise<{id: string, values: number[]}[]>} The array of objects
+   * @async
+   */
+  private readonly convertLinearTableValuesToObjects = async (
+    nums: number[],
+  ): Promise<TableValue[]> => {
+    const result: TableValue[] = [];
+
+    for (let i = 0; i < nums.length; i += 2) {
+      const values: number[] = [nums[i] ?? 0, nums[i + 1] ?? 0];
+      const id: string = await genId();
+
+      result.push({
+        id,
+        values,
+      });
+    }
+
+    return result;
+  };
 
   /**
    * Render the component
@@ -61,11 +91,9 @@ export default class TableModel extends Component {
               {this.state.values.map((row: any) => (
                 <tr key={row.id}>
                   {row.values.map((value: number[], index: number) => {
-                    const id: string = genId();
-
                     return (
                       <this.TableBody
-                        key={id}
+                        key={row.id + ":" + index}
                         value={value}
                         row={row}
                         index={index}
@@ -253,12 +281,16 @@ export default class TableModel extends Component {
    * @memberof Table
    */
   private readonly AddRowButton = (): JSX.Element => {
-    const id: string = genId();
-
-    const onClick = () => {
+    /**
+     * On click event
+     * @returns Promise<void>
+     */
+    const addRow = async (): Promise<void> => {
       if (this.state.values.length >= MAX_ROWS) {
         return;
       }
+
+      const id: string = await genId();
 
       this.setState({
         values: [
@@ -273,7 +305,7 @@ export default class TableModel extends Component {
 
     return this.state.values.length < MAX_ROWS ? (
       <button
-        onClick={() => onClick()}
+        onClick={async () => await addRow()}
         className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <PlusSVG className="h-5 w-5 fill-slate-950" />
@@ -343,7 +375,7 @@ export default class TableModel extends Component {
    */
   private readonly TableHeader = (props: { header: string }): JSX.Element => {
     const onBlur = (e: any) => {
-      const newHeaders = this.state.headers.map((h: string) =>
+      const newHeaders = this.state.headers.map(async (h: string) =>
         h === props.header ? e.currentTarget.textContent : h,
       );
 

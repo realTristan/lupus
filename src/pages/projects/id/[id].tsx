@@ -4,9 +4,8 @@ import { useSession } from "next-auth/react";
 import LoadingCenter from "~/components/svgs/Loading";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
-import { type Network, type TableValue } from "~/lib/types";
+import { type Table, type Network } from "~/lib/types";
 import TableModel from "~/components/TableModel";
-import { genId } from "~/lib/crypto";
 import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel";
 import { useState } from "react";
@@ -114,23 +113,19 @@ export default function ProjectPage(): JSX.Element {
           })}
 
           {/* Map the tables */}
-          {data.result.tables?.map((table) => {
-            const values = convertLinearTableValuesToObjects(table.values);
-
-            return (
-              <div key={table.id} className="w-full">
-                <h1 className="w-fit text-5xl font-thin">{table.name}</h1>
-                <p className="mt-2 text-2xl">{table.description}</p>
-                <div className="m-3 w-full">
-                  <TableModel
-                    headers={table.headers}
-                    values={values}
-                    layers={activeNetwork?.layers ?? []}
-                  />
-                </div>
+          {data.result.tables?.map((table: Table) => (
+            <div key={table.id} className="w-full">
+              <h1 className="w-fit text-5xl font-thin">{table.name}</h1>
+              <p className="mt-2 text-2xl">{table.description}</p>
+              <div className="m-3 w-full">
+                <TableModel
+                  headers={table.headers}
+                  values={table.values}
+                  layers={activeNetwork?.layers ?? []}
+                />
               </div>
-            );
-          })}
+            </div>
+          ))}
 
           <h1 className="w-fit text-5xl font-thin">Model Builds</h1>
         </main>
@@ -140,26 +135,4 @@ export default function ProjectPage(): JSX.Element {
 
   // If the user isn't logged in, return a loading component
   return <LoadingCenter />;
-}
-
-/**
- * Convert a linear array of numbers to an array of objects
- * @param {number[]} nums The linear array of numbers
- * @returns {Promise<{id: string, values: number[]}[]>} The array of objects
- * @async
- */
-function convertLinearTableValuesToObjects(nums: number[]): TableValue[] {
-  const result: TableValue[] = [];
-
-  for (let i = 0; i < nums.length; i += 2) {
-    const values: number[] = [nums[i] ?? 0, nums[i + 1] ?? 0];
-    const id: string = genId();
-
-    result.push({
-      id,
-      values,
-    });
-  }
-
-  return result;
 }

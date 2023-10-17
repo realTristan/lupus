@@ -61,31 +61,16 @@ CREATE TABLE "NetworkModelLayer" (
     "type" TEXT NOT NULL,
     "neurons" INTEGER NOT NULL,
     "shape" INTEGER NOT NULL,
-    "networkModelId" TEXT,
+    "networkId" TEXT,
 
     CONSTRAINT "NetworkModelLayer_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Project_id_key" ON "Project"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_secret_key" ON "User"("secret");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Build_id_key" ON "Build"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "TableModel_id_key" ON "TableModel"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "NetworkModel_id_key" ON "NetworkModel"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "NetworkModelLayer_id_key" ON "NetworkModelLayer"("id");
 
 -- AddForeignKey
 ALTER TABLE "Project" ADD CONSTRAINT "Project_userSecret_fkey" FOREIGN KEY ("userSecret") REFERENCES "User"("secret") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -100,4 +85,4 @@ ALTER TABLE "TableModel" ADD CONSTRAINT "TableModel_projectId_fkey" FOREIGN KEY 
 ALTER TABLE "NetworkModel" ADD CONSTRAINT "NetworkModel_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "NetworkModelLayer" ADD CONSTRAINT "NetworkModelLayer_networkModelId_fkey" FOREIGN KEY ("networkModelId") REFERENCES "NetworkModel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "NetworkModelLayer" ADD CONSTRAINT "NetworkModelLayer_networkId_fkey" FOREIGN KEY ("networkId") REFERENCES "NetworkModel"("id") ON DELETE SET NULL ON UPDATE CASCADE;

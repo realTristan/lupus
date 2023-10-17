@@ -20,7 +20,7 @@ export default function Home() {
         <h1 className="mx-10 text-center text-8xl font-bold md:text-9xl xl:w-3/4">
           Build<mark className="bg-transparent text-slate-300">.</mark>{" "}
           Collaborate<mark className="bg-transparent text-slate-300">.</mark>{" "}
-          Market<mark className="bg-transparent text-slate-300">.</mark>
+          Explore<mark className="bg-transparent text-slate-300">.</mark>
         </h1>
         <div className="m-10 flex flex-row gap-10">
           <Link

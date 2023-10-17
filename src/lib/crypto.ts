@@ -3,9 +3,8 @@
  */
 export async function sha256(text: string): Promise<string> {
   const msgBuffer = new TextEncoder().encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-
+  const hash = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hash));
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
@@ -38,6 +37,6 @@ export function base64decode(text: string): string {
  * Generate a random id using nanoseconds
  * @returns The random id
  */
-export function genId(): string {
-  return base64encode(Math.random().toString() + ":" + Date.now());
+export async function genId(): Promise<string> {
+  return sha256(Math.random().toString() + ":" + Date.now());
 }
