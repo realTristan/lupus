@@ -30,7 +30,6 @@ model Project {
   userSecret  String
   tables      TableModel[]
   networks    NetworkModel[]
-  builds      Build[]
 }
 
 // Model for storing table data
@@ -42,6 +41,7 @@ model TableModel {
   values      Int[]
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId   String
+  builds      Build[]
 }
 
 // Model for storing network models
@@ -66,12 +66,10 @@ model NetworkModelLayer {
 
 // Model for storing previous builds
 model Build {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  projectId String
+  id        String      @id
+  createdAt DateTime    @default(now())
+  table     TableModel? @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId   String?
 }
 
 // npx prisma migrate dev --name init

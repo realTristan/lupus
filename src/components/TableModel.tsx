@@ -4,8 +4,7 @@ import * as tf from "@tensorflow/tfjs";
 import PlusSVG from "./svgs/Plus";
 import { genId } from "~/lib/crypto";
 import { LoadingRelative } from "./svgs/Loading";
-import { useRouter } from "next/router";
-import { type Table, type TableValue } from "~/lib/types";
+import { type Build, type Table, type TableValue } from "~/lib/types";
 import { MAX_ROWS } from "~/lib/constants";
 
 interface TableModelProps {
@@ -23,6 +22,7 @@ interface TableModelState {
   model: tf.Sequential | null;
   prediction: string;
   hidden: boolean;
+  builds: Build[];
 }
 
 export default class TableModel extends Component {
@@ -40,6 +40,7 @@ export default class TableModel extends Component {
       model: null,
       prediction: "None",
       hidden: true,
+      builds: [],
     };
 
     const columns: number = props.headers.length;
@@ -81,32 +82,26 @@ export default class TableModel extends Component {
    * Render the component
    * @returns JSX.Element
    */
-  render() {
-    return (
-      <div className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7">
-        <div className="flex flex-row items-center justify-between">
-          <div>
-            <h1 className="w-full text-5xl font-extrabold">
-              {this.props.table.name}
-            </h1>
-            <p className="mt-2 w-full text-xl font-thin">
-              {this.props.table.description}
-            </p>
-          </div>
-          <button
-            onClick={() => this.setState({ hidden: !this.state.hidden })}
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-          >
-            <p>{this.state.hidden ? "Show table" : "Hide table"}</p>
-          </button>
+  render = () => (
+    <div className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7">
+      <div className="flex flex-row items-center justify-between">
+        <div>
+          <h1 className="w-full text-5xl font-extrabold">
+            {this.props.table.name}
+          </h1>
+          <p className="mt-2 w-full text-xl font-thin">
+            {this.props.table.description}
+          </p>
         </div>
-        <div
-          className={
-            this.state.hidden
-              ? "hidden"
-              : "mt-4 flex w-full flex-col gap-2 lg:flex-row"
-          }
+        <button
+          onClick={() => this.setState({ hidden: !this.state.hidden })}
+          className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
         >
+          <p>{this.state.hidden ? "Show table" : "Hide table"}</p>
+        </button>
+      </div>
+      <div className={this.state.hidden ? "hidden" : "flex flex-col"}>
+        <div className="mt-4 flex w-full flex-col gap-2 lg:flex-row">
           <div className="flex w-full flex-col items-center justify-center gap-2">
             <table className="w-full">
               <thead>
@@ -173,9 +168,50 @@ export default class TableModel extends Component {
             </p>
           </div>
         </div>
+
+        <this.ModelBuilds />
       </div>
-    );
-  }
+    </div>
+  );
+
+  /**
+   * Model builds component
+   * @returns JSX.Element
+   */
+  private readonly ModelBuilds = (): JSX.Element => (
+    <div
+      className={`mt-4 w-full gap-2 ${
+        this.state.builds.length > 0 ? "flex flex-col" : "hidden"
+      }`}
+    >
+      <h1 className="text-2xl font-black">Previous Builds</h1>
+      <div className="flex w-full flex-col gap-2">
+        {this.state.builds.map((build: Build) => (
+          <div key={build.id} className="flex flex-row gap-4">
+            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+              {build.createdAt.toLocaleString()}
+            </span>
+            <button
+              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+              onClick={async () => await this.downloadModel(build.model)}
+            >
+              Download Model
+            </button>
+            <button
+              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+              onClick={async () => {
+                this.setState({
+                  model: build.model,
+                });
+              }}
+            >
+              Use Model
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   /**
    * Build model button component
@@ -218,39 +254,36 @@ export default class TableModel extends Component {
   };
 
   /**
+   * Download a specific model
+   * @param model The model to download
+   * @returns Promise<void>
+   */
+  private readonly downloadModel = async (model: tf.Sequential | null) => {
+    if (!model) {
+      return;
+    }
+
+    const savedModel = await model.save("downloads://model");
+    const modelJSON = JSON.stringify(savedModel);
+    const ENCODING_PREFIX = "data:text/plain;charset=utf-8,";
+
+    window.location.href = ENCODING_PREFIX + encodeURIComponent(modelJSON);
+  };
+
+  /**
    * Download model button component
    * @returns JSX.Element
    * @memberof Table
    */
-  private readonly DownloadModelButton = (): JSX.Element => {
-    const router = useRouter();
-
-    const onClick = async () => {
-      if (!this.state.model) {
-        return;
-      }
-
-      const model = await this.state.model.save("downloads://model");
-      const modelJSON = JSON.stringify(model);
-      const ENCODING_PREFIX = "data:text/plain;charset=utf-8,";
-
-      router
-        .push(`${ENCODING_PREFIX}${encodeURIComponent(modelJSON)}`)
-        .catch((e) => console.log(e.message));
-
-      return;
-    };
-
-    return (
-      <button
-        disabled={!this.state.model}
-        onClick={async () => await onClick()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-      >
-        <span>Download Model</span>
-      </button>
-    );
-  };
+  private readonly DownloadModelButton = (): JSX.Element => (
+    <button
+      disabled={!this.state.model}
+      onClick={async () => await this.downloadModel(this.state.model)}
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+    >
+      <span>Download Model</span>
+    </button>
+  );
 
   /**
    * Table data component
@@ -485,7 +518,6 @@ export default class TableModel extends Component {
     const model = tf.sequential();
 
     for (const layer of this.props.layers) {
-      console.log(layer);
       model.add(
         tf.layers.dense({
           units: layer.neurons,
@@ -507,6 +539,17 @@ export default class TableModel extends Component {
     );
 
     await model.fit(xs, ys, { epochs: this.state.testEpochs });
+
+    this.setState({
+      builds: [
+        {
+          model: model,
+          id: await genId(),
+          createdAt: new Date(),
+        },
+        ...this.state.builds,
+      ].slice(0, 5),
+    });
 
     return model;
   };

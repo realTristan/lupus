@@ -109,17 +109,15 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
         </span>
 
         {/* Map the layers */}
-        {props.network.layers?.map((layer: NetworkLayer, i: number) => {
-          return (
-            <NetworkLayer
-              project={props.project}
-              network={props.network}
-              layer={layer}
-              index={i}
-              key={layer.id}
-            />
-          );
-        })}
+        {props.network.layers?.map((layer: NetworkLayer, i: number) => (
+          <NetworkLayer
+            project={props.project}
+            network={props.network}
+            layer={layer}
+            index={i}
+            key={layer.id}
+          />
+        ))}
 
         <div className="flex flex-row gap-2">
           {/* Button to copy the code */}

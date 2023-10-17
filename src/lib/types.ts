@@ -1,5 +1,5 @@
 import { type Dispatch, type SetStateAction } from "react";
-
+import { type Sequential } from "@tensorflow/tfjs";
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
 export interface Project {
@@ -19,9 +19,8 @@ export interface Project {
 
 export interface Build {
   id?: string;
-  name: string;
+  model: Sequential;
   createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Network {
