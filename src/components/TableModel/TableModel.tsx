@@ -18,8 +18,8 @@ import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
 import ModelBuildsList from "./components/ModelBuildsList";
-import { genId } from "~/lib/crypto";
 import { ObjectState } from "~/lib/state";
+import linearTableToObjs from "./lib/linearTableToObjs";
 
 /**
  * Test Model Button props
@@ -172,29 +172,4 @@ export default function TableModel(props: Props): JSX.Element {
       </div>
     </div>
   );
-}
-
-/**
- * Convert a linear array of numbers to an array of objects
- * @param {number[]} nums The linear array of numbers
- * @returns {Promise<{id: string, values: number[]}[]>} The array of objects
- * @async
- */
-async function linearTableToObjs(
-  cols: number,
-  nums: number[],
-): Promise<TableValue[]> {
-  const result: TableValue[] = [];
-
-  for (let i = 0; i < nums.length; i += cols) {
-    const values: number[] = [nums[i] ?? 0, nums[i + 1] ?? 0];
-    const id: string = await genId();
-
-    result.push({
-      id,
-      values,
-    });
-  }
-
-  return result;
 }
