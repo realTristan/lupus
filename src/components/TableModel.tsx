@@ -3,31 +3,31 @@ import CrossSVG from "./svgs/Cross";
 import * as tf from "@tensorflow/tfjs";
 import PlusSVG from "./svgs/Plus";
 import { genId } from "~/lib/crypto";
-import { cn } from "~/utils/cn";
 import { LoadingRelative } from "./svgs/Loading";
 import { useRouter } from "next/router";
 import { type TableValue } from "~/lib/types";
 import { MAX_ROWS } from "~/lib/constants";
 
+interface TableModelProps {
+  headers: string[];
+  values: TableValue[];
+  layers: any[];
+}
+
+interface TableModelState {
+  headers: string[];
+  values: TableValue[];
+  testEpochs: number;
+  testInput: number;
+  model: tf.Sequential | null;
+  prediction: string;
+}
+
 export default class TableModel extends Component {
-  state: {
-    headers: string[];
-    values: TableValue[];
+  state: TableModelState;
+  props!: TableModelProps;
 
-    testEpochs: number;
-    testInput: number;
-    model: tf.Sequential | null;
-    prediction: string;
-  };
-
-  props: any = {
-    className: "",
-    headers: [] as string[],
-    values: [] as TableValue[],
-    layers: [],
-  };
-
-  constructor(props: any) {
+  constructor(props: TableModelProps) {
     super(props);
 
     this.state = {
@@ -36,7 +36,7 @@ export default class TableModel extends Component {
       testEpochs: 10,
       testInput: 1,
       model: null,
-      prediction: "",
+      prediction: "None",
     };
   }
 
@@ -46,12 +46,7 @@ export default class TableModel extends Component {
    */
   render() {
     return (
-      <div
-        className={cn(
-          "flex w-full flex-col gap-4 lg:flex-row lg:gap-10",
-          this.props.className,
-        )}
-      >
+      <div className="flex w-full flex-col gap-4 lg:flex-row lg:gap-10">
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <table className="w-full">
             <thead>
@@ -424,6 +419,7 @@ export default class TableModel extends Component {
     const model = tf.sequential();
 
     for (const layer of this.props.layers) {
+      console.log(layer);
       model.add(
         tf.layers.dense({
           units: layer.neurons,

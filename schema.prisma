@@ -10,7 +10,7 @@ generator client {
 
 // Model for storing projects
 model Project {
-  id          String         @id @default(uuid())
+  id          String         @id @unique @default(uuid())
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   name        String
@@ -25,7 +25,7 @@ model Project {
 
 // Model for storing user data
 model User {
-  id        Int       @id @default(autoincrement())
+  id        Int       @id @unique @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   email     String    @unique
@@ -35,7 +35,7 @@ model User {
 
 // Model for storing previous builds
 model Build {
-  id        String   @id @default(uuid())
+  id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
@@ -45,7 +45,7 @@ model Build {
 
 // Model for storing table data
 model TableModel {
-  id          String   @id @default(uuid())
+  id          String   @id @unique @default(uuid())
   name        String
   description String?
   headers     String[]
@@ -56,7 +56,7 @@ model TableModel {
 
 // Model for storing network models
 model NetworkModel {
-  id          String              @id @default(uuid())
+  id          String              @id @unique @default(uuid())
   name        String
   description String?
   layers      NetworkModelLayer[]
@@ -66,7 +66,7 @@ model NetworkModel {
 
 // Model for storing network model layers
 model NetworkModelLayer {
-  id             String        @id @unique
+  id             String        @id @unique @default(uuid())
   type           String
   neurons        Int
   shape          Int

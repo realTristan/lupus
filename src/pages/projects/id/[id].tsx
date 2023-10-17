@@ -57,13 +57,17 @@ export default function ProjectPage(): JSX.Element {
 
   // If the user is logged in, get the projects
   if (status === "authenticated") {
-    // Verify states
+    // Verify states and data
     if (!session?.user.secret) return <></>;
-    if (!data) refetch();
-    if (!data?.result) return <LoadingCenter />;
-    if (!networks.updated) {
-      networks.set(data.result.networks);
-      setActiveNetwork(data.result.networks[0]);
+    if (!data?.result) {
+      refetch().then((res) => {
+        if (!res.data?.result) return;
+
+        networks.set(res.data.result.networks);
+        setActiveNetwork(res.data.result.networks[0]);
+      });
+
+      return <LoadingCenter />;
     }
 
     // Return the jsx
@@ -83,11 +87,9 @@ export default function ProjectPage(): JSX.Element {
           </div>
 
           {/* Map the networks */}
-          {networks.value.map((network) => {
-            const id: string = genId();
-
+          {networks.value.map((network: Network) => {
             return (
-              <div key={id} className="w-full">
+              <div key={network.id} className="w-full">
                 <div className="flex flex-row justify-between">
                   <div>
                     <h1 className="w-fit text-5xl font-thin">{network.name}</h1>
@@ -105,7 +107,8 @@ export default function ProjectPage(): JSX.Element {
                     </p>
                   </button>
                 </div>
-                <NetworkModel networks={networks} network={network} key={id} />
+
+                <NetworkModel networks={networks} network={network} />
               </div>
             );
           })}
@@ -113,18 +116,18 @@ export default function ProjectPage(): JSX.Element {
           {/* Map the tables */}
           {data.result.tables?.map((table) => {
             const values = convertLinearTableValuesToObjects(table.values);
-            const id: string = genId();
 
             return (
-              <div key={id} className="w-full">
+              <div key={table.id} className="w-full">
                 <h1 className="w-fit text-5xl font-thin">{table.name}</h1>
                 <p className="mt-2 text-2xl">{table.description}</p>
-                <TableModel
-                  className="m-7"
-                  headers={table.headers}
-                  values={values}
-                  layers={activeNetwork?.layers ?? []}
-                />
+                <div className="m-3 w-full">
+                  <TableModel
+                    headers={table.headers}
+                    values={values}
+                    layers={activeNetwork?.layers ?? []}
+                  />
+                </div>
               </div>
             );
           })}
