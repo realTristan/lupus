@@ -20,7 +20,7 @@ model User {
 
 // Model for storing projects
 model Project {
-  id          String         @id
+  id          String         @id @unique @default(uuid())
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   name        String
@@ -34,7 +34,7 @@ model Project {
 
 // Model for storing table data
 model TableModel {
-  id          String   @id
+  id          String   @id @unique @default(uuid())
   name        String
   description String?
   headers     String[]
@@ -46,7 +46,7 @@ model TableModel {
 
 // Model for storing network models
 model NetworkModel {
-  id          String              @id
+  id          String              @id @unique @default(uuid())
   name        String
   description String?
   layers      NetworkModelLayer[]
@@ -56,7 +56,7 @@ model NetworkModel {
 
 // Model for storing network model layers
 model NetworkModelLayer {
-  id        String        @id
+  id        String        @id @unique @default(uuid())
   type      String
   neurons   Int
   shape     Int
@@ -66,10 +66,12 @@ model NetworkModelLayer {
 
 // Model for storing previous builds
 model Build {
-  id        String      @id
-  createdAt DateTime    @default(now())
-  table     TableModel? @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tableId   String?
+  id          String      @id @unique @default(uuid())
+  networkName String
+  createdAt   DateTime    @default(now())
+  model       String
+  table       TableModel? @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId     String?
 }
 
 // npx prisma migrate dev --name init

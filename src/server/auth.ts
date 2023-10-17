@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
 
       // Add the user to the database if they don't already exist
       if (email && secret) {
-        Prisma.addUser({
+        Prisma.createUser({
           email,
           secret,
         }).catch(() => {

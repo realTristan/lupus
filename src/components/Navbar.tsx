@@ -39,6 +39,13 @@ export default function Navbar() {
             <PlusSVG className="fill-slate-950" /> <p>New Project</p>
           </Link>
 
+          <Link
+            href="/projects"
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+          >
+            <ExternalSVG className="fill-slate-950" /> <p>My Projects</p>
+          </Link>
+
           <button
             onClick={() => {
               signOut();

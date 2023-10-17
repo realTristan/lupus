@@ -159,21 +159,29 @@ export class Prisma extends PrismaClient {
         tables: {
           create: [
             {
-              name: "Table 1",
+              id: await genId(),
+              name: "Table-default",
               description: "Default table",
               headers: DEFAULT_PROJECT_TABLE_HEADERS,
               values: [0, 1, 0, 2, 1, 3],
+              /*
+              builds: {
+                create: [],
+              },
+              */
             },
           ],
         },
         networks: {
           create: [
             {
-              name: "Network 1",
+              id: await genId(),
+              name: "Network-default",
               description: "Default network",
               layers: {
                 create: [
                   {
+                    id: await genId(),
                     type: "dense",
                     neurons: 1,
                     shape: 1,
@@ -354,7 +362,11 @@ export class Prisma extends PrismaClient {
     return (await Prisma.findOne("project", {
       where: { id, userSecret },
       include: {
-        tables: true,
+        tables: {
+          include: {
+            builds: true,
+          },
+        },
         networks: {
           include: {
             layers: true,
@@ -370,7 +382,7 @@ export class Prisma extends PrismaClient {
    * @returns The added user
    * @throws Error if the user already exists
    */
-  public static readonly addUser = async (user: User): Promise<User> => {
+  public static readonly createUser = async (user: User): Promise<User> => {
     if (await Prisma.userValid(user.secret)) {
       throw new Error("User already exists");
     }

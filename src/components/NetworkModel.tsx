@@ -6,6 +6,7 @@ import TrashcanSVG from "./svgs/Trashcan";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
 import CopySVG from "./svgs/Copy";
 import { useState } from "react";
+import CrossSVG from "./svgs/Cross";
 
 /**
  * Clean a string
@@ -92,6 +93,26 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
             className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
           >
             <p>{hidden ? "Show network" : "Hide network"}</p>
+          </button>
+          <button
+            onClick={() => {
+              if (props.activeNetwork.value.id === props.network.id) {
+                return;
+              }
+
+              const newNetworks = props.project.value.networks.filter(
+                (network: Network) => network.id !== props.network.id,
+              );
+
+              props.project.set({
+                ...props.project.value,
+                networks: newNetworks,
+              });
+            }}
+            disabled={props.activeNetwork.value.id === props.network.id}
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50 disabled:opacity-50"
+          >
+            <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Delete</p>
           </button>
         </div>
       </div>

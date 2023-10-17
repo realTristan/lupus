@@ -21,6 +21,7 @@ export interface Build {
   id?: string;
   model: Sequential;
   createdAt: Date;
+  networkName: string;
 }
 
 export interface Network {

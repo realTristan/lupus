@@ -4,14 +4,19 @@ import * as tf from "@tensorflow/tfjs";
 import PlusSVG from "./svgs/Plus";
 import { genId } from "~/lib/crypto";
 import { LoadingRelative } from "./svgs/Loading";
-import { type Build, type Table, type TableValue } from "~/lib/types";
+import {
+  type Network,
+  type Build,
+  type Table,
+  type TableValue,
+} from "~/lib/types";
 import { MAX_ROWS } from "~/lib/constants";
 
 interface TableModelProps {
   headers: string[];
   values: number[];
-  layers: any[];
   table: Table;
+  activeNetwork: Network;
 }
 
 interface TableModelState {
@@ -135,11 +140,58 @@ export default class TableModel extends Component {
 
             <div className="flex w-full flex-row gap-2">
               <this.AddRowButton />
-              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+              {/* Dialog to select a csv file from files */}
+              <label
+                htmlFor="import_csv_input"
+                className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+              >
                 <span>Import CSV</span>
-              </button>
-              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-                <span>Export as CSV</span>
+              </label>
+              <input
+                id="import_csv_input"
+                className="hidden"
+                type="file"
+                accept=".csv"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) {
+                    return;
+                  }
+
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                    const result = e.target?.result;
+                    if (!result) {
+                      return;
+                    }
+
+                    const values = result
+                      .toString()
+                      .split("\n")
+                      .map((row: string) => row.split(","))
+                      .slice(1);
+
+                    if (values.length > MAX_ROWS) {
+                      return;
+                    }
+
+                    const newValues = values.map((row: string[]) => {
+                      return {
+                        id: genId(),
+                        values: row.map((value: string) => parseInt(value)),
+                      };
+                    });
+
+                    this.setState({
+                      values: newValues,
+                    });
+                  };
+
+                  reader.readAsText(file);
+                }}
+              />
+              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+                <span>Export CSV</span>
               </button>
             </div>
           </div>
@@ -163,7 +215,7 @@ export default class TableModel extends Component {
 
             <this.DownloadModelButton />
 
-            <p className="mt-2 flex h-full w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
               Output: {this.state.prediction}
             </p>
           </div>
@@ -187,8 +239,10 @@ export default class TableModel extends Component {
       <h1 className="text-2xl font-black">Previous Builds</h1>
       <div className="flex w-full flex-col gap-2">
         {this.state.builds.map((build: Build) => (
-          <div key={build.id} className="flex flex-row gap-4">
-            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+          <div key={build.id} className="group flex flex-row gap-4">
+            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
+              <strong>{build.networkName}</strong>
+              <br />
               {build.createdAt.toLocaleString()}
             </span>
             <button
@@ -375,10 +429,10 @@ export default class TableModel extends Component {
     return this.state.values.length < MAX_ROWS ? (
       <button
         onClick={async () => await addRow()}
-        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
         <PlusSVG className="h-5 w-5 fill-slate-950" />
-        <span>Add Row</span>
+        <span>Row</span>
       </button>
     ) : (
       <></>
@@ -517,11 +571,11 @@ export default class TableModel extends Component {
   private readonly buildModel = async (): Promise<tf.Sequential> => {
     const model = tf.sequential();
 
-    for (const layer of this.props.layers) {
+    for (const layer of this.props.activeNetwork.layers) {
       model.add(
         tf.layers.dense({
-          units: layer.neurons,
-          inputShape: [layer.shape],
+          units: layer.neurons ?? 1,
+          inputShape: [layer.shape ?? 1],
         }),
       );
     }
@@ -543,6 +597,7 @@ export default class TableModel extends Component {
     this.setState({
       builds: [
         {
+          networkName: this.props.activeNetwork.name,
           model: model,
           id: await genId(),
           createdAt: new Date(),

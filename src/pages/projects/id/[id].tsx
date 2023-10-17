@@ -10,6 +10,7 @@ import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel";
 import { genId } from "~/lib/crypto";
 import PlusSVG from "~/components/svgs/Plus";
+import { MAX_NETWORKS } from "~/lib/constants";
 
 /**
  * Project page
@@ -52,7 +53,9 @@ export default function ProjectPage(): JSX.Element {
       secret: session?.user.secret ?? "",
       id: router.query.id as string,
       project: {
-        ...project.value,
+        name: project.value.name,
+        description: project.value.description,
+        tags: project.value.tags,
       },
     },
     {
@@ -62,7 +65,31 @@ export default function ProjectPage(): JSX.Element {
   );
 
   /**
-   * Store the networks
+   * Update the project tables builds
+   */
+
+  /**
+   * Add a new network
+   */
+
+  /**
+   * Add a new network layer
+   */
+
+  /**
+   * Update the project network layers
+   */
+
+  /**
+   * Add a new table
+   */
+
+  /**
+   * Update table data/headers
+   */
+
+  /**
+   * Store the networks in a state
    */
   const activeNetwork = new ObjectState<Network>({} as Network);
 
@@ -122,7 +149,7 @@ export default function ProjectPage(): JSX.Element {
                 key={table.id}
                 headers={table.headers}
                 values={table.values}
-                layers={activeNetwork.value.layers}
+                activeNetwork={activeNetwork.value}
                 table={table}
               />
             );
@@ -170,13 +197,18 @@ function CreateNewNetworkButton(props: {
 }): JSX.Element {
   return (
     <button
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      disabled={props.project.value.networks.length >= MAX_NETWORKS}
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
       onClick={async () => {
+        if (props.project.value.networks.length >= MAX_NETWORKS) {
+          return;
+        }
+
         const networkId: string = await genId();
         const newNetwork: Network = {
           id: networkId,
-          name: "New Network",
-          description: "New Network",
+          name: `Network-${networkId.slice(0, 5)}`,
+          description: "User created network",
           layers: [
             {
               id: await genId(),
@@ -193,7 +225,13 @@ function CreateNewNetworkButton(props: {
         });
       }}
     >
-      <PlusSVG className="fill-slate-950" /> <p>Create a new network</p>
+      {props.project.value.networks.length >= MAX_NETWORKS ? (
+        <p>Maximum networks limit reached</p>
+      ) : (
+        <>
+          <PlusSVG className="fill-slate-950" /> <p>Create a new network</p>
+        </>
+      )}
     </button>
   );
 }
