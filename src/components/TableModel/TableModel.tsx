@@ -9,7 +9,7 @@ import TestModelButton from "./components/TestModelButton";
 import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
-import PreviousModelsList from "./components/PreviousModelsList";
+import ModelsList from "./components/ModelsList";
 import linearTableToObjs from "./lib/linearTableToObjs";
 import { ObjectState } from "~/lib/state";
 import { useState } from "react";
@@ -174,7 +174,7 @@ export default function TableModel(props: Props): JSX.Element {
           </div>
         </div>
 
-        <PreviousModelsList
+        <ModelsList
           activeNetwork={props.activeNetwork}
           models={models}
           setModels={setModels}

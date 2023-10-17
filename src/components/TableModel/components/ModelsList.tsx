@@ -49,7 +49,7 @@ export default function PreviousModelsList(props: Props): JSX.Element {
               className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               onClick={async () => await downloadModel(model.model)}
             >
-              Download Model
+              Download model
             </button>
             <button
               disabled={props.currentModel?.id === model.id}
@@ -59,6 +59,21 @@ export default function PreviousModelsList(props: Props): JSX.Element {
               {props.currentModel?.id === model.id
                 ? "Already in use"
                 : "Use model"}
+            </button>
+            <button
+              disabled={props.currentModel?.id === model.id}
+              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+              onClick={() => {
+                if (props.currentModel?.id === model.id) {
+                  return;
+                }
+
+                props.setModels(
+                  props.models.filter((m: Model) => m.id !== model.id),
+                );
+              }}
+            >
+              Delete model
             </button>
           </div>
         ))}
