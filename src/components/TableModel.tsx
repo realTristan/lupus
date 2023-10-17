@@ -145,7 +145,7 @@ export default class TableModel extends Component {
                 htmlFor="import_csv_input"
                 className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               >
-                <span>Import CSV</span>
+                Import CSV
               </label>
               <input
                 id="import_csv_input"
@@ -190,8 +190,21 @@ export default class TableModel extends Component {
                   reader.readAsText(file);
                 }}
               />
-              <button className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-                <span>Export CSV</span>
+              <button
+                onClick={() => {
+                  const headers: string = this.state.headers.join(",") + "\n";
+                  const rows: string[] = this.state.values.map((row: any) =>
+                    row.values.join(","),
+                  );
+                  const data: string = headers + rows.join("\n");
+                  const ENCODING_PREFIX = "data:text/plain;charset=utf-8,";
+
+                  window.location.href =
+                    ENCODING_PREFIX + encodeURIComponent(data);
+                }}
+                className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+              >
+                Export CSV
               </button>
             </div>
           </div>
