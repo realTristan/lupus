@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import buildModel from "../lib/buildModel";
-import { type Network, type TableValue } from "~/lib/types";
+import { type Build, type Network, type TableValue } from "~/lib/types";
 import { type Sequential } from "@tensorflow/tfjs";
 import { LoadingRelative } from "~/components/svgs/Loading";
 
@@ -17,6 +17,8 @@ interface Props {
   epochs: number;
   values: TableValue[];
   setModel: (model: Sequential) => void;
+  builds: Build[];
+  setBuilds: Dispatch<SetStateAction<Build[]>>;
 }
 
 /**
@@ -45,6 +47,14 @@ export default function BuildModelButton(props: Props): JSX.Element {
     });
 
     props.setModel(newModel);
+    props.setBuilds([
+      {
+        model: newModel,
+        createdAt: new Date(),
+        networkName: props.activeNetwork.name,
+      },
+      ...props.builds,
+    ]);
 
     setBuilding(false);
   };

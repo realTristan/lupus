@@ -49,7 +49,7 @@ export default function Navbar() {
           <button
             onClick={() => {
               signOut();
-              router.push("/").catch((e: any) => console.log(e.message));
+              router.push("/").catch((e: any) => console.error(e));
             }}
             className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >

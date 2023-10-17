@@ -19,7 +19,7 @@ import { LoadingRelative } from "~/components/svgs/Loading";
  */
 interface Props {
   input: number;
-  model: Sequential;
+  model: Sequential | null;
   activeNetwork: Network;
   epochs: number;
   builds: Build[];

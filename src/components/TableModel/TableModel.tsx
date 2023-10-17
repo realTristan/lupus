@@ -45,7 +45,7 @@ export default function TableModel(props: Props): JSX.Element {
   const [epochs, setEpochs] = useState<number>(10);
   const [prediction, setPrediction] = useState<string>("None");
   const [builds, setBuilds] = useState<Build[]>([]);
-  const [model, setModel] = useState<Sequential>({} as Sequential);
+  const [model, setModel] = useState<Sequential | null>(null);
   const [testData, setTestData] = useState<number>(1);
   const values = new ObjectState<TableValue[]>([]);
 
@@ -147,6 +147,8 @@ export default function TableModel(props: Props): JSX.Element {
             <div className="flex flex-row gap-2">
               <EpochsInput setEpochs={setEpochs} />
               <BuildModelButton
+                builds={builds}
+                setBuilds={setBuilds}
                 activeNetwork={props.activeNetwork}
                 epochs={epochs}
                 values={values.value}

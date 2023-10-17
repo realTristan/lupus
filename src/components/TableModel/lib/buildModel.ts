@@ -46,12 +46,12 @@ export default async function buildModel(
   const valuesLength: number = params.values.length;
 
   const xs = tensor2d(
-    params.values.map((d: any) => d.values[0]),
+    params.values.map((t: TableValue) => t.values[0] ?? 0),
     [valuesLength, 1],
   );
 
   const ys = tensor2d(
-    params.values.map((d: any) => d.values[1]),
+    params.values.map((t: TableValue) => t.values[1] ?? 0),
     [valuesLength, 1],
   );
 

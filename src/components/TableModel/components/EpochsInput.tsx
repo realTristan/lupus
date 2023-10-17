@@ -1,3 +1,8 @@
+/**
+ * Parameters for Epochs Input component
+ * @interface Parameters
+ * @property {Function} setEpochs Set the epochs
+ */
 interface Parameters {
   setEpochs: (epochs: number) => void;
 }
@@ -7,7 +12,7 @@ interface Parameters {
  * @returns JSX.Element
  */
 export default function EpochsInput(params: Parameters): JSX.Element {
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value: string = e.currentTarget.value || "10";
     const valueInt: number = parseInt(value, 10);
     params.setEpochs(valueInt);

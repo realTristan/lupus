@@ -10,9 +10,9 @@ interface Props {
  * @returns JSX.Element
  */
 export default function TableHeader(props: Props): JSX.Element {
-  const onBlur = (e: any) => {
+  const onBlur = (e: React.FocusEvent<HTMLTableHeaderCellElement>): void => {
     const newHeaders = props.headers.map((h: string) =>
-      h === props.header ? e.currentTarget.textContent : h,
+      h === props.header ? e.currentTarget.textContent ?? "" : h,
     );
 
     props.setNewHeaders(newHeaders);

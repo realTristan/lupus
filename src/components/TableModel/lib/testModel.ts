@@ -11,7 +11,7 @@ import { genId } from "~/lib/crypto";
 
 interface Parameters {
   input: number;
-  model: Sequential;
+  model: Sequential | null;
   activeNetwork: Network;
   epochs: number;
   builds: Build[];

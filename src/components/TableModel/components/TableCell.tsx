@@ -3,14 +3,14 @@ import { type TableValue } from "~/lib/types";
 /**
  * Table cell props
  * @interface Props
- * @property {any} row The row
+ * @property {TableValue} row The row
  * @property {number[]} value The value
  * @property {TableValue[]} values The values
  * @property {Function} setValues Set the values
  * @property {number} index The index
  */
 interface Props {
-  row: any;
+  row: TableValue;
   value: number[];
   values: TableValue[];
   setValues: (values: TableValue[]) => void;
@@ -20,7 +20,7 @@ interface Props {
 /**
  * Table data component
  * @param props Table data props
- * @param {any} props.row The row
+ * @param {TableValue} props.row The row
  * @param {number[]} props.value The value
  * @param {TableValue[]} props.values The values
  * @param {Function} props.setValues Set the values
@@ -28,10 +28,10 @@ interface Props {
  * @returns JSX.Element
  */
 export default function TableCell(props: Props): JSX.Element {
-  const onBlur = (e: any) => {
-    const newValues = props.values.map((d: any) => {
+  const onBlur = (e: React.FocusEvent<HTMLTableDataCellElement>): void => {
+    const newValues = props.values.map((d: TableValue) => {
       if (d.id === props.row.id) {
-        d.values[props.index] = parseInt(e.currentTarget.textContent);
+        d.values[props.index] = parseInt(e.currentTarget.textContent ?? "");
       }
 
       return d;

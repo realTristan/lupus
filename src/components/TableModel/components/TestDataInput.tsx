@@ -6,7 +6,7 @@ interface Parameters {
  * @returns JSX.Element
  */
 export default function TestDataInput(params: Parameters): JSX.Element {
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value: string = e.currentTarget.value;
     const valueInt: number = parseInt(value ?? "1", 10);
     params.setTestData(valueInt);
