@@ -40,7 +40,7 @@ export default function ProjectCard(props: Props): JSX.Element {
         <Link
           target="_blank"
           href={`/projects/id/${props.project.id}`}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-blue-500 px-7 py-2 text-sm font-normal tracking-wider text-white hover:bg-blue-500/80"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-blue-500 px-7 py-3 text-sm font-normal tracking-wider text-white hover:bg-blue-500/80"
         >
           <ExternalSVG className="h-5 w-5 fill-white" /> <p>Open</p>
         </Link>
@@ -50,7 +50,7 @@ export default function ProjectCard(props: Props): JSX.Element {
             deleteProject();
             props.router.reload();
           }}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-red-500 px-7 py-2 text-sm font-normal tracking-wider text-white hover:bg-red-500/80"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-red-500 px-7 py-3 text-sm font-normal tracking-wider text-white hover:bg-red-500/80"
         >
           <CrossSVG className="h-3 w-3 fill-white" /> <p>Delete</p>
         </button>
