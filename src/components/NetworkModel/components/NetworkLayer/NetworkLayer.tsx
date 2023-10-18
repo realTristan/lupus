@@ -21,7 +21,7 @@ interface NetLayerProps {
  * @returns JSX.Element
  */
 export default function NetLayer(props: NetLayerProps): JSX.Element {
-  const HAS_ATLEAST_ONE_LAYER: boolean = props.network.layers.length >= 1;
+  const HAS_ATLEAST_TWO_LAYERS: boolean = props.network.layers.length > 1;
   const layerType: string = clean(props.layer.type);
   const layerNum: number = props.index + 1;
 
@@ -36,7 +36,7 @@ export default function NetLayer(props: NetLayerProps): JSX.Element {
         <ShapeInput {...props} />
 
         {/* Button to delete the current layer */}
-        {HAS_ATLEAST_ONE_LAYER && <DeleteLayerButton {...props} />}
+        {HAS_ATLEAST_TWO_LAYERS && <DeleteLayerButton {...props} />}
       </div>
     </div>
   );

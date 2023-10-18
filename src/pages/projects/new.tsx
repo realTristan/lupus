@@ -43,7 +43,7 @@ export default function NewProjectPage(): JSX.Element {
             Create a new project
           </p>
           <p className="mt-1 text-base font-normal italic text-slate-950">
-            Projects are used to organize your data
+            Projects are used to organize your models and data.
           </p>
           <div className="my-7 flex w-1/3 flex-col items-center justify-center">
             <CreateNewProjectInputs project={project} setProject={setProject} />
