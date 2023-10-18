@@ -25,13 +25,11 @@ export default function ProjectPage(): JSX.Element {
   const router: NextRouter = useRouter();
 
   // Get the project data via trpc
-  const project = new ObjectState<Project>({
-    id: router.query.id as string,
-  } as Project);
+  const project = new ObjectState<Project>({} as Project);
 
   const { data: projectData, getProject } = trpcGetProject(
     session?.user.secret ?? "",
-    project.value.id,
+    router.query.id as string,
   );
 
   // Update the project settings to the database
@@ -59,8 +57,8 @@ export default function ProjectPage(): JSX.Element {
 
   // If the user is logged in, get the projects
   if (status === "authenticated") {
-    // Verify states and data
     if (!session?.user.secret) return <></>;
+
     if (!project.updated || !projectData?.result) {
       getProject().then((res) => {
         const result = res.data?.result;

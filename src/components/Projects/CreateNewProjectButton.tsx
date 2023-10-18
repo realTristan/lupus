@@ -22,7 +22,7 @@ export default function CreateNewProjectButton(props: Props): JSX.Element {
   return (
     <button
       onClick={() => createNewProject()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
     >
       <p>Create</p>
     </button>

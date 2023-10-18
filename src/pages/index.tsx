@@ -17,7 +17,7 @@ export default function Home() {
       <CirclesBackground className="-z-10 opacity-10" />
 
       <main className="flex min-h-screen flex-col items-center justify-center pt-40">
-        <h1 className="mx-10 text-center text-8xl font-bold md:text-9xl xl:w-3/4">
+        <h1 className="mx-10 text-center text-7xl font-bold md:text-8xl xl:w-3/4">
           Build<mark className="bg-transparent text-slate-300">.</mark>{" "}
           Collaborate<mark className="bg-transparent text-slate-300">.</mark>{" "}
           Explore<mark className="bg-transparent text-slate-300">.</mark>
@@ -25,13 +25,13 @@ export default function Home() {
         <div className="m-10 flex flex-row gap-10">
           <Link
             href="/projects"
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <ExternalSVG className="fill-slate-950" /> <p>Get started</p>
           </Link>
           <Link
             href="/learn-more"
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-5 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <ExternalSVG className="fill-slate-950" /> <p>Learn more</p>
           </Link>

@@ -49,7 +49,7 @@ export default function Projects(): JSX.Element {
 
         <Navbar />
 
-        <main className="mt-40 flex min-h-screen flex-col items-center p-14">
+        <main className="flex min-h-screen flex-col items-center p-14 pt-40">
           {hasProjects ? (
             <ProjectsTable
               projects={projects}

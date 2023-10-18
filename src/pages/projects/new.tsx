@@ -39,13 +39,13 @@ export default function NewProjectPage(): JSX.Element {
         <Navbar />
 
         <main className="flex min-h-screen flex-col items-center justify-center">
-          <p className="text-4xl font-bold text-slate-950">
+          <p className="text-3xl font-bold text-slate-950">
             Create a new project
           </p>
-          <p className="mt-1 text-base font-normal italic text-slate-950">
+          <p className="mt-1 text-sm font-normal italic text-slate-950">
             Projects are used to organize your models and data.
           </p>
-          <div className="my-7 flex w-1/3 flex-col items-center justify-center">
+          <div className="my-4 flex w-1/3 flex-col items-center justify-center">
             <CreateNewProjectInputs project={project} setProject={setProject} />
 
             <div className="flex w-full flex-row gap-2">
@@ -58,7 +58,7 @@ export default function NewProjectPage(): JSX.Element {
               />
               <button
                 onClick={() => router.push("/projects")}
-                className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+                className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               >
                 <p>Cancel</p>
               </button>

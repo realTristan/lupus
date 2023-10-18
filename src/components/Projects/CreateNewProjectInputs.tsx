@@ -29,20 +29,20 @@ export default function CreateNewProjectInputs(props: Props): JSX.Element {
   return (
     <>
       <input
-        className="h-12 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-slate-600"
+        className="h-10 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-sm text-slate-600"
         placeholder="Project Name"
         onChange={onNameChange}
       />
-      <p className="my-3 text-sm font-normal text-red-500">
+      <p className="my-1 text-sm font-normal text-red-500">
         {IS_INVALID_NAME && "Project name must be less than 20 characters"}
       </p>
 
       <input
-        className="h-12 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-slate-600"
+        className="h-10 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-sm text-slate-600"
         placeholder="Project Description"
         onChange={onDescriptionChange}
       />
-      <p className="my-3 text-sm font-normal text-red-500">
+      <p className="my-1 text-sm font-normal text-red-500">
         {IS_INVALID_DESCRIPTION &&
           "Project description must be less than 50 characters"}
       </p>

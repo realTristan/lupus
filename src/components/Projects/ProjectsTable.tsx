@@ -11,9 +11,9 @@ interface Props {
 
 export default function ProjectsTable(props: Props): JSX.Element {
   return (
-    <table className="w-full table-auto">
+    <table className="w-full">
       <thead>
-        <tr className="text-left">
+        <tr className="text-left text-sm">
           <th className="px-4 py-2">Name</th>
           <th className="px-4 py-2">Description</th>
           <th className="px-4 py-2">Created at</th>

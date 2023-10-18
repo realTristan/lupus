@@ -1,5 +1,5 @@
-import CrossSVG from "~/components/svgs/Cross";
 import { type TableValue } from "~/lib/types";
+import CrossSVG from "../svgs/Cross";
 
 /**
  * Remove row button props
@@ -30,9 +30,11 @@ export default function RemoveRowButton(props: Props): JSX.Element {
   return (
     <td
       onClick={() => onClick()}
-      className="cursor-pointer border-2 border-slate-100 px-7 py-3 text-sm hover:bg-slate-50"
+      className="cursor-pointer border-2 border-slate-100 px-3 py-3 text-sm hover:bg-slate-50"
     >
-      <CrossSVG className="h-3 w-3 fill-slate-950" />
+      <div className="flex flex-row items-center justify-center gap-2">
+        <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Remove</p>
+      </div>
     </td>
   );
 }

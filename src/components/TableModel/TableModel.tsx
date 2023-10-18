@@ -90,7 +90,7 @@ export default function TableModel(props: Props): JSX.Element {
       </div>
       <div className={hidden ? "hidden" : "flex flex-col"}>
         <div className="mt-4 flex w-full flex-col gap-2 sm:flex-row">
-          <div className="flex w-full flex-col items-center justify-center gap-2">
+          <div className="flex w-full flex-col items-center gap-2 text-left">
             <table className="w-full">
               <thead>
                 <tr>
@@ -137,9 +137,9 @@ export default function TableModel(props: Props): JSX.Element {
             </table>
 
             <div className="flex w-full flex-row gap-2">
-              <AddRowButton values={values.value} setValues={values.set} />
               <ImportCSVDialog setValues={values.set} />
               <ExportCSVButton />
+              <AddRowButton values={values.value} setValues={values.set} />
             </div>
             {/*<ImportTestDataButton />*/}
           </div>

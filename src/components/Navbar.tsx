@@ -35,14 +35,14 @@ export default function Navbar() {
         <div className="flex flex-row items-center justify-center gap-4">
           <Link
             href="/projects/new"
-            className="flex h-auto flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-2 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
+            className="flex h-[50px] flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <PlusSVG className="fill-slate-950" /> <p>New Project</p>
           </Link>
 
           <Link
             href="/projects"
-            className="flex flex-row items-center justify-center gap-3 rounded-md border-2 border-slate-100 bg-white px-10 py-2 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
+            className="flex h-[50px] flex-row items-center justify-center gap-3 rounded-md border-2 border-slate-100 bg-white px-10 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <TableSVG className="mt-0.5 h-5 w-5 fill-slate-950" />{" "}
             <p>My Projects</p>
@@ -53,7 +53,7 @@ export default function Navbar() {
               signOut();
               router.push("/").catch((e: any) => console.error(e));
             }}
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-2 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
+            className="flex h-[50px] flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 text-sm tracking-wider text-slate-950 hover:bg-slate-50"
           >
             <ExternalSVG className="fill-slate-950" /> <p>Signout</p>
           </button>
