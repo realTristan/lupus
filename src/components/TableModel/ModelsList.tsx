@@ -31,6 +31,7 @@ interface Props {
  */
 export default function PreviousModelsList(props: Props): JSX.Element {
   const HAS_MODELS = props.models.length > 0;
+  const SLICED_MODELS = props.models.slice(0, 5);
 
   return (
     <div
@@ -38,7 +39,7 @@ export default function PreviousModelsList(props: Props): JSX.Element {
     >
       <h1 className="mt-5 text-2xl font-black">My Models</h1>
       <div className="flex w-full flex-col gap-2">
-        {props.models.map((model: Model) => (
+        {SLICED_MODELS.map((model: Model) => (
           <div key={model.id} className="group flex flex-row gap-4">
             <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
               <strong>{model.networkName}</strong>
@@ -69,7 +70,7 @@ export default function PreviousModelsList(props: Props): JSX.Element {
                 }
 
                 props.setModels(
-                  props.models.filter((m: Model) => m.id !== model.id),
+                  SLICED_MODELS.filter((m: Model) => m.id !== model.id),
                 );
               }}
             >
