@@ -13,7 +13,6 @@ export default function CirclesBackground(props: {
         "absolute bottom-0 left-0 z-0 h-full w-full",
         props.className,
       )}
-      id="visual"
       viewBox="0 0 900 600"
       width="900"
       height="600"

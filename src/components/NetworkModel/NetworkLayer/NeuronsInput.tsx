@@ -24,7 +24,7 @@ interface Props {
 export default function NeuronsInput(props: Props): JSX.Element {
   return (
     <span className="flex flex-row items-center justify-start rounded-md border-2 border-slate-100 bg-white px-4 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
-      <p>Neurons: </p>
+      Neurons:
       <input
         type="number"
         className="bg-transparent px-2 py-1"

@@ -19,7 +19,8 @@ import {
   type TableValue,
   type Model,
 } from "~/lib/types";
-import TableSVG from "../Svgs/Table";
+import TableSVG from "../SvgComponents/Table";
+import SlateBorderButton from "../SlateBorderButton";
 
 /**
  * Test Model Button props
@@ -81,12 +82,9 @@ export default function TableModel(props: Props): JSX.Element {
             {props.table.description}
           </p>
         </div>
-        <button
-          onClick={() => setHidden(!hidden)}
-          className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-        >
-          <p>{hidden ? "Show table" : "Hide table"}</p>
-        </button>
+        <SlateBorderButton onClick={() => setHidden(!hidden)}>
+          {hidden ? "Show table" : "Hide table"}
+        </SlateBorderButton>
       </div>
       <div className={hidden ? "hidden" : "flex flex-col"}>
         <div className="mt-4 flex w-full flex-col gap-2 sm:flex-row">
@@ -177,9 +175,9 @@ export default function TableModel(props: Props): JSX.Element {
 
             <DownloadModelButton model={currentModel?.model ?? null} />
 
-            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+            <SlateBorderButton className="py-3">
               Output: {prediction}
-            </p>
+            </SlateBorderButton>
           </div>
         </div>
 

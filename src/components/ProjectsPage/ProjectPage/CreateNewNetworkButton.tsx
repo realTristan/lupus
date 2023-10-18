@@ -2,7 +2,7 @@ import { MAX_NETWORKS } from "~/lib/constants";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
 import { createNewNetwork } from "../../../lib/projects/project/createNewNetwork";
-import PlusSVG from "~/components/Svgs/Plus";
+import PlusSVG from "~/components/SvgComponents/Plus";
 
 interface Props {
   project: ObjectState<Project>;

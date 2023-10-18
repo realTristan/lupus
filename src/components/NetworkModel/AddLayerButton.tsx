@@ -1,8 +1,9 @@
-import PlusSVG from "~/components/Svgs/Plus";
+import PlusSVG from "~/components/SvgComponents/Plus";
 import { createLayer } from "~/lib/projects/project/networks/networkLayer/createLayer";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
+import SlateBorderButton from "../SlateBorderButton";
 
 /**
  * Add layer button props
@@ -24,8 +25,7 @@ export default function AddLayerButton(props: Props): JSX.Element {
     props.network.layers.length >= MAX_NETWORK_LAYERS;
 
   return (
-    <button
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+    <SlateBorderButton
       disabled={HAS_REACHED_MAX_LAYERS}
       onClick={() =>
         createLayer({
@@ -33,9 +33,10 @@ export default function AddLayerButton(props: Props): JSX.Element {
           network: props.network,
         })
       }
+      className="w-full border-0 bg-blue-500 text-white hover:bg-blue-500/80"
     >
-      <PlusSVG className="fill-slate-950" />{" "}
-      <p>{HAS_REACHED_MAX_LAYERS ? "Max layers reached" : "Add Layer"}</p>
-    </button>
+      <PlusSVG className="h-5 w-5 fill-white" />
+      <span>Layer</span>
+    </SlateBorderButton>
   );
 }

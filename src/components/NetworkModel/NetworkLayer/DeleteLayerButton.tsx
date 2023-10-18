@@ -1,4 +1,5 @@
-import CrossSVG from "~/components/Svgs/Cross";
+import SlateBorderButton from "~/components/SlateBorderButton";
+import CrossSVG from "~/components/SvgComponents/Cross";
 import { deleteLayer } from "~/lib/projects/project/networks/networkLayer/deleteLayer";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
@@ -22,7 +23,7 @@ interface Props {
  */
 export default function DeleteLayerButton(props: Props): JSX.Element {
   return (
-    <button
+    <SlateBorderButton
       onClick={() =>
         deleteLayer({
           project: props.project,
@@ -30,9 +31,8 @@ export default function DeleteLayerButton(props: Props): JSX.Element {
           index: props.index,
         })
       }
-      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
     >
       <CrossSVG className="h-3 w-3 fill-slate-950" />
-    </button>
+    </SlateBorderButton>
   );
 }

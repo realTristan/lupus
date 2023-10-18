@@ -27,10 +27,7 @@ export default function NetLayer(props: NetLayerProps): JSX.Element {
 
   return (
     <div className="flex w-full flex-col items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-3 text-left text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
-      <p>
-        Layer {layerNum}: {layerType}
-      </p>
-
+      Layer {layerNum}: {layerType}
       <div className="flex w-full flex-col justify-start gap-2 lg:flex-row">
         <NeuronsInput {...props} />
         <ShapeInput {...props} />

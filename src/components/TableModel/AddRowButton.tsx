@@ -1,7 +1,8 @@
-import PlusSVG from "~/components/Svgs/Plus";
+import PlusSVG from "~/components/SvgComponents/Plus";
 import { MAX_ROWS } from "~/lib/constants";
 import { genId } from "~/lib/crypto";
 import { type TableValue } from "~/lib/types";
+import SlateBorderButton from "../SlateBorderButton";
 
 /**
  * Add row button parameters
@@ -39,13 +40,12 @@ export default function AddRowButton(params: Parameters): JSX.Element {
   };
 
   return (
-    <button
+    <SlateBorderButton
       disabled={params.values.length >= MAX_ROWS}
       onClick={async () => await addRow()}
-      className="flex w-full flex-row items-center justify-center gap-1 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
     >
       <PlusSVG className="h-5 w-5 fill-slate-950" />
       <span>Row</span>
-    </button>
+    </SlateBorderButton>
   );
 }

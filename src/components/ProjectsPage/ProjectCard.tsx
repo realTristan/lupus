@@ -2,8 +2,8 @@ import Link from "next/link";
 import { type NextRouter } from "next/router";
 import { trpcDeleteProject } from "~/lib/trpc/deleteProject";
 import { type Project } from "~/lib/types";
-import ExternalSVG from "../Svgs/External";
-import CrossSVG from "../Svgs/Cross";
+import ExternalSVG from "../SvgComponents/External";
+import CrossSVG from "../SvgComponents/Cross";
 
 /**
  * Project card props
@@ -40,9 +40,9 @@ export default function ProjectCard(props: Props): JSX.Element {
         <Link
           target="_blank"
           href={`/projects/id/${props.project.id}`}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:border-slate-200 hover:bg-slate-200"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-blue-500 px-7 py-2 text-sm font-normal tracking-wider text-white hover:bg-blue-500/80"
         >
-          <ExternalSVG className="h-5 w-5 fill-slate-950" /> <p>Open</p>
+          <ExternalSVG className="h-5 w-5 fill-white" /> <p>Open</p>
         </Link>
 
         <button
@@ -50,7 +50,7 @@ export default function ProjectCard(props: Props): JSX.Element {
             deleteProject();
             props.router.reload();
           }}
-          className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-50 bg-red-500 px-7 py-2 text-sm font-normal tracking-wider text-white hover:border-red-600 hover:bg-red-600"
+          className="flex w-full flex-row items-center justify-center gap-2 rounded-md bg-red-500 px-7 py-2 text-sm font-normal tracking-wider text-white hover:bg-red-500/80"
         >
           <CrossSVG className="h-3 w-3 fill-white" /> <p>Delete</p>
         </button>

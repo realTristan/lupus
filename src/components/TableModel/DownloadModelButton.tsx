@@ -1,5 +1,7 @@
 import { type Sequential } from "@tensorflow/tfjs";
 import { downloadModel } from "../../lib/projects/project/tables/downloadModel";
+import SlateBorderButton from "../SlateBorderButton";
+import ExternalSVG from "../SvgComponents/External";
 
 /**
  * Download model button props
@@ -16,17 +18,18 @@ interface Props {
  * @memberof Table
  */
 export default function DownloadModelButton(props: Props): JSX.Element {
+  const onClick = async () => {
+    if (!props.model) return;
+    await downloadModel(props.model);
+  };
+
   return (
-    <button
+    <SlateBorderButton
+      onClick={onClick}
       disabled={!props.model}
-      onClick={async () => {
-        if (props.model) {
-          await downloadModel(props.model);
-        }
-      }}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+      className="border-0 bg-blue-500 px-6 text-white hover:bg-blue-500/80"
     >
-      <span>Download Model</span>
-    </button>
+      <ExternalSVG className="h-5 w-5 fill-white" /> <p>Download</p>
+    </SlateBorderButton>
   );
 }

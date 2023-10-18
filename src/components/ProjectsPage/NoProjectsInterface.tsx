@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ExternalSVG from "../Svgs/External";
+import ExternalSVG from "../SvgComponents/External";
 
 export default function NoProjectsInterface(): JSX.Element {
   return (
@@ -10,9 +10,9 @@ export default function NoProjectsInterface(): JSX.Element {
       </p>
       <Link
         href="/projects/new"
-        className="mt-5 flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-4 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="mt-6 flex flex-row items-center justify-center gap-2 rounded-md bg-blue-500 px-7 py-3 text-sm font-normal tracking-wider text-white hover:bg-blue-500/80"
       >
-        <ExternalSVG className="fill-slate-950" /> <p>Get started</p>
+        <ExternalSVG className="fill-white" /> <p>Get started</p>
       </Link>
     </div>
   );

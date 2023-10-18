@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { type NextRouter, useRouter } from "next/router";
-import LoadingCenter from "~/components/Svgs/Loading";
-import Navbar from "~/components/Navbar";
-import NoProjectsInterface from "~/components/Projects/NoProjectsInterface";
-import ProjectsTable from "~/components/Projects/ProjectsTable";
+import LoadingCenter from "~/components/SvgComponents/Loading";
+import Navbar from "~/components/Navbar/Navbar";
+import NoProjectsInterface from "~/components/ProjectsPage/NoProjectsInterface";
+import ProjectsTable from "~/components/ProjectsPage/ProjectsTable";
 import { type Project } from "~/lib/types";
 import { trpcGetAllProjects } from "~/lib/trpc/getAllProjects";
 
@@ -40,7 +40,7 @@ export default function Projects(): JSX.Element {
     return (
       <>
         <Head>
-          <title>Projects | arcai</title>
+          <title>Projects | Lupus AI</title>
         </Head>
 
         <Navbar />

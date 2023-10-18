@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import LoadingCenter from "~/components/Svgs/Loading";
+import LoadingCenter from "~/components/SvgComponents/Loading";
 import Head from "next/head";
-import Navbar from "~/components/Navbar";
-import CreateNewProjectButton from "~/components/Projects/CreateNewProjectButton";
+import Navbar from "~/components/Navbar/Navbar";
+import CreateNewProjectButton from "~/components/ProjectsPage/CreateNewProjectButton";
 import { trpcCreateProject } from "~/lib/trpc/createProject";
-import CreateNewProjectInputs from "~/components/Projects/CreateNewProjectInputs";
+import CreateNewProjectInputs from "~/components/ProjectsPage/CreateNewProjectInputs";
 import { generateDefaultProject } from "~/utils/projects";
 
 // Popup dialog when the user wants to create a new project
@@ -33,7 +33,7 @@ export default function NewProjectPage(): JSX.Element {
     return (
       <>
         <Head>
-          <title>New Project | arcai</title>
+          <title>New Project | Lupus AI</title>
         </Head>
 
         <Navbar />

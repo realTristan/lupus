@@ -1,6 +1,7 @@
 import { type Network, type Model } from "~/lib/types";
-import { downloadModel } from "../../lib/projects/project/tables/downloadModel";
 import { type Dispatch, type SetStateAction } from "react";
+import SlateBorderButton from "../SlateBorderButton";
+import DownloadModelButton from "./DownloadModelButton";
 
 /**
  * Previous models list props
@@ -32,6 +33,11 @@ interface Props {
 export default function PreviousModelsList(props: Props): JSX.Element {
   const HAS_MODELS = props.models.length > 0;
   const SLICED_MODELS = props.models.slice(0, 5);
+  const deleteModel = (model: Model) => {
+    if (props.currentModel?.id === model.id) return;
+
+    props.setModels(SLICED_MODELS.filter((m: Model) => m.id !== model.id));
+  };
 
   return (
     <div
@@ -41,41 +47,26 @@ export default function PreviousModelsList(props: Props): JSX.Element {
       <div className="flex w-full flex-col gap-2">
         {SLICED_MODELS.map((model: Model) => (
           <div key={model.id} className="group flex flex-row gap-4">
-            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
+            <div className="flex w-full flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
               <strong>{model.networkName}</strong>
-              <br />
               <mark className="bg-transparent text-xs">
                 {model.createdAt.toLocaleString()}
               </mark>
-            </span>
-            <button
-              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-              onClick={async () => await downloadModel(model.model)}
-            >
-              Download
-            </button>
-            <button
+            </div>
+            <SlateBorderButton
               disabled={props.currentModel?.id === model.id}
-              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
               onClick={() => props.setCurrentModel(model)}
             >
               {props.currentModel?.id === model.id ? "Activated" : "Activate"}
-            </button>
-            <button
+            </SlateBorderButton>
+            <SlateBorderButton
               disabled={props.currentModel?.id === model.id}
-              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-              onClick={() => {
-                if (props.currentModel?.id === model.id) {
-                  return;
-                }
-
-                props.setModels(
-                  SLICED_MODELS.filter((m: Model) => m.id !== model.id),
-                );
-              }}
+              onClick={() => deleteModel(model)}
+              className="border-0 bg-red-500 text-white hover:bg-red-500/80"
             >
               Delete
-            </button>
+            </SlateBorderButton>
+            <DownloadModelButton model={model.model} />
           </div>
         ))}
       </div>

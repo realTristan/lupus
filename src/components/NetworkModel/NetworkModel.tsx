@@ -1,12 +1,13 @@
 import { type ObjectState } from "~/lib/state";
 import { type Project, type Network, type NetLayer } from "~/lib/types";
-import CopySVG from "../Svgs/Copy";
+import CopySVG from "../SvgComponents/Copy";
 import { useState } from "react";
 import NetworkLayer from "./NetworkLayer/NetworkLayer";
 import AddLayerButton from "./AddLayerButton";
 import DeleteNetworkButton from "./DeleteNetworkButton";
 import SetActiveNetworkButton from "./SetActiveNetworkButton";
-import NetworkSVG from "../Svgs/Network";
+import NetworkSVG from "../SvgComponents/Network";
+import SlateBorderButton from "../SlateBorderButton";
 
 /**
  * Network model props
@@ -43,14 +44,11 @@ export default function NetworkModel(props: NetworkModelProps): JSX.Element {
         </div>
         <div className="flex w-full flex-row justify-end gap-2">
           <SetActiveNetworkButton {...props} />
-          {/* Button to hide the network */}
-          <button
-            onClick={() => setHidden(!hidden)}
-            className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
-          >
-            <p>{hidden ? "Show" : "Hide"}</p>
-          </button>
-          {/* Button to delete the network */}
+
+          <SlateBorderButton onClick={() => setHidden(!hidden)}>
+            {hidden ? "Show" : "Hide"}
+          </SlateBorderButton>
+
           <DeleteNetworkButton
             activeNetwork={props.activeNetwork.value}
             network={props.network}

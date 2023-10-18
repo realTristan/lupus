@@ -2,6 +2,7 @@ import { type ChangeEvent } from "react";
 import { MAX_ROWS } from "~/lib/constants";
 import { genId } from "~/lib/crypto";
 import { type TableValue } from "~/lib/types";
+import ImportSVG from "../SvgComponents/Import";
 
 /**
  * Import CSV dialog props
@@ -23,7 +24,7 @@ export default function ImportCSVDialog(props: Props): JSX.Element {
         htmlFor="import_csv_input"
         className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-center text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>Import</span>
+        <ImportSVG className="h-3.5 w-3.5 fill-slate-950" /> <p>Import</p>
       </label>
       <input
         id="import_csv_input"

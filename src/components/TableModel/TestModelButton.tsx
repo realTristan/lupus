@@ -2,7 +2,8 @@ import { type Dispatch, type SetStateAction, useState } from "react";
 import { testModel } from "../../lib/projects/project/tables/testModel";
 import { type Sequential } from "@tensorflow/tfjs";
 import { type Model, type TableValue, type Network } from "~/lib/types";
-import { LoadingRelative } from "~/components/Svgs/Loading";
+import { LoadingRelative } from "~/components/SvgComponents/Loading";
+import SlateBorderButton from "../SlateBorderButton";
 
 /**
  * Test Model Button props
@@ -75,18 +76,12 @@ export default function TestModelButton(props: Props): JSX.Element {
   };
 
   return testing ? (
-    <button
-      onClick={async () => await onClick()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 tracking-wider text-slate-950 hover:bg-slate-50"
-    >
-      <LoadingRelative className="h-8 w-8" />
-    </button>
+    <SlateBorderButton disabled={true}>
+      <LoadingRelative /> Loading
+    </SlateBorderButton>
   ) : (
-    <button
-      onClick={async () => await onClick()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-    >
-      <span>Test Model</span>
-    </button>
+    <SlateBorderButton onClick={async () => await onClick()}>
+      Test
+    </SlateBorderButton>
   );
 }

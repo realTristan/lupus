@@ -1,15 +1,15 @@
 import { useRouter, type NextRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import LoadingCenter from "~/components/Svgs/Loading";
+import LoadingCenter from "~/components/SvgComponents/Loading";
 import Head from "next/head";
-import Navbar from "~/components/Navbar";
+import Navbar from "~/components/Navbar/Navbar";
 import { type Table, type Network, type Project } from "~/lib/types";
 import TableModel from "~/components/TableModel/TableModel";
 import { ObjectState } from "~/lib/state";
 import NetworkModel from "~/components/NetworkModel/NetworkModel";
-import CreateNewNetworkButton from "~/components/Projects/Project/CreateNewNetworkButton";
-import { CreateNewTableButton } from "~/components/Projects/Project/CreateNewTableButton";
-import SideMenu from "~/components/Projects/Project/SideMenu";
+import CreateNewNetworkButton from "~/components/ProjectsPage/ProjectPage/CreateNewNetworkButton";
+import { CreateNewTableButton } from "~/components/ProjectsPage/ProjectPage/CreateNewTableButton";
+import SideMenu from "~/components/ProjectsPage/ProjectPage/SideMenu";
 import { trpcGetProject } from "~/lib/trpc/getProject";
 
 /**
@@ -79,7 +79,7 @@ export default function ProjectPage(): JSX.Element {
     return (
       <>
         <Head>
-          <title>{project.value.name} | arcai</title>
+          <title>{project.value.name} | Lupus AI</title>
         </Head>
 
         <Navbar />

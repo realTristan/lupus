@@ -1,5 +1,5 @@
-import NetworkSVG from "~/components/Svgs/Network";
-import TableSVG from "~/components/Svgs/Table";
+import NetworkSVG from "~/components/SvgComponents/Network";
+import TableSVG from "~/components/SvgComponents/Table";
 import { type ObjectState } from "~/lib/state";
 import { type Project, type Network, Table } from "~/lib/types";
 
