@@ -1,11 +1,9 @@
-"use client";
-
-import { signIn, useSession, SessionProvider } from "next-auth/react";
+import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-import LoadingCenter from "~/components/Svgs/Loading";
 import { type Session } from "next-auth";
 import { useRouter } from "next/router";
+import LoadingCenter from "~/components/Svgs/Loading";
 
 /**
  * Return the component jsx

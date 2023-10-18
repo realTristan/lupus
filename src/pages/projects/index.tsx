@@ -27,14 +27,10 @@ export default function Projects(): JSX.Element {
     return <LoadingCenter />;
   }
 
-  // Fetch all of the projects
-  getAllProjects();
-
   // If the user is logged in, get the projects
   if (status === "authenticated") {
-    if (!projectsData || !projectsData.result) {
-      return <LoadingCenter />;
-    }
+    if (!projectsData) getAllProjects();
+    if (!projectsData || !projectsData.result) return <LoadingCenter />;
 
     // Store the projects in a constant variable
     const projects: Project[] | null = projectsData.result;
