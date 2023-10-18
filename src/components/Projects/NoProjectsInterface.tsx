@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ExternalSVG from "../svgs/External";
+import ExternalSVG from "../Svgs/External";
 
 export default function NoProjectsInterface(): JSX.Element {
   return (

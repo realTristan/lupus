@@ -1,4 +1,4 @@
-import PlusSVG from "~/components/svgs/Plus";
+import PlusSVG from "~/components/Svgs/Plus";
 
 /**
  * Create a new table button

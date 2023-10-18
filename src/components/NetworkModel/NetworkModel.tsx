@@ -1,12 +1,12 @@
 import { type ObjectState } from "~/lib/state";
 import { type Project, type Network, type NetLayer } from "~/lib/types";
-import CopySVG from "../svgs/Copy";
+import CopySVG from "../Svgs/Copy";
 import { useState } from "react";
 import NetworkLayer from "./NetworkLayer/NetworkLayer";
 import AddLayerButton from "./AddLayerButton";
 import DeleteNetworkButton from "./DeleteNetworkButton";
 import SetActiveNetworkButton from "./SetActiveNetworkButton";
-import NetworkSVG from "../svgs/Network";
+import NetworkSVG from "../Svgs/Network";
 
 /**
  * Network model props

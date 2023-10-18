@@ -1,4 +1,4 @@
-import CrossSVG from "~/components/svgs/Cross";
+import CrossSVG from "~/components/Svgs/Cross";
 import { deleteLayer } from "~/lib/projects/project/networks/networkLayer/deleteLayer";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";

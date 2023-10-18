@@ -1,5 +1,5 @@
 import { type TableValue } from "~/lib/types";
-import CrossSVG from "../svgs/Cross";
+import CrossSVG from "../Svgs/Cross";
 
 /**
  * Remove row button props

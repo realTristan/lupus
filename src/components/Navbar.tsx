@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import GoogleLogoSmallSVG from "./svgs/Google";
-import PlusSVG from "./svgs/Plus";
-import ExternalSVG from "./svgs/External";
+import GoogleLogoSmallSVG from "./Svgs/Google";
+import PlusSVG from "./Svgs/Plus";
+import ExternalSVG from "./Svgs/External";
 import { useRouter } from "next/router";
-import TableSVG from "./svgs/Table";
+import TableSVG from "./Svgs/Table";
 
 export default function Navbar() {
   const { data: session, status } = useSession();

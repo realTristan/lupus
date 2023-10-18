@@ -1,4 +1,4 @@
-import PlusSVG from "~/components/svgs/Plus";
+import PlusSVG from "~/components/Svgs/Plus";
 import { createLayer } from "~/lib/projects/project/networks/networkLayer/createLayer";
 import { MAX_NETWORK_LAYERS } from "~/lib/constants";
 import { type ObjectState } from "~/lib/state";

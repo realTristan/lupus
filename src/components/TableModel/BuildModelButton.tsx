@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction, useState } from "react";
 import { buildModel } from "../../lib/projects/project/tables/buildModel";
 import { type Model, type Network, type TableValue } from "~/lib/types";
-import { LoadingRelative } from "~/components/svgs/Loading";
+import { LoadingRelative } from "~/components/Svgs/Loading";
 import { genId } from "~/lib/crypto";
 
 /**

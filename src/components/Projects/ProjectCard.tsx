@@ -2,8 +2,8 @@ import Link from "next/link";
 import { type NextRouter } from "next/router";
 import { trpcDeleteProject } from "~/lib/trpc/deleteProject";
 import { type Project } from "~/lib/types";
-import ExternalSVG from "../svgs/External";
-import CrossSVG from "../svgs/Cross";
+import ExternalSVG from "../Svgs/External";
+import CrossSVG from "../Svgs/Cross";
 
 /**
  * Project card props

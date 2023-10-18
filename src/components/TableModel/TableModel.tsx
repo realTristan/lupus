@@ -19,7 +19,7 @@ import {
   type TableValue,
   type Model,
 } from "~/lib/types";
-import TableSVG from "../svgs/Table";
+import TableSVG from "../Svgs/Table";
 
 /**
  * Test Model Button props

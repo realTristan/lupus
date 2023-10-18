@@ -3,7 +3,7 @@
 import { signIn, useSession, SessionProvider } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-import LoadingCenter from "~/components/svgs/Loading";
+import LoadingCenter from "~/components/Svgs/Loading";
 import { type Session } from "next-auth";
 import { useRouter } from "next/router";
 

@@ -2,7 +2,7 @@ import { type Dispatch, type SetStateAction, useState } from "react";
 import { testModel } from "../../lib/projects/project/tables/testModel";
 import { type Sequential } from "@tensorflow/tfjs";
 import { type Model, type TableValue, type Network } from "~/lib/types";
-import { LoadingRelative } from "~/components/svgs/Loading";
+import { LoadingRelative } from "~/components/Svgs/Loading";
 
 /**
  * Test Model Button props

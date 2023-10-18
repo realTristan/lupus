@@ -1,4 +1,4 @@
-import PlusSVG from "~/components/svgs/Plus";
+import PlusSVG from "~/components/Svgs/Plus";
 import { MAX_ROWS } from "~/lib/constants";
 import { genId } from "~/lib/crypto";
 import { type TableValue } from "~/lib/types";

@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
-import CirclesBackground from "~/components/svgs/CirclesBackground";
+import CirclesBackground from "~/components/Svgs/CirclesBackground";
 import Navbar from "~/components/Navbar";
-import ExternalSVG from "~/components/svgs/External";
+import ExternalSVG from "~/components/Svgs/External";
 
 export default function Home() {
   return (
