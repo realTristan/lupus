@@ -33,7 +33,7 @@ export default function RemoveRowButton(props: Props): JSX.Element {
       className="cursor-pointer border-2 border-slate-100 px-3 py-3 text-sm hover:bg-slate-50"
     >
       <div className="flex flex-row items-center justify-center gap-2">
-        <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Remove</p>
+        <CrossSVG className="h-3 w-3 fill-slate-950" />
       </div>
     </td>
   );
