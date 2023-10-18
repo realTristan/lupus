@@ -67,10 +67,7 @@ export default function BuildModelButton(props: Props): JSX.Element {
   };
 
   return building ? (
-    <SlateBorderButton
-      disabled={true}
-      className="border-0 bg-green-400 text-white hover:bg-green-400/80"
-    >
+    <SlateBorderButton disabled={true}>
       <LoadingRelative className="h-5 w-5 fill-white" />
       <span>Building</span>
     </SlateBorderButton>
