@@ -1,5 +1,5 @@
 import { type ObjectState } from "~/lib/state";
-import { updateLayerRow } from "../lib/updateLayerRow";
+import { updateLayerRow } from "~/lib/projects/project/networks/networkLayer/updateLayerRow";
 import { type NetLayer, type Network, type Project } from "~/lib/types";
 
 /**

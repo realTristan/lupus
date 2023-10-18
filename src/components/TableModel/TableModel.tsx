@@ -10,7 +10,7 @@ import EpochsInput from "./components/EpochsInput";
 import BuildModelButton from "./components/BuildModelButton";
 import DownloadModelButton from "./components/DownloadModelButton";
 import ModelsList from "./components/ModelsList";
-import { linearTableToObjs } from "./lib/linearTableToObjs";
+import { linearTableToObjs } from "../../lib/projects/project/tables/linearTableToObjs";
 import { ObjectState } from "~/lib/state";
 import { useState } from "react";
 import {

@@ -5,16 +5,15 @@ export type SetState<T> = Dispatch<SetStateAction<T>>;
 export interface Project {
   id: string;
   name: string;
-  description?: string;
-  type: string;
+  description: string;
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  user: User;
-  userSecret: string;
-  tables: Table[];
-  networks: Network[];
-  builds: Model[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  user?: User;
+  userSecret?: string;
+  tables?: Table[];
+  networks?: Network[];
+  builds?: Model[];
 }
 
 export interface Model {
@@ -28,21 +27,21 @@ export interface Model {
 export interface Network {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   layers: NetLayer[];
 }
 
 export interface NetLayer {
   id: string;
   type: string;
-  neurons?: number;
-  shape?: number;
+  neurons: number;
+  shape: number;
 }
 
 export interface Table {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   headers: string[];
   values: number[];
 }
@@ -56,5 +55,5 @@ export interface User {
   id: number;
   email: string;
   secret: string;
-  projects?: Project[];
+  projects: Project[];
 }

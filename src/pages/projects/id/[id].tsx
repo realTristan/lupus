@@ -10,7 +10,7 @@ import NetworkModel from "~/components/NetworkModel/NetworkModel";
 import CreateNewNetworkButton from "~/components/Projects/Project/CreateNewNetworkButton";
 import { CreateNewTableButton } from "~/components/Projects/Project/CreateNewTableButton";
 import SideMenu from "~/components/Projects/Project/SideMenu";
-import { trpcGetProject } from "~/components/Projects/Project/lib/trpc/getProject";
+import { trpcGetProject } from "~/lib/trpc/getProject";
 
 /**
  * Project page
@@ -30,8 +30,8 @@ export default function ProjectPage(): JSX.Element {
   } as Project);
 
   const { data: projectData, getProject } = trpcGetProject(
-    session,
-    project.value,
+    session?.user.secret ?? "",
+    project.value.id,
   );
 
   // Update the project settings to the database
@@ -63,10 +63,15 @@ export default function ProjectPage(): JSX.Element {
     if (!session?.user.secret) return <></>;
     if (!project.updated || !projectData?.result) {
       getProject().then((res) => {
-        if (!res.data?.result) return;
+        const result = res.data?.result;
+        if (!result) return;
 
-        project.set(res.data.result);
-        activeNetwork.set(res.data.result.networks[0] ?? ({} as Network));
+        const networks = result.networks;
+        if (!networks) return;
+
+        const network = networks.at(0) ?? ({} as Network);
+        activeNetwork.set(network);
+        project.set(result);
       });
 
       return <LoadingCenter />;

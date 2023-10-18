@@ -1,44 +1,34 @@
 import { useState } from "react";
-import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import LoadingCenter from "~/components/svgs/Loading";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
+import CreateNewProjectButton from "~/components/Projects/CreateNewProjectButton";
+import { trpcCreateProject } from "~/lib/trpc/createProject";
+import CreateNewProjectInputs from "~/components/Projects/CreateNewProjectInputs";
+import { generateDefaultProject } from "~/utils/projects";
 
 // Popup dialog when the user wants to create a new project
 export default function NewProjectPage(): JSX.Element {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const randomProjectId: number = Math.floor(Math.random() * 1000000);
-  const [project, setProject] = useState({
-    name: `my-project-${randomProjectId}`,
-    description: "A super cool description!",
-    type: "table",
-    tags: [],
-  });
+  const [project, setProject] = useState(generateDefaultProject());
+  const { createProject } = trpcCreateProject(
+    session?.user.secret ?? "",
+    project,
+  );
 
+  // If the user isn't logged in, redirect to the login page
   if (status === "unauthenticated") {
     router.push("/login?redirect=/projects").catch((e) => console.log(e));
     return <LoadingCenter />;
   }
 
+  // If the user is logged in, get the projects
   if (status === "authenticated") {
-    if (!session.user.secret) {
-      return <></>;
-    }
-
-    const { refetch } = api.projects.createOne.useQuery(
-      {
-        secret: session.user.secret,
-        project,
-      },
-      {
-        enabled: false,
-        refetchOnWindowFocus: false,
-      },
-    );
+    if (!session.user.secret) return <></>;
 
     return (
       <>
@@ -56,55 +46,18 @@ export default function NewProjectPage(): JSX.Element {
             Projects are used to organize your data
           </p>
           <div className="my-7 flex w-1/3 flex-col items-center justify-center">
-            <input
-              className="h-12 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-slate-600"
-              placeholder="Project Name"
-              onChange={(e) => setProject({ ...project, name: e.target.value })}
-            />
-            <p className="my-3 text-sm font-normal text-red-500">
-              {project.name.length > 20
-                ? "Project name must be less than 20 characters"
-                : ""}
-            </p>
-
-            <input
-              className="h-12 w-full rounded-md border-2 border-slate-100 border-b-slate-100 px-4 py-2 text-slate-600"
-              placeholder="Project Description"
-              onChange={(e) =>
-                setProject({ ...project, description: e.target.value })
-              }
-            />
-            <p className="my-3 text-sm font-normal text-red-500">
-              {project.description.length > 50
-                ? "Project description must be less than 50 characters"
-                : ""}
-            </p>
+            <CreateNewProjectInputs project={project} setProject={setProject} />
 
             <div className="flex w-full flex-row gap-2">
-              <button
-                onClick={() => {
-                  if (project.name.length > 20) {
-                    return;
-                  }
-
-                  if (project.description.length > 50) {
-                    return;
-                  }
-
-                  refetch().then(() => {
-                    router
-                      .push("/projects")
-                      .catch((e) => console.log(e.message));
-                  });
+              <CreateNewProjectButton
+                project={project}
+                router={router}
+                createProject={async () => {
+                  await createProject();
                 }}
-                className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
-              >
-                <p>Create</p>
-              </button>
+              />
               <button
-                onClick={() =>
-                  router.push("/projects").catch((e) => console.log(e.message))
-                }
+                onClick={() => router.push("/projects")}
                 className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-8 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               >
                 <p>Cancel</p>

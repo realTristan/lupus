@@ -1,5 +1,5 @@
 import TrashcanSVG from "~/components/svgs/Trashcan";
-import { deleteLayer } from "../lib/deleteLayer";
+import { deleteLayer } from "~/lib/projects/project/networks/networkLayer/deleteLayer";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
 

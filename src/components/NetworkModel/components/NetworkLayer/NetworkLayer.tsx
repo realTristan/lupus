@@ -3,7 +3,7 @@ import { type ObjectState } from "~/lib/state";
 import NeuronsInput from "./components/NeuronsInput";
 import ShapeInput from "./components/ShapeInput";
 import DeleteLayerButton from "./components/DeleteLayerButton";
-import { clean } from "./utils/clean";
+import { clean } from "../../../../utils/clean";
 
 /**
  * Network layer props
