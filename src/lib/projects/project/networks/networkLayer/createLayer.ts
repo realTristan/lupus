@@ -27,23 +27,30 @@ export async function createLayer(params: Parameters) {
   }
 
   const NetLayerId: string = await genId();
+  const newLayer = {
+    id: NetLayerId,
+    type: "dense",
+    neurons: 1,
+    shape: 1,
+  };
+
   const newNetwork = {
     ...params.network,
-    layers: [
-      ...params.network.layers,
-      {
-        id: NetLayerId,
-        type: "dense",
-        neurons: 1,
-        shape: 1,
-      },
-    ],
+    layers: [...params.network.layers, newLayer],
   };
+
+  const networks = params.project.value.networks ?? [];
+  const networkToAppendTo = networks.find(
+    (network) => network.id === params.network.id,
+  );
+  if (!networkToAppendTo) return;
+
+  const newNetworks = networks.map((network) =>
+    network.id === params.network.id ? newNetwork : network,
+  );
 
   params.project.set({
     ...params.project.value,
-    networks: params.project.value.networks?.map((network: Network) =>
-      network.id === newNetwork.id ? newNetwork : network,
-    ),
+    networks: newNetworks,
   });
 }

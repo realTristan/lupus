@@ -1,6 +1,6 @@
 import { type ChangeEvent } from "react";
 import { type ObjectState } from "~/lib/state";
-import { type NetLayer, type Network, type Project } from "~/lib/types";
+import { type Network, type Project } from "~/lib/types";
 
 /**
  * The parameters
@@ -34,30 +34,38 @@ interface Parameters {
 export function updateLayerRow(params: Parameters) {
   const value: string = params.event.target.value;
 
-  // Create a new network with the updated layers
+  const networkLayers = params.network.layers ?? [];
+  const networkLayer = networkLayers[params.index];
+  if (!networkLayer) return;
+
+  const newLayers = networkLayers.map((layer, index) =>
+    index === params.index
+      ? {
+          ...layer,
+          [params.key]: parseInt(value),
+        }
+      : layer,
+  );
+
   const newNetwork: Network = {
     ...params.network,
-    layers: params.network.layers?.map((layer: NetLayer, i: number) => {
-      if (i === params.index) {
-        return {
-          ...layer,
-          [params.key]: value,
-        };
-      }
-
-      return layer;
-    }),
+    layers: newLayers,
   };
 
-  // Update the project with the new network and layers
+  const networks = params.project.value.networks ?? [];
+  const networkToUpdate = networks.find(
+    (network) => network.id === params.network.id,
+  );
+  if (!networkToUpdate) return;
+
+  const newNetworks = networks.map((network) =>
+    network.id === params.network.id ? newNetwork : network,
+  );
+
   params.project.set({
     ...params.project.value,
-    networks: params.project.value.networks?.map((network: Network) => {
-      if (network.id === params.network.id) {
-        return newNetwork;
-      }
-
-      return network;
-    }),
+    networks: newNetworks,
   });
+
+  console.log(params.project.value);
 }

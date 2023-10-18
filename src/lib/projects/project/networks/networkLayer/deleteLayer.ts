@@ -25,23 +25,31 @@ interface Parameters {
  * @returns void
  */
 export function deleteLayer(params: Parameters) {
-  // Create a new network with the deleted layer
-  const newNetwork = {
+  const networkLayers = params.network.layers ?? [];
+  const networkLayer = networkLayers[params.index];
+  if (!networkLayer) return;
+
+  const newLayers = networkLayers.filter(
+    (_: NetLayer, index: number) => index !== params.index,
+  );
+
+  const newNetwork: Network = {
     ...params.network,
-    layers: params.network.layers.filter(
-      (_: NetLayer, i: number) => i !== params.index,
-    ),
+    layers: newLayers,
   };
 
-  // Update the project with the new network and layers
+  const networks = params.project.value.networks ?? [];
+  const networkToUpdate = networks.find(
+    (network) => network.id === params.network.id,
+  );
+  if (!networkToUpdate) return;
+
+  const newNetworks = networks.map((network) =>
+    network.id === params.network.id ? newNetwork : network,
+  );
+
   params.project.set({
     ...params.project.value,
-    networks: params.project.value.networks?.map((network: Network) => {
-      if (network.id === params.network.id) {
-        return newNetwork;
-      }
-
-      return network;
-    }),
+    networks: newNetworks,
   });
 }
