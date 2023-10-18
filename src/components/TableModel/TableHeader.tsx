@@ -20,7 +20,7 @@ export default function TableHeader(props: Props): JSX.Element {
 
   return (
     <th
-      className="border-2 border-slate-100 p-4"
+      className="border-2 border-slate-100 px-4 py-3 text-sm"
       contentEditable={true}
       suppressContentEditableWarning={true}
       onBlur={(e) => onBlur(e)}

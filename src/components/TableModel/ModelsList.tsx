@@ -40,29 +40,29 @@ export default function PreviousModelsList(props: Props): JSX.Element {
       <div className="flex w-full flex-col gap-2">
         {props.models.map((model: Model) => (
           <div key={model.id} className="group flex flex-row gap-4">
-            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-base font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
+            <span className="w-full rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 group-hover:bg-slate-50">
               <strong>{model.networkName}</strong>
               <br />
-              {model.createdAt.toLocaleString()}
+              <mark className="bg-transparent text-xs">
+                {model.createdAt.toLocaleString()}
+              </mark>
             </span>
             <button
-              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
               onClick={async () => await downloadModel(model.model)}
             >
-              Download model
+              Download
             </button>
             <button
               disabled={props.currentModel?.id === model.id}
-              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
               onClick={() => props.setCurrentModel(model)}
             >
-              {props.currentModel?.id === model.id
-                ? "Already in use"
-                : "Use model"}
+              {props.currentModel?.id === model.id ? "Activated" : "Activate"}
             </button>
             <button
               disabled={props.currentModel?.id === model.id}
-              className="flex w-auto flex-row items-center justify-start gap-2 rounded-md border-2 border-slate-100 bg-white px-14 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
               onClick={() => {
                 if (props.currentModel?.id === model.id) {
                   return;
@@ -73,7 +73,7 @@ export default function PreviousModelsList(props: Props): JSX.Element {
                 );
               }}
             >
-              Delete model
+              Delete
             </button>
           </div>
         ))}

@@ -21,9 +21,9 @@ export default function ImportCSVDialog(props: Props): JSX.Element {
     <>
       <label
         htmlFor="import_csv_input"
-        className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-center text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+        className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-center text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
       >
-        <span>Import CSV</span>
+        <span>Import</span>
       </label>
       <input
         id="import_csv_input"

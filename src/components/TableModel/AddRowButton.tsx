@@ -42,7 +42,7 @@ export default function AddRowButton(params: Parameters): JSX.Element {
     <button
       disabled={params.values.length >= MAX_ROWS}
       onClick={async () => await addRow()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+      className="flex w-full flex-row items-center justify-center gap-1 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
     >
       <PlusSVG className="h-5 w-5 fill-slate-950" />
       <span>Row</span>

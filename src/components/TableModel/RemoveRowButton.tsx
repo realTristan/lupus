@@ -30,7 +30,7 @@ export default function RemoveRowButton(props: Props): JSX.Element {
   return (
     <td
       onClick={() => onClick()}
-      className="cursor-pointer border-2 border-slate-100 px-7 py-3 text-base hover:bg-slate-50"
+      className="cursor-pointer border-2 border-slate-100 px-7 py-3 text-sm hover:bg-slate-50"
     >
       <CrossSVG className="h-3 w-3 fill-slate-950" />
     </td>

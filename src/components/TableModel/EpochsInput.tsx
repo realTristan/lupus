@@ -25,7 +25,7 @@ export default function EpochsInput(params: Parameters): JSX.Element {
       defaultValue={10}
       min="1"
       max="100"
-      className="w-full rounded-md border-2 border-slate-100 p-4"
+      className="w-full rounded-md border-2 border-slate-100 px-3 py-2 text-sm"
       onChange={onChange}
     />
   );

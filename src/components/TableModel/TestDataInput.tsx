@@ -17,7 +17,7 @@ export default function TestDataInput(params: Parameters): JSX.Element {
       type="number"
       placeholder="Input"
       defaultValue={1}
-      className="w-full rounded-md border-2 border-slate-100 p-4"
+      className="w-full rounded-md border-2 border-slate-100 px-3 py-2 text-sm"
       onChange={onChange}
     />
   );

@@ -144,8 +144,8 @@ export default function TableModel(props: Props): JSX.Element {
             {/*<ImportTestDataButton />*/}
           </div>
 
-          <div className="flex w-full flex-col gap-2">
-            <div className="mb-1 flex flex-row gap-2">
+          <div className="flex w-full flex-col gap-1">
+            <div className="mb-1 flex flex-row gap-1">
               <TestDataInput setTestData={setTestData} />
               <TestModelButton
                 input={testData}
@@ -160,7 +160,7 @@ export default function TableModel(props: Props): JSX.Element {
               />
             </div>
 
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-1">
               <EpochsInput setEpochs={setEpochs} />
               <BuildModelButton
                 models={models}
@@ -177,7 +177,7 @@ export default function TableModel(props: Props): JSX.Element {
 
             <DownloadModelButton model={currentModel?.model ?? null} />
 
-            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+            <p className="mt-2 flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
               Output: {prediction}
             </p>
           </div>

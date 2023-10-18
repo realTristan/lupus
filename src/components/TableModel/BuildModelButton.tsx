@@ -68,14 +68,14 @@ export default function BuildModelButton(props: Props): JSX.Element {
   return building ? (
     <button
       onClick={async () => await onClick()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 tracking-wider text-slate-950 hover:bg-slate-50"
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 tracking-wider text-slate-950 hover:bg-slate-50"
     >
       <LoadingRelative className="h-8 w-8" />
     </button>
   ) : (
     <button
       onClick={async () => await onClick()}
-      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      className="flex w-full flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
     >
       <span>Build Model</span>
     </button>
