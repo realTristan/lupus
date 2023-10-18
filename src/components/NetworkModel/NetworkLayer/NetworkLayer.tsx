@@ -1,9 +1,9 @@
 import { type Network, type Project, type NetLayer } from "~/lib/types";
 import { type ObjectState } from "~/lib/state";
-import NeuronsInput from "./components/NeuronsInput";
-import ShapeInput from "./components/ShapeInput";
-import DeleteLayerButton from "./components/DeleteLayerButton";
-import { clean } from "../../../../utils/clean";
+import NeuronsInput from "./NeuronsInput";
+import ShapeInput from "./ShapeInput";
+import DeleteLayerButton from "./DeleteLayerButton";
+import { clean } from "../../../utils/clean";
 
 /**
  * Network layer props
@@ -26,12 +26,12 @@ export default function NetLayer(props: NetLayerProps): JSX.Element {
   const layerNum: number = props.index + 1;
 
   return (
-    <div className="flex w-full flex-col items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-3 text-left text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
+    <div className="flex w-full flex-col items-start gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-3 text-left text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50">
       <p>
         Layer {layerNum}: {layerType}
       </p>
 
-      <div className="flex w-full flex-col items-start justify-start gap-2 lg:flex-row">
+      <div className="flex w-full flex-col justify-start gap-2 lg:flex-row">
         <NeuronsInput {...props} />
         <ShapeInput {...props} />
 

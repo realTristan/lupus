@@ -21,12 +21,12 @@ export default function SetAsActiveNetworkButton(props: Props): JSX.Element {
     <button
       disabled={props.network.id === props.activeNetwork.value.id}
       onClick={() => props.activeNetwork.set(props.network)}
-      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-2 text-sm tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
     >
       <p>
         {props.network.id == props.activeNetwork.value.id
-          ? "Already active"
-          : "Set as active"}
+          ? "Activated"
+          : "Activate"}
       </p>
     </button>
   );

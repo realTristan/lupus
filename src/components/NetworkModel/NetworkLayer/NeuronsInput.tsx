@@ -23,7 +23,7 @@ interface Props {
  */
 export default function NeuronsInput(props: Props): JSX.Element {
   return (
-    <span className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-4 py-2 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50">
+    <span className="flex flex-row items-center justify-start rounded-md border-2 border-slate-100 bg-white px-4 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50">
       <p>Neurons: </p>
       <input
         type="number"

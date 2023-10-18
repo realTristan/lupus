@@ -1,4 +1,4 @@
-import TrashcanSVG from "~/components/svgs/Trashcan";
+import CrossSVG from "~/components/svgs/Cross";
 import { deleteLayer } from "~/lib/projects/project/networks/networkLayer/deleteLayer";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
@@ -30,9 +30,9 @@ export default function DeleteLayerButton(props: Props): JSX.Element {
           index: props.index,
         })
       }
-      className="flex w-fit flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50"
+      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-5 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50"
     >
-      <TrashcanSVG className="h-5 w-5 fill-slate-950" /> <p>Delete</p>
+      <CrossSVG className="h-3 w-3 fill-slate-950" />
     </button>
   );
 }

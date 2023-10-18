@@ -1,5 +1,5 @@
 import { type Network, type Model } from "~/lib/types";
-import { downloadModel } from "../../../lib/projects/project/tables/downloadModel";
+import { downloadModel } from "../../lib/projects/project/tables/downloadModel";
 import { type Dispatch, type SetStateAction } from "react";
 
 /**

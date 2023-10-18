@@ -20,24 +20,22 @@ interface Props {
  * @returns JSX.Element
  */
 export default function DeleteNetworkButton(props: Props): JSX.Element {
+  const deleteNetwork = () => {
+    const newNetworks = props.project.value.networks?.filter(
+      (network: Network) => network.id !== props.network.id,
+    );
+
+    props.project.set({
+      ...props.project.value,
+      networks: newNetworks,
+    });
+  };
+
   return (
     <button
-      onClick={() => {
-        if (props.activeNetwork.id === props.network.id) {
-          return;
-        }
-
-        const newNetworks = props.project.value.networks.filter(
-          (network: Network) => network.id !== props.network.id,
-        );
-
-        props.project.set({
-          ...props.project.value,
-          networks: newNetworks,
-        });
-      }}
+      onClick={() => deleteNetwork()}
       disabled={props.activeNetwork.id === props.network.id}
-      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+      className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
     >
       <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Delete</p>
     </button>

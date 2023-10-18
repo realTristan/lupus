@@ -1,15 +1,15 @@
-import TableHeader from "./components/TableHeader";
-import TableCell from "./components/TableCell";
-import RemoveRowButton from "./components/RemoveRowButton";
-import AddRowButton from "./components/AddRowButton";
-import ImportCSVDialog from "./components/ImportCSVDialog";
-import ExportCSVButton from "./components/ExportCSVButton";
-import TestDataInput from "./components/TestDataInput";
-import TestModelButton from "./components/TestModelButton";
-import EpochsInput from "./components/EpochsInput";
-import BuildModelButton from "./components/BuildModelButton";
-import DownloadModelButton from "./components/DownloadModelButton";
-import ModelsList from "./components/ModelsList";
+import TableHeader from "./TableHeader";
+import TableCell from "./TableCell";
+import RemoveRowButton from "./RemoveRowButton";
+import AddRowButton from "./AddRowButton";
+import ImportCSVDialog from "./ImportCSVDialog";
+import ExportCSVButton from "./ExportCSVButton";
+import TestDataInput from "./TestDataInput";
+import TestModelButton from "./TestModelButton";
+import EpochsInput from "./EpochsInput";
+import BuildModelButton from "./BuildModelButton";
+import DownloadModelButton from "./DownloadModelButton";
+import ModelsList from "./ModelsList";
 import { linearTableToObjs } from "../../lib/projects/project/tables/linearTableToObjs";
 import { ObjectState } from "~/lib/state";
 import { useState } from "react";
@@ -19,6 +19,7 @@ import {
   type TableValue,
   type Model,
 } from "~/lib/types";
+import TableSVG from "../svgs/Table";
 
 /**
  * Test Model Button props
@@ -66,18 +67,23 @@ export default function TableModel(props: Props): JSX.Element {
   return (
     <div
       id={props.table.id}
-      className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-10 py-7"
+      className="flex w-full flex-col rounded-md border-2 border-slate-100 bg-white px-7 py-5"
     >
       <div className="flex flex-row items-center justify-between">
-        <div>
-          <h1 className="w-full text-5xl font-extrabold">{props.table.name}</h1>
-          <p className="mt-2 w-full text-xl font-thin">
+        <div className="flex flex-col gap-px">
+          <div className="flex flex-row gap-2">
+            <TableSVG className="mt-px h-7 w-7 fill-slate-950" />
+            <h1 className="w-full text-xl font-extrabold">
+              {props.table.name}
+            </h1>
+          </div>
+          <p className="mt-0.5 w-full text-sm font-thin">
             {props.table.description}
           </p>
         </div>
         <button
           onClick={() => setHidden(!hidden)}
-          className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-10 py-4 text-base font-normal tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
+          className="flex flex-row items-center justify-center gap-2 rounded-md border-2 border-slate-100 bg-white px-7 py-3 text-sm tracking-wider text-slate-950 hover:bg-slate-50 disabled:opacity-50"
         >
           <p>{hidden ? "Show table" : "Hide table"}</p>
         </button>

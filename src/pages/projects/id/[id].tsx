@@ -88,13 +88,11 @@ export default function ProjectPage(): JSX.Element {
         <SideMenu project={project.value} activeNetwork={activeNetwork} />
 
         {/* The main content of the page */}
-        <main className="flex min-h-screen flex-col gap-7 p-14 pl-80 pt-52">
+        <main className="flex min-h-screen flex-col gap-4 p-14 pl-72 pt-40">
           {/* Project title and description */}
-          <div className="text-center">
-            <h1 className="text-6xl font-black">{project.value.name}</h1>
-            <p className="mt-2 text-2xl font-thin">
-              {project.value.description}
-            </p>
+          <div className="gap02 flex flex-col text-left">
+            <h1 className="text-3xl font-black">{project.value.name}</h1>
+            <p className="text-lg font-thin">{project.value.description}</p>
           </div>
 
           {/* Map the networks */}
