@@ -1,6 +1,8 @@
 # arcai ![Stars](https://img.shields.io/github/stars/realTristan/arc?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/arc?label=Watchers)
 
-https://github.com/realTristan/arc/assets/75189508/5b979e66-6b69-4b9b-8d92-5cabcddf99f2
+
+https://github.com/realTristan/arc/assets/75189508/5f40dd0e-8b00-425e-bb0f-a6b8051513e0
+
 
 <img width="369" alt="Screenshot 2023-10-17 at 8 52 46 PM" src="https://github.com/realTristan/arc/assets/75189508/41cc2f32-18c2-4237-90e3-9bbd05fb5963">
 
