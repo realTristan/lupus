@@ -1,4 +1,3 @@
-import CrossSVG from "~/components/SvgComponents/Cross";
 import { type ObjectState } from "~/lib/state";
 import { type Network, type Project } from "~/lib/types";
 import SlateBorderButton from "../SlateBorderButton";
@@ -37,7 +36,7 @@ export default function DeleteNetworkButton(props: Props): JSX.Element {
       onClick={() => deleteNetwork()}
       disabled={props.activeNetwork.id === props.network.id}
     >
-      <CrossSVG className="h-3 w-3 fill-slate-950" /> <p>Delete</p>
+      Delete
     </SlateBorderButton>
   );
 }
