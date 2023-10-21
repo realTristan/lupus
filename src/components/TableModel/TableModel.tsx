@@ -21,6 +21,7 @@ import {
 } from "~/lib/types";
 import TableSVG from "../SvgComponents/Table";
 import SlateBorderButton from "../SlateBorderButton";
+import { MIN_SHOWN_ROWS } from "~/lib/constants";
 
 /**
  * Test Model Button props
@@ -55,6 +56,7 @@ export default function TableModel(props: Props): JSX.Element {
   const [models, setModels] = useState<Model[]>([]);
   const [currentModel, setCurrentModel] = useState<Model | null>(null);
   const [testData, setTestData] = useState<number>(1);
+  const [showAllRows, setShowAllRows] = useState<boolean>(false);
   const values = new ObjectState<TableValue[]>([]);
 
   // Convert the linear array of numbers to an array of objects
@@ -109,30 +111,48 @@ export default function TableModel(props: Props): JSX.Element {
               </thead>
 
               <tbody>
-                {values.value.map((row: any) => (
-                  <tr key={row.id}>
-                    {row.values.map((value: number[], index: number) => {
-                      return (
-                        <TableCell
-                          key={row.id + ":" + index}
-                          value={value}
-                          row={row}
-                          index={index}
-                          values={values.value}
-                          setValues={values.set}
-                        />
-                      );
-                    })}
+                {values.value.map((row: any, i: number) => {
+                  if (!showAllRows && i >= MIN_SHOWN_ROWS) {
+                    return <></>;
+                  }
 
-                    <RemoveRowButton
-                      id={row.id}
-                      values={values.value}
-                      setValues={values.set}
-                    />
-                  </tr>
-                ))}
+                  return (
+                    <tr key={row.id}>
+                      {row.values.map((value: number[], index: number) => {
+                        return (
+                          <TableCell
+                            key={row.id + ":" + index}
+                            value={value}
+                            row={row}
+                            index={index}
+                            values={values.value}
+                            setValues={values.set}
+                          />
+                        );
+                      })}
+
+                      <RemoveRowButton
+                        id={row.id}
+                        values={values.value}
+                        setValues={values.set}
+                      />
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+
+            {/* Show rows button */}
+            {values.value.length > 3 && (
+              <SlateBorderButton
+                onClick={() => setShowAllRows(!showAllRows)}
+                className="w-full"
+              >
+                {showAllRows
+                  ? `Hide ${values.value.length - MIN_SHOWN_ROWS} rows`
+                  : `Show all ${values.value.length} rows`}
+              </SlateBorderButton>
+            )}
 
             <div className="flex w-full flex-row gap-2">
               <ImportCSVDialog setValues={values.set} />
