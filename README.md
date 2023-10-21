@@ -1,4 +1,6 @@
-# Lupus AI ![Stars](https://img.shields.io/github/stars/realTristan/lupus?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/lupus?label=Watchers)
+# Lupus ![Stars](https://img.shields.io/github/stars/realTristan/lupus?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/lupus?label=Watchers)
+
+https://github.com/realTristan/lupus/assets/75189508/3b33575c-312b-4bf2-bf36-887f6a9dbc25
 
 # License
 MIT License
